@@ -793,26 +793,242 @@ code {
     .admin-header-right { width: 100%; justify-content: flex-start; flex-wrap: wrap; }
 }
 @media (max-width: 768px) {
+    /* 手机 / 小平板：侧栏改为抽屉式（覆盖原本 72px 图标侧栏） */
+    .admin-view { position: relative; }
     .admin-sidebar {
-        width: 72px;
+        position: fixed;
+        top: 0; left: 0; bottom: 0;
+        width: 84%;
+        max-width: 300px;
+        z-index: 200;
+        transform: translateX(-100%);
+        transition: transform 0.28s cubic-bezier(.2,.8,.2,1);
+        box-shadow: 20px 0 60px rgba(0,0,0,0.4);
+        overflow: hidden;
     }
+    .admin-sidebar.open { transform: translateX(0); }
+    .sidebar-mask {
+        position: fixed; inset: 0;
+        background: rgba(10,22,40,0.55);
+        backdrop-filter: blur(3px);
+        -webkit-backdrop-filter: blur(3px);
+        z-index: 190;
+        opacity: 0; pointer-events: none;
+        transition: opacity 0.2s ease;
+    }
+    .sidebar-mask.open { opacity: 1; pointer-events: auto; }
+
+    /* 恢复抽屉里的文字（72px 图标模式仅桌面 > 768 不显示） */
     .admin-brand > div:last-child,
     .admin-nav li a span:not(.nav-icon),
     .admin-sidebar-footer button span:not(:first-child),
     .admin-btn-secondary span,
-    .admin-btn-ghost span { display: none; }
-    .admin-brand { justify-content: center; padding: 20px 10px; }
+    .admin-btn-ghost span { display: inline; }
+    .admin-brand { justify-content: flex-start; padding: 20px 18px 22px; gap: 12px; }
     .admin-brand-icon { width: 40px; height: 40px; }
-    .admin-nav ul { align-items: center; }
+    .admin-nav ul { align-items: stretch; padding: 0; }
     .admin-nav li { width: 100%; }
-    .admin-nav li a { justify-content: center; }
-    .admin-sidebar-footer { padding: 12px; }
+    .admin-nav li a { justify-content: flex-start; gap: 12px; padding: 12px 14px; font-size: 14px; }
+    .admin-nav li a svg { width: 19px; height: 19px; }
+    .admin-sidebar-footer { padding: 14px 16px; }
+    .admin-btn-secondary,
+    .admin-btn-ghost { gap: 10px; }
+
+    /* 顶栏汉堡按钮 + 紧凑化 */
+    .admin-header {
+        padding: 14px 16px;
+        gap: 10px;
+        flex-wrap: wrap;
+    }
+    .sidebar-toggle {
+        width: 40px; height: 40px;
+        border-radius: 10px;
+        border: 1.5px solid var(--admin-border);
+        background: #fff;
+        display: inline-flex; align-items: center; justify-content: center;
+        flex-shrink: 0;
+        color: var(--admin-primary-light);
+        transition: all 0.18s ease;
+    }
+    .sidebar-toggle svg { width: 20px; height: 20px; stroke-width: 2; }
+    .sidebar-toggle:active { background: rgba(201,169,97,0.1); border-color: var(--admin-gold); color: var(--admin-gold-dark); }
+
+    .admin-body { padding: 18px 16px 40px; }
     .form-container { padding: 20px 16px; border-radius: 12px; }
     .form-grid.cols-3 { grid-template-columns: 1fr; }
-    .admin-header-right { gap: 6px; }
-    .admin-btn-primary, .admin-btn-gold, .admin-btn-outline {
-        padding: 9px 12px; font-size: 12px;
+    .form-grid { grid-template-columns: 1fr; }
+    .admin-header-right {
+        width: 100%;
+        gap: 8px;
+        flex-wrap: wrap;
+        justify-content: space-between;
     }
-    .save-status { font-size: 11px; padding: 5px 10px; }
+    .save-status {
+        margin-right: 0;
+        padding: 6px 12px;
+        font-size: 11px;
+        flex: 1 1 auto;
+        text-align: center;
+    }
+    .admin-btn-primary, .admin-btn-gold, .admin-btn-outline {
+        padding: 9px 12px;
+        font-size: 12px;
+        gap: 6px;
+        flex: 1 1 40%;
+        min-width: 0;
+    }
     .list-item-card { padding: 14px; }
 }
+
+/* ============ SMALL MOBILE (<=560px, 手机横竖屏 极窄屏） ============ */
+@media (max-width: 560px) {
+    /* 登录页再紧凑 */
+    .login-view { padding: 14px; }
+    .login-card {
+        padding: 28px 20px 24px;
+        border-radius: 16px;
+        max-width: 100%;
+    }
+    .login-logo { margin-bottom: 20px; gap: 10px; }
+    .login-logo-icon { width: 44px; height: 44px; padding: 6px; border-radius: 10px; }
+    .login-logo-cn { font-size: 18px; letter-spacing: 1.5px; }
+    .login-logo-en { font-size: 9px; letter-spacing: 2px; }
+    .login-title { font-size: 21px; letter-spacing: 0.5px; margin-bottom: 4px; }
+    .login-subtitle { font-size: 11px; letter-spacing: 0.5px; margin-bottom: 22px; }
+    .login-form { gap: 14px; }
+    .login-hint { font-size: 11px; line-height: 1.7; }
+
+    /* 抽屉 max-width 缩一点（极窄屏） */
+    .admin-sidebar { width: 84%; max-width: 280px; }
+
+    /* 顶栏更紧凑 */
+    .admin-header {
+        padding: 12px 14px;
+        gap: 10px;
+    }
+    .sidebar-toggle { width: 38px; height: 38px; border-radius: 10px; }
+    .sidebar-toggle svg { width: 20px; height: 20px; }
+    .admin-header-left { min-width: 0; flex: 1 1 auto; gap: 2px; }
+    .admin-page-title { font-size: 16px; letter-spacing: 0.3px; }
+    .admin-header-desc { font-size: 11.5px; line-height: 1.5; }
+    .admin-header-right { gap: 6px; }
+    .admin-btn-primary, .admin-btn-gold, .admin-btn-outline {
+        padding: 8px 12px;
+        font-size: 12px;
+        gap: 6px;
+        flex: 1 1 40%;
+        min-width: 0;
+    }
+    .admin-btn-primary svg, .admin-btn-gold svg, .admin-btn-outline svg { width: 14px; height: 14px; }
+
+    /* 主体 + 表单紧凑 */
+    .admin-body { padding: 14px 12px 36px; }
+    .form-container {
+        padding: 18px 14px;
+        border-radius: 12px;
+        max-width: 100%;
+    }
+    .form-section { padding-bottom: 22px; margin-bottom: 22px; }
+    .form-section-title { font-size: 15px; gap: 8px; }
+    .form-section-title::before { height: 15px; }
+    .form-section-desc { font-size: 12px; line-height: 1.65; padding-left: 11px; margin-bottom: 16px; }
+    .form-grid { grid-template-columns: 1fr; gap: 14px; }
+    .form-grid.cols-3 { grid-template-columns: 1fr; }
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        padding: 10px 12px;
+        font-size: 14px;
+    }
+    .form-group textarea { min-height: 84px; }
+
+    /* 列表编辑器 */
+    .list-item-card { padding: 14px 12px; }
+    .list-item-card .item-header {
+        flex-direction: row;
+        gap: 8px;
+        align-items: flex-start;
+        margin-bottom: 10px;
+    }
+    .list-item-card .item-index { font-size: 13px; gap: 6px; min-width: 0; overflow: hidden; }
+    .list-item-card .item-index .idx-num { min-width: 26px; height: 26px; padding: 0 7px; font-size: 11px; }
+    .list-item-card .item-actions { gap: 4px; flex-shrink: 0; }
+    .list-item-card .item-actions button { width: 32px; height: 32px; }
+    .add-item-btn {
+        width: 100%;
+        padding: 10px 12px;
+        font-size: 13px;
+        justify-content: center;
+    }
+
+    /* SVG 代码编辑器 */
+    .code-area {
+        font-size: 12px !important;
+        padding: 14px !important;
+        min-height: 180px;
+    }
+
+    /* Toast */
+    .toast-container {
+        top: 12px; right: 12px; left: 12px;
+        width: auto;
+        max-width: none;
+    }
+    .toast {
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+        padding: 12px 14px;
+        gap: 8px;
+    }
+    .toast-title { font-size: 13px; }
+    .toast-msg { font-size: 12px; }
+
+    /* Modal → Bottom Sheet */
+    .modal { padding: 0; }
+    .modal-dialog {
+        max-width: 100%;
+        width: 100%;
+        max-height: 92vh;
+        border-radius: 16px 16px 0 0;
+        position: fixed;
+        bottom: 0; left: 0; right: 0;
+        top: auto;
+        animation: sheetIn 0.32s cubic-bezier(.2,.8,.2,1);
+    }
+    @keyframes sheetIn {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
+    }
+    .modal-lg { max-width: 100%; }
+    .modal-header {
+        padding: 16px 16px;
+        gap: 10px;
+    }
+    .modal-title { font-size: 16px; }
+    .modal-close { width: 34px; height: 34px; }
+    .modal-body { padding: 16px; }
+    .modal-desc { font-size: 12.5px; line-height: 1.7; }
+    .export-textarea {
+        min-height: 280px;
+        font-size: 11.5px;
+        padding: 14px;
+    }
+    .modal-footer {
+        padding: 14px 16px calc(14px + env(safe-area-inset-bottom));
+        gap: 8px;
+        flex-wrap: wrap;
+    }
+    .modal-footer .admin-btn-primary,
+    .modal-footer .admin-btn-gold,
+    .modal-footer .admin-btn-outline {
+        flex: 1 1 30%;
+        min-width: 0;
+    }
+
+    /* 防 iOS 底部条遮挡 */
+    .admin-sidebar-footer,
+    .admin-body { padding-bottom: calc(14px + env(safe-area-inset-bottom)); }
+}
+
+

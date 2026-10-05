@@ -43,6 +43,7 @@
     </div>
 
     <div id="adminView" class="admin-view" style="display:none;">
+        <div id="sidebarMask" class="sidebar-mask"></div>
         <aside class="admin-sidebar">
             <div class="admin-brand">
                 <div class="admin-brand-icon">
@@ -74,6 +75,13 @@
 
         <div class="admin-main">
             <header class="admin-header">
+                <button id="sidebarToggle" class="sidebar-toggle" type="button" aria-label="切换导航菜单" aria-expanded="false">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="2.5" y1="5" x2="17.5" y2="5"/>
+                        <line x1="2.5" y1="10" x2="17.5" y2="10"/>
+                        <line x1="2.5" y1="15" x2="17.5" y2="15"/>
+                    </svg>
+                </button>
                 <div class="admin-header-left">
                     <h2 id="pageTitle" class="admin-page-title">站点设置</h2>
                     <span class="admin-header-desc" id="pageDesc">修改网站标题、关键词、品牌名称等基础信息</span>

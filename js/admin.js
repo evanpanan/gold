@@ -396,7 +396,36 @@
         document.getElementById('pageTitle').textContent = item ? item.label : '';
         document.getElementById('pageDesc').textContent = item ? item.desc : '';
         renderForm(id);
+        closeSidebar();
         window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function openSidebar() {
+        try {
+            const sb = document.querySelector('.admin-sidebar');
+            const mk = document.getElementById('sidebarMask');
+            const tg = document.getElementById('sidebarToggle');
+            if (sb) sb.classList.add('open');
+            if (mk) mk.classList.add('open');
+            if (tg) tg.setAttribute('aria-expanded', 'true');
+        } catch (e) {}
+    }
+    function closeSidebar() {
+        try {
+            const sb = document.querySelector('.admin-sidebar');
+            const mk = document.getElementById('sidebarMask');
+            const tg = document.getElementById('sidebarToggle');
+            if (sb) sb.classList.remove('open');
+            if (mk) mk.classList.remove('open');
+            if (tg) tg.setAttribute('aria-expanded', 'false');
+        } catch (e) {}
+    }
+    function toggleSidebar() {
+        try {
+            const sb = document.querySelector('.admin-sidebar');
+            if (sb && sb.classList.contains('open')) closeSidebar();
+            else openSidebar();
+        } catch (e) {}
     }
 
     /* ============ FORM RENDER ============ */
@@ -702,6 +731,12 @@
 
     /* ============ TOP BUTTONS ============ */
     function bindTopButtons() {
+        const toggle = document.getElementById('sidebarToggle');
+        const mask = document.getElementById('sidebarMask');
+        if (toggle) toggle.addEventListener('click', function (e) { e.preventDefault(); toggleSidebar(); });
+        if (mask) mask.addEventListener('click', function () { closeSidebar(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeSidebar(); });
+
         document.getElementById('saveBtn').addEventListener('click', function () {
             saveConfig(currentCfg);
             dirty = false;
@@ -718,6 +753,7 @@
             toast('success', '已恢复默认', '所有内容已重置为出厂配置');
         });
         document.getElementById('previewBtn').addEventListener('click', function () {
+            closeSidebar();
             window.open('index.html', '_blank');
         });
         document.getElementById('logoutBtn').addEventListener('click', function () {
@@ -726,6 +762,7 @@
             location.reload();
         });
         document.getElementById('exportBtn').addEventListener('click', function () {
+            closeSidebar();
             openExportModal();
         });
     }
