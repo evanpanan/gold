@@ -1,0 +1,29 @@
+# OS / Editor junk
+.DS_Store
+Thumbs.db
+*.log
+*.tmp
+*.swp
+node_modules/
+dist/
+build/
+.cache/
+
+# IDE / AI session meta
+.trae/
+.vscode/
+.idea/
+
+# Deployment platform state (config files like vercel.json are kept)
+.vercel/
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+venv/
+env/
+
+# Server logs
+/tmp/
+/local_tmp/

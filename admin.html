@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>金岩石官网 · 内容管理后台</title>
+    <link rel="stylesheet" href="css/admin.css?v=20261005a">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div id="loginView" class="login-view">
+        <div class="login-bg"></div>
+        <div class="login-card">
+            <div class="login-logo">
+                <div class="login-logo-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <path d="M20 2L38 12V28L20 38L2 28V12L20 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M20 10L32 17V25L20 32L8 25V17L20 10Z" fill="currentColor" opacity="0.3"/>
+                        <path d="M20 16L26 20V24L20 28L14 24V20L20 16Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="login-logo-cn">金岩石</div>
+                    <div class="login-logo-en">GOLDEN ROCK</div>
+                </div>
+            </div>
+            <h1 class="login-title">内容管理后台</h1>
+            <p class="login-subtitle">CMS Admin Dashboard</p>
+            <form id="loginForm" class="login-form">
+                <label class="field">
+                    <span class="field-label">管理员密码</span>
+                    <div class="field-input-wrap">
+                        <svg class="field-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="10" width="14" height="8" rx="2"/><path d="M7 10V7a3 3 0 016 0v3"/></svg>
+                        <input id="loginPwd" type="password" placeholder="请输入登录密码" autocomplete="current-password" required>
+                    </div>
+                </label>
+                <div id="loginError" class="login-error" style="display:none;">密码错误，请重试。</div>
+                <button type="submit" class="btn btn-primary btn-full">登 录</button>
+                <p class="login-hint">请联系系统管理员获取登录权限。如忘记密码，可通过系统管理员重置。</p>
+            </form>
+        </div>
+    </div>
+
+    <div id="adminView" class="admin-view" style="display:none;">
+        <aside class="admin-sidebar">
+            <div class="admin-brand">
+                <div class="admin-brand-icon">
+                    <svg viewBox="0 0 40 40" fill="none">
+                        <path d="M20 2L38 12V28L20 38L2 28V12L20 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M20 10L32 17V25L20 32L8 25V17L20 10Z" fill="currentColor" opacity="0.3"/>
+                        <path d="M20 16L26 20V24L20 28L14 24V20L20 16Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div>
+                    <div class="admin-brand-cn">金岩石 后台</div>
+                    <div class="admin-brand-en">GOLDEN ROCK CMS</div>
+                </div>
+            </div>
+            <nav class="admin-nav">
+                <ul id="adminNav"></ul>
+            </nav>
+            <div class="admin-sidebar-footer">
+                <button id="previewBtn" class="admin-btn-secondary">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 3C6 3 2.73 5.11 1 7c1.73 1.89 5 4 9 4s7.27-2.11 9-4c-1.73-1.89-5-4-9-4z"/><circle cx="10" cy="7" r="3"/><path d="M1.75 13.5C5.5 16 8.5 17 10 17s4.5-1 8.25-3.5"/></svg>
+                    打开官网预览
+                </button>
+                <button id="logoutBtn" class="admin-btn-ghost">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M7 4H5a2 2 0 00-2 2v8a2 2 0 002 2h2"/><path d="M14 10H4m0 0l3-3m-3 3l3 3m7-9l3 12"/></svg>
+                    退出登录
+                </button>
+            </div>
+        </aside>
+
+        <div class="admin-main">
+            <header class="admin-header">
+                <div class="admin-header-left">
+                    <h2 id="pageTitle" class="admin-page-title">站点设置</h2>
+                    <span class="admin-header-desc" id="pageDesc">修改网站标题、关键词、品牌名称等基础信息</span>
+                </div>
+                <div class="admin-header-right">
+                    <div id="saveStatus" class="save-status">未保存更改</div>
+                    <button id="resetBtn" class="admin-btn-outline">恢复默认</button>
+                    <button id="saveBtn" class="admin-btn-primary">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h9l3 3v9a1 1 0 01-1 1H4a1 1 0 01-1-1V5a1 1 0 011-1z"/><path d="M14 4v4H6V4h8z"/></svg>
+                        保存更改
+                    </button>
+                    <button id="exportBtn" class="admin-btn-gold">
+                        <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M12 2H6a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V8l-4-6z"/><path d="M12 2v6h6"/><path d="M8 12h4M8 15h4"/></svg>
+                        发布与导出
+                    </button>
+                </div>
+            </header>
+
+            <div class="admin-body">
+                <div id="toastContainer" class="toast-container"></div>
+                <div id="formContainer" class="form-container">
+                    <!-- 表单由 JS 动态生成 -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="exportModal" class="modal" style="display:none;">
+        <div class="modal-backdrop"></div>
+        <div class="modal-dialog modal-lg">
+            <div class="modal-header">
+            <h3 class="modal-title">发布与导出网站内容</h3>
+            <button class="modal-close" data-modal>&times;</button>
+            </div>
+            <div class="modal-body">
+                <p class="modal-desc">您当前编辑的所有网站内容已自动汇总在下方。请选择一种方式，将内容包交给您的技术团队或部署服务商上线：</p>
+                <ul class="export-tips" style="margin:0 0 16px;padding-left:20px;color:#5a6a88;font-size:13px;line-height:1.8;">
+                    <li><strong>方式一 · 下载</strong>：获取内容配置文件，发送给技术/运维同事或托管服务商即可上线。</li>
+                    <li><strong>方式二 · 复制</strong>：直接粘贴到您的工单 / 邮件 / 即时通讯中发送给对接人员。</li>
+                </ul>
+                <textarea id="exportTextarea" class="export-textarea" spellcheck="false"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button class="admin-btn-outline" data-modal-close>关闭</button>
+                <button id="copyConfigBtn" class="admin-btn-primary">复制内容数据</button>
+                <button id="downloadConfigBtn" class="admin-btn-gold">下载内容配置包</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="config.js?v=20261005a"></script>
+    <script src="js/admin.js?v=20261005a"></script>
+</body>
+</html>

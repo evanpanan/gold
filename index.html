@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" data-dyn="site.metaDescription" content="金岩石有限公司 Golden Rock Limited - 扎根香港国际金融中心的专业金融服务机构，专注全球资本市场证券业务服务。">
+    <meta name="keywords" data-dyn="site.metaKeywords" content="金岩石, GoldenRock, 香港券商, 证券交易, 投资咨询, 跨境资产配置, 港股, 美股">
+    <title data-dyn="site.title">金岩石有限公司 | Golden Rock Limited</title>
+    <link rel="icon" type="image/svg+xml" data-favicon-slot>
+    <link rel="stylesheet" href="css/style.css?v=20261005a">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header id="navbar" class="navbar">
+        <div class="container nav-container">
+            <a href="#home" class="logo">
+                <div class="logo-icon" data-dyn="brand.logoSvg" data-type="svg-inner">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 2L38 12V28L20 38L2 28V12L20 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                        <path d="M20 10L32 17V25L20 32L8 25V17L20 10Z" fill="currentColor" opacity="0.3"/>
+                        <path d="M20 16L26 20V24L20 28L14 24V20L20 16Z" fill="currentColor"/>
+                    </svg>
+                </div>
+                <div class="logo-text">
+                    <span class="logo-cn" data-dyn="brand.logoCn">金岩石</span>
+                    <span class="logo-en" data-dyn="brand.logoEn">GOLDEN ROCK</span>
+                </div>
+            </a>
+            <nav class="nav-menu" id="navMenu">
+                <ul>
+                    <li><a href="#home" class="nav-link active" data-i18n="ui.nav.home">首页</a></li>
+                    <li><a href="#about" class="nav-link" data-i18n="ui.nav.about">关于我们</a></li>
+                    <li><a href="#values" class="nav-link" data-i18n="ui.nav.values">核心价值观</a></li>
+                    <li><a href="#services" class="nav-link" data-i18n="ui.nav.services">核心服务</a></li>
+                    <li><a href="#compliance" class="nav-link" data-i18n="ui.nav.compliance">合规资质</a></li>
+                    <li><a href="#contact" class="nav-link" data-i18n="ui.nav.contact">联系我们</a></li>
+                </ul>
+                <div class="lang-switcher" id="langSwitcher" aria-label="语言切换">
+                    <button type="button" class="lang-pill" data-lang="zh_CN" data-i18n="ui.switcher.simplified">简</button>
+                    <button type="button" class="lang-pill" data-lang="zh_TW" data-i18n="ui.switcher.traditional">繁</button>
+                    <button type="button" class="lang-pill" data-lang="en" data-i18n="ui.switcher.english">EN</button>
+                </div>
+            </nav>
+            <button class="mobile-toggle" id="mobileToggle" aria-label="菜单">
+                <span></span>
+                <span></span>
+                <span></span>
+            </button>
+        </div>
+    </header>
+
+    <section id="home" class="hero">
+        <div class="hero-bg"></div>
+        <div class="hero-overlay"></div>
+        <div class="container hero-content">
+            <div class="hero-parallax-layer" data-parallax="0.08">
+                <div class="hero-badge">
+                    <span class="badge-dot"></span>
+                    <span data-dyn="brand.heroBadge">香港持牌金融服务机构</span>
+                </div>
+            </div>
+            <div class="hero-parallax-layer" data-parallax="0.04">
+                <h1 class="hero-title">
+                    <span class="title-line" data-dyn="brand.taglinePrimary">磐石固本</span>
+                    <span class="title-line title-gold" data-dyn="brand.taglineSecondary">金石创富</span>
+                </h1>
+            </div>
+            <div class="hero-parallax-layer" data-parallax="0.06">
+                <p class="hero-subtitle" data-dyn="hero.subtitle" data-type="html">
+                    立足香港国际金融枢纽，助力客户理性布局全球市场<br class="desktop-br">
+                    发掘可持续的全球价值机遇
+                </p>
+            </div>
+            <div class="hero-parallax-layer" data-parallax="0.10">
+                <div class="hero-actions">
+                    <a href="#services" class="btn btn-primary" data-dyn="hero.ctaPrimary.href" data-type="href">
+                        <span data-dyn="hero.ctaPrimary.text">了解服务</span>
+                        <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <line x1="3" y1="10" x2="17" y2="10"/>
+                            <polyline points="11,4 17,10 11,16"/>
+                        </svg>
+                    </a>
+                    <a href="#contact" class="btn btn-outline" data-dyn="hero.ctaSecondary.href" data-type="href">
+                        <span data-dyn="hero.ctaSecondary.text">联系我们</span>
+                    </a>
+                </div>
+            </div>
+            <div class="hero-parallax-layer" data-parallax="0.12">
+                <div class="hero-stats">
+                    <div class="hero-stats-inline" data-dyn-list="hero.stats">
+                        <div class="stat-item" data-dyn-tmpl>
+                            <div class="stat-value" style="font-variant-numeric: tabular-nums;" data-dyn-f="value">HK</div>
+                            <div class="stat-label" data-dyn-f="label">国际金融枢纽</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="hero-scroll">
+            <span data-i18n="ui.hero.scrollCue">向下滚动</span>
+            <div class="scroll-line"></div>
+        </div>
+    </section>
+
+    <section id="about" class="section about-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="ui.sectionTag.about">ABOUT US</span>
+                <h2 class="section-title" data-i18n="ui.sectionTitle.about">关于金岩石</h2>
+                <div class="section-line"></div>
+            </div>
+            <div class="about-grid">
+                <div class="about-content">
+                    <div class="about-intro" data-dyn-list="about.intro">
+                        <p class="intro-text" data-dyn-tmpl data-dyn-f data-dyn-t="html">
+                            <span class="text-gold font-bold">金岩石 GoldenRock</span>，扎根香港国际金融中心的专业金融服务机构，专注全球资本市场证券业务服务。
+                        </p>
+                    </div>
+                    <div class="about-vision-mission">
+                        <div class="vm-card">
+                            <div class="vm-icon" data-vm-type="vision">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                    <path d="M5 13 C9 7 15 5 16 5 C17 5 23 7 27 13 C23 19 17 21 16 21 C15 21 9 19 5 13 Z"/>
+                                    <path d="M8 12 C10 9 13 7.5 16 7.5 C19 7.5 22 9 24 12" opacity="0.6"/>
+                                    <circle cx="16" cy="13" r="4.5"/>
+                                    <circle cx="16" cy="13" r="2.2" fill="currentColor" opacity="0.85"/>
+                                    <line x1="16" y1="8.5" x2="16" y2="17.5" stroke-width="1.2"/>
+                                    <line x1="11.5" y1="13" x2="20.5" y2="13" stroke-width="1.2"/>
+                                    <path d="M25 6 L27 4" stroke-width="1.6"/>
+                                    <path d="M27.5 6.5 L29 5" stroke-width="1.2" opacity="0.7"/>
+                                </svg>
+                            </div>
+                            <h3 class="vm-title" data-dyn="about.vision.title">企业愿景</h3>
+                            <p class="vm-desc" data-dyn="about.vision.desc">成为一家专注价值、基业稳固的全球金融服务机构。</p>
+                        </div>
+                        <div class="vm-card">
+                            <div class="vm-icon" data-vm-type="mission">
+                                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+                                    <circle cx="16" cy="16" r="13"/>
+                                    <circle cx="16" cy="16" r="10.5" opacity="0.35"/>
+                                    <line x1="16" y1="2.5" x2="16" y2="5" stroke-width="2"/>
+                                    <line x1="29.5" y1="16" x2="27" y2="16" stroke-width="2"/>
+                                    <line x1="16" y1="29.5" x2="16" y2="27" stroke-width="2"/>
+                                    <line x1="2.5" y1="16" x2="5" y2="16" stroke-width="2"/>
+                                    <line x1="25.3" y1="7.8" x2="23.8" y2="9.3"/>
+                                    <line x1="26.8" y1="9.3" x2="25.3" y2="10.8"/>
+                                    <line x1="25.3" y1="24.2" x2="23.8" y2="22.7"/>
+                                    <line x1="26.8" y1="22.7" x2="25.3" y2="21.2"/>
+                                    <line x1="6.7" y1="24.2" x2="8.2" y2="22.7"/>
+                                    <line x1="5.2" y1="22.7" x2="6.7" y2="21.2"/>
+                                    <line x1="6.7" y1="7.8" x2="8.2" y2="9.3"/>
+                                    <line x1="5.2" y1="9.3" x2="6.7" y2="10.8"/>
+                                    <path d="M16 7 L19 16 L16 16 L13 25" stroke-width="2.1" fill="currentColor" opacity="0.25"/>
+                                    <path d="M16 7 L19 16 L16 16" fill="currentColor" opacity="0.75" stroke-width="1.4"/>
+                                    <path d="M16 25 L13 16 L16 16" fill="currentColor" opacity="0.35" stroke-width="1.4"/>
+                                </svg>
+                            </div>
+                            <h3 class="vm-title" data-dyn="about.mission.title">企业使命</h3>
+                            <p class="vm-desc" data-dyn="about.mission.desc">立足香港国际金融枢纽，助力客户理性布局全球市场，发掘可持续的全球价值机遇。</p>
+                        </div>
+                    </div>
+                </div>
+                <div class="about-visual">
+                    <div class="visual-card">
+                        <div class="visual-pattern">
+                            <div class="grid-lines">
+                                <div class="grid-line horizontal"></div>
+                                <div class="grid-line horizontal"></div>
+                                <div class="grid-line horizontal"></div>
+                                <div class="grid-line vertical"></div>
+                                <div class="grid-line vertical"></div>
+                                <div class="grid-line vertical"></div>
+                            </div>
+                        </div>
+                        <div class="visual-content" data-dyn-list="about.visualCards">
+                            <div class="vc-item" data-dyn-tmpl>
+                                <div class="vc-icon" data-vc-icon data-dyn-f="icon"></div>
+                                <div>
+                                    <div class="vc-value" data-dyn-f="value">香港</div>
+                                    <div class="vc-label" data-dyn-f="label">总部所在地</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="values" class="section values-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="ui.sectionTag.values">CORE VALUES</span>
+                <h2 class="section-title" data-i18n="ui.sectionTitle.values">核心价值观</h2>
+                <div class="section-line"></div>
+                <p class="section-desc" data-i18n="ui.sectionDesc.values">坚守四大核心准则，铸就长期信任基石</p>
+            </div>
+            <div class="values-grid" data-dyn-list="values">
+                <div class="value-card" data-dyn-tmpl>
+                    <div class="value-number" data-dyn-f="num">01</div>
+                    <div class="value-icon-wrap" data-value-icon-type="0"></div>
+                    <h3 class="value-title" data-dyn-f="title">磐石固本</h3>
+                    <div class="value-divider"></div>
+                    <p class="value-desc" data-dyn-f="desc">坚守风控底线，审慎稳健，基业长青。以磐石般的坚定，守护每一份资产安全。</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="services" class="section services-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="ui.sectionTag.services">OUR SERVICES</span>
+                <h2 class="section-title" data-i18n="ui.sectionTitle.services">核心专业服务</h2>
+                <div class="section-line"></div>
+                <p class="section-desc" data-i18n="ui.sectionDesc.services">专业团队 · 全球视野 · 为客户创造长期价值</p>
+            </div>
+            <div class="services-grid" data-dyn-list="services">
+                <div class="service-card" data-dyn-tmpl>
+                    <div class="featured-badge" data-dyn-cond="item.featured" data-i18n="ui.hero.featuredBadge">核心服务</div>
+                    <div class="service-header">
+                        <div class="service-icon" data-svc-icon-type="trade">
+                            <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                                <path d="M6 30L14 22L20 28L30 14L36 20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <path d="M30 14H36V20" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                                <rect x="2" y="6" width="36" height="28" rx="2" stroke="currentColor" stroke-width="2"/>
+                            </svg>
+                        </div>
+                        <span class="service-num" data-dyn-f="num">01</span>
+                    </div>
+                    <h3 class="service-title" data-dyn-f="title">证券市场交易执行</h3>
+                    <p class="service-desc" data-dyn-f="desc" data-dyn-t="html">提供港股、美股等海外主流市场的专业交易执行服务，高效稳定的交易系统，确保客户订单快速、准确执行。</p>
+                    <ul class="service-features" data-dyn-list="features">
+                        <li data-dyn-tmpl><span class="feature-dot"></span><span data-dyn-f>港股 / 美股直通交易</span></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="compliance" class="section compliance-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="ui.sectionTag.compliance">COMPLIANCE & LICENSES</span>
+                <h2 class="section-title" data-i18n="ui.sectionTitle.compliance">合规资质与资金安全</h2>
+                <div class="section-line"></div>
+                <p class="section-desc" data-i18n="ui.sectionDesc.compliance">严格遵守香港金融监管要求，合规先行，客户资产安全至上</p>
+            </div>
+            <div class="compliance-grid">
+                <div class="compliance-main">
+                    <div class="compliance-hero-card">
+                        <div class="chc-badge">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M10 1.2L17 5.2V11.2C17 15.2 13.5 18.7 10 19.2C6.5 18.7 3 15.2 3 11.2V5.2L10 1.2Z"/>
+                                <path d="M5.2 4.8 C7 3.2 13 3.2 14.8 4.8 C14.8 6 13 6.8 10 6.8 C7 6.8 5.2 6 5.2 4.8 Z" fill="currentColor" opacity="0.22"/>
+                                <path d="M4 4.5 L2.8 2.6" opacity="0.75"/>
+                                <path d="M16 4.5 L17.2 2.6" opacity="0.75"/>
+                                <path d="M10 6.5 C10 8 10.2 9.2 8.5 10.5 C7.5 11.3 7 12 7 12.5" opacity="0" stroke-width="0"/>
+                                <path d="M6.5 10.2 C7.3 11.4 8.6 12.2 10 12.2 C11.4 12.2 12.6 11.6 13.2 10.5" opacity="0.7"/>
+                                <path d="M7.5 9.2 C8.2 10 9 10.4 10 10.4 C11.1 10.4 11.9 9.9 12.6 9"/>
+                                <path d="M11.2 13.2 L13 11.5" stroke-width="2"/>
+                            </svg>
+                            <span data-dyn="compliance.hero.badge">持牌合规</span>
+                        </div>
+                        <h3 class="chc-title" data-dyn="compliance.hero.title">香港证监会 (SFC) 监管</h3>
+                        <p class="chc-desc" data-dyn="compliance.hero.desc" data-type="html">
+                            金岩石有限公司 Golden Rock Limited 严格遵守《证券及期货条例》及香港证监会（SFC）颁布的各项监管规定，
+                            建立完善的内部合规体系与风控机制，确保所有业务活动在合规框架内稳健运行。
+                        </p>
+                        <div class="chc-note">
+                            <svg width="18" height="18" viewBox="0 0 18 18" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.55" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M9 2.2 C7.2 2.2 6.2 2.8 6 4" opacity="0.01" stroke-width="0"/>
+                                <path d="M6.8 2.4 C7.4 1.4 10.6 1.4 11.2 2.4" fill="none"/>
+                                <circle cx="9" cy="9.5" r="6.2"/>
+                                <circle cx="9" cy="9.5" r="4.6" opacity="0.25"/>
+                                <line x1="9" y1="9.5" x2="9" y2="5.8" stroke-width="1.7"/>
+                                <line x1="9" y1="9.5" x2="12.3" y2="10.8" stroke-width="1.5"/>
+                                <circle cx="9" cy="9.5" r="0.8" fill="currentColor"/>
+                                <path d="M4.2 15.2 L3.2 16.8" stroke-width="1.6"/>
+                                <path d="M13.8 15.2 L14.8 16.8" stroke-width="1.6"/>
+                                <line x1="5.5" y1="16.2" x2="12.5" y2="16.2" stroke-width="1.4" opacity="0.5"/>
+                            </svg>
+                            <span data-dyn="compliance.hero.note">所有受规管活动均在 SFC 严格监督下开展</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="compliance-features" data-dyn-list="compliance.features">
+                    <div class="cf-card" data-dyn-tmpl>
+                        <div class="cf-icon" data-cf-icon-type="safe-1"></div>
+                        <h4 class="cf-title" data-dyn-f="title">客户资产隔离托管</h4>
+                        <p class="cf-desc" data-dyn-f="desc">客户资产与公司自有资金严格分离，独立托管于香港认可的银行及清算机构。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="section cta-section">
+        <div class="container">
+            <div class="cta-card">
+                <div class="cta-bg-pattern"></div>
+                <div class="cta-content">
+                    <h2 class="cta-title" data-dyn="cta.title">开启全球价值投资之旅</h2>
+                    <p class="cta-desc" data-dyn="cta.desc" data-type="html">
+                        专业的投研团队 · 稳健的风控体系 · 广阔的全球视野<br>
+                        金岩石，与您同行于财富增长之路
+                    </p>
+                    <div class="cta-actions">
+                        <a href="#contact" class="btn btn-primary btn-large" data-dyn="cta.ctaPrimary.href" data-type="href">
+                            <span data-dyn="cta.ctaPrimary.text">立即咨询</span>
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="3" y1="10" x2="17" y2="10"/>
+                                <polyline points="11,4 17,10 11,16"/>
+                            </svg>
+                        </a>
+                        <a href="#services" class="btn btn-outline btn-large" data-dyn="cta.ctaSecondary.href" data-type="href">
+                            <span data-dyn="cta.ctaSecondary.text">查看服务详情</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section id="contact" class="section contact-section">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag" data-i18n="ui.sectionTag.contact">CONTACT US</span>
+                <h2 class="section-title" data-i18n="ui.sectionTitle.contact">联系我们</h2>
+                <div class="section-line"></div>
+                <p class="section-desc" data-i18n="ui.sectionDesc.contact">欢迎与我们取得联系，专业团队将为您提供极速响应服务</p>
+            </div>
+            <div class="contact-grid">
+                <div class="contact-info" data-dyn-list="contact.items">
+                    <div class="contact-item" data-dyn-tmpl>
+                        <div class="ci-icon" data-contact-icon-type="location"></div>
+                        <div class="ci-content">
+                            <div class="ci-label" data-dyn-f="label">公司地址</div>
+                            <div class="ci-value" data-dyn-f="value">香港中环（国际金融中心区域）</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="contact-form-wrap">
+                    <form class="contact-form" id="contactForm">
+                        <h3 class="form-title" data-dyn="contact.form.title">留言咨询</h3>
+                        <p class="form-desc" data-dyn="contact.form.desc">填写以下表单，我们将在1个工作日内与您联系</p>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="name" data-i18n="ui.form.nameLabel">姓名 *</label>
+                                <input type="text" id="name" name="name" required data-i18n-attr="placeholder:ui.form.namePh" placeholder="请输入您的姓名">
+                            </div>
+                            <div class="form-group">
+                                <label for="phone" data-i18n="ui.form.phoneLabel">联系电话</label>
+                                <input type="tel" id="phone" name="phone" data-i18n-attr="placeholder:ui.form.phonePh" placeholder="请输入您的电话" style="font-variant-numeric: tabular-nums;">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email" data-i18n="ui.form.emailLabel">电子邮箱 *</label>
+                            <input type="email" id="email" name="email" required data-i18n-attr="placeholder:ui.form.emailPh" placeholder="请输入您的邮箱">
+                        </div>
+                        <div class="form-group">
+                            <label for="service" data-i18n="ui.form.serviceLabel">咨询服务</label>
+                            <select id="service" name="service" data-dyn-list="contact.serviceOptions">
+                                <option value="" data-i18n="ui.form.serviceDefault">请选择咨询类型</option>
+                                <option data-dyn-tmpl data-dyn-f="label" data-dyn-fv="value">证券市场交易执行</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="message" data-i18n="ui.form.msgLabel">留言内容 *</label>
+                            <textarea id="message" name="message" rows="4" required data-i18n-attr="placeholder:ui.form.msgPh" placeholder="请简要描述您的需求或问题..."></textarea>
+                        </div>
+                        <div class="form-group form-checkbox">
+                            <input type="checkbox" id="privacy" name="privacy" required>
+                            <label for="privacy" data-i18n-html="ui.form.agree">我已阅读并同意隐私政策与信息处理声明</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <span data-dyn="contact.form.submitText">提交咨询</span>
+                            <svg width="18" height="18" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                                <line x1="3" y1="10" x2="17" y2="10"/>
+                                <polyline points="11,4 17,10 11,16"/>
+                            </svg>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-top">
+                <div class="footer-brand">
+                    <a href="#home" class="logo footer-logo">
+                        <div class="logo-icon">
+                            <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M20 2L38 12V28L20 38L2 28V12L20 2Z" stroke="currentColor" stroke-width="2" fill="none"/>
+                                <path d="M20 10L32 17V25L20 32L8 25V17L20 10Z" fill="currentColor" opacity="0.3"/>
+                                <path d="M20 16L26 20V24L20 28L14 24V20L20 16Z" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <div class="logo-text">
+                            <span class="logo-cn" data-dyn="brand.logoCn">金岩石</span>
+                            <span class="logo-en" data-dyn="brand.logoEnFull">GOLDEN ROCK LIMITED</span>
+                        </div>
+                    </a>
+                    <p class="footer-desc" data-dyn="footer.brandDesc">
+                        扎根香港，放眼全球。以专业与诚信，为客户发掘可持续的全球价值机遇。
+                    </p>
+                </div>
+                <div class="footer-links-group">
+                    <div class="footer-links">
+                        <h5 class="fl-title" data-i18n="ui.footer.navTitle">网站导航</h5>
+                        <ul>
+                            <li><a href="#home" data-i18n="ui.footer.links.home">首页</a></li>
+                            <li><a href="#about" data-i18n="ui.footer.links.about">关于我们</a></li>
+                            <li><a href="#values" data-i18n="ui.footer.links.values">核心价值观</a></li>
+                            <li><a href="#services" data-i18n="ui.footer.links.services">核心服务</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h5 class="fl-title" data-i18n="ui.footer.svcTitle">专业服务</h5>
+                        <ul>
+                            <li><a href="#services" data-i18n="ui.footer.links.svcTrading">证券交易执行</a></li>
+                            <li><a href="#services" data-i18n="ui.footer.links.svcAdvisory">投资咨询服务</a></li>
+                            <li><a href="#services" data-i18n="ui.footer.links.svcAllocation">跨境资产配置</a></li>
+                            <li><a href="#compliance" data-i18n="ui.footer.links.compliance">合规资质</a></li>
+                        </ul>
+                    </div>
+                    <div class="footer-links">
+                        <h5 class="fl-title" data-i18n="ui.footer.contactTitle">联系我们</h5>
+                        <ul>
+                            <li><span class="ft-ic ft-ic-loc" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M10 18 C4 14 2.6 11 2.6 8.3 C2.6 5.3 5.1 3.2 7.4 3.2 C8.4 3.2 9 3.5 9 4.2 C9 3.5 9.6 3.2 10.6 3.2 C12.9 3.2 15.4 5.3 15.4 8.3 C15.4 11 10 18 10 18 Z"/><circle cx="10" cy="8.8" r="2.3"/></svg></span><span data-i18n="ui.footer.links.locShort">香港中环</span></li>
+                            <li style="font-variant-numeric: tabular-nums;"><span class="ft-ic ft-ic-phone" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="6.3" y="2.8" width="8.4" height="14.4" rx="2"/><rect x="7.4" y="4.6" width="6.2" height="8.2" rx="0.9" fill="currentColor" opacity="0.12"/><circle cx="10.5" cy="15.4" r="0.75" fill="currentColor" opacity="0.45"/><path d="M6.5 8.6 L4.5 9.9 C4 10.2 3.8 10.8 4.2 11.3 L4.9 12.4 C5.2 12.8 5.6 12.9 6.1 12.8 L7.8 12.5"/><path d="M14.5 8.6 L16.5 9.9 C17 10.2 17.2 10.8 16.8 11.3 L16.1 12.4 C15.8 12.8 15.4 12.9 14.9 12.8 L13.2 12.5"/></svg></span>+852 xxxx xxxx</li>
+                            <li><span class="ft-ic ft-ic-mail" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="2.6" y="4.6" width="14.8" height="10.8" rx="1.8"/><path d="M3.2 6.2 L10 11.4 L16.8 6.2"/></svg></span>contact@goldenrock.com.hk</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-disclaimer">
+                <p>
+                    <strong data-dyn="footer.disclaimerTitle">重要声明：</strong><span data-dyn="footer.disclaimer">本网站所载资料及内容仅供参考，并不构成任何证券、金融产品或工具的要约、邀约、招揽、建议、意见或任何保证。投资涉及风险，证券价格可升可跌，甚至变成毫无价值。过往业绩并不代表将来表现。投资者在作出任何投资决定前，应考虑本身的财政状况、投资目标及经验、风险承受能力及仔细了解相关产品或服务的性质及风险。如有疑问，请咨询独立专业顾问。</span>
+                </p>
+                <p data-dyn="footer.regulatorNote">
+                    金岩石有限公司 Golden Rock Limited 为香港注册成立之公司，并受香港证券及期货事务监察委员会（SFC）监管。
+                </p>
+            </div>
+            <div class="footer-bottom">
+                <div class="fb-copyright" data-dyn="footer.copyright">
+                    © 2026 金岩石有限公司 GOLDEN ROCK LIMITED. 版权所有 All Rights Reserved.
+                </div>
+                <div class="fb-links" data-dyn-list="footer.links">
+                    <a data-dyn-tmpl data-dyn-f="text" data-dyn-fhref="href" href="#privacy">隐私政策</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <template id="cfIconTemplates" style="display:none;">
+        <svg id="cf-icon-safe-1" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="6" width="30" height="24" rx="3"/>
+            <line x1="18" y1="7" x2="18" y2="29" stroke-dasharray="2 1.5"/>
+            <rect x="6.5" y="10" width="9" height="16" rx="1.5"/>
+            <rect x="20.5" y="10" width="9" height="16" rx="1.5"/>
+            <circle cx="11" cy="18" r="1.8"/>
+            <circle cx="25" cy="18" r="1.8"/>
+            <line x1="11" y1="19.8" x2="11" y2="22"/>
+            <line x1="25" y1="19.8" x2="25" y2="22"/>
+        </svg>
+        <svg id="cf-icon-safe-2" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="18" cy="20" r="12.5"/>
+            <circle cx="18" cy="20" r="10"/>
+            <path d="M6 20 A12 12 0 0 1 30 20"/>
+            <line x1="10" y1="12" x2="11" y2="13.5"/>
+            <line x1="18" y1="7.5" x2="18" y2="9.5"/>
+            <line x1="26" y1="12" x2="25" y2="13.5"/>
+            <line x1="18" y1="20" x2="25" y2="13" stroke-width="2"/>
+            <circle cx="18" cy="20" r="1.5" fill="currentColor"/>
+            <line x1="12" y1="27" x2="15" y2="27" stroke-dasharray="1.2 1"/>
+            <line x1="16.5" y1="27" x2="19.5" y2="27" stroke-dasharray="1.2 1"/>
+            <line x1="21" y1="27" x2="24" y2="27" stroke-dasharray="1.2 1"/>
+        </svg>
+        <svg id="cf-icon-safe-3" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M8 5 H24 L30 11 V30 H8 Z"/>
+            <path d="M24 5 V11 H30" fill="currentColor" opacity="0.15"/>
+            <line x1="12" y1="16" x2="26" y2="16"/>
+            <line x1="12" y1="20" x2="24" y2="20"/>
+            <line x1="12" y1="24" x2="21" y2="24"/>
+            <circle cx="25.5" cy="26.5" r="3.2"/>
+            <path d="M23.8 26.5 L25 27.7 L27.3 25.3"/>
+        </svg>
+        <svg id="cf-icon-safe-4" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M18 3 L31 10.5 V21 L18 33 L5 21 V10.5 Z"/>
+            <path d="M12 20 H24 V28 H12 Z" rx="1"/>
+            <path d="M14.5 20 V16.5 C14.5 14.5 16 13 18 13 C20 13 21.5 14.5 21.5 16.5 V20"/>
+            <circle cx="14.5" cy="13.2" r="0.9" fill="currentColor"/>
+            <circle cx="21.5" cy="13.2" r="0.9" fill="currentColor"/>
+            <line x1="15.5" y1="23" x2="20.5" y2="23"/>
+            <line x1="15.5" y1="24.8" x2="20.5" y2="24.8"/>
+            <line x1="15.5" y1="26.6" x2="20.5" y2="26.6"/>
+        </svg>
+    </template>
+    <template id="svcIconTemplates" style="display:none;">
+        <svg id="svc-icon-trade" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="5" y1="34" x2="35" y2="34"/>
+            <line x1="11" y1="34" x2="11" y2="32"/>
+            <line x1="20" y1="34" x2="20" y2="32"/>
+            <line x1="29" y1="34" x2="29" y2="32"/>
+            <line x1="11" y1="10" x2="11" y2="14" stroke-width="2"/>
+            <rect x="9" y="14" width="4" height="7" fill="currentColor" opacity="0.18"/>
+            <line x1="11" y1="21" x2="11" y2="28" stroke-width="2"/>
+            <rect x="9" y="21" width="4" height="4" fill="currentColor" opacity="0.22"/>
+            <line x1="20" y1="8" x2="20" y2="12" stroke-width="2"/>
+            <rect x="18" y="12" width="4" height="3"/>
+            <line x1="20" y1="15" x2="20" y2="28" stroke-width="2"/>
+            <rect x="18" y="18" width="4" height="5" fill="currentColor" opacity="0.2"/>
+            <line x1="29" y1="13" x2="29" y2="24" stroke-width="2"/>
+            <rect x="27" y="15" width="4" height="6" fill="currentColor" opacity="0.16"/>
+            <rect x="27" y="22" width="4" height="3"/>
+        </svg>
+        <svg id="svc-icon-research" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="17" cy="17" r="9"/>
+            <circle cx="17" cy="17" r="6.5" opacity="0.5"/>
+            <circle cx="17" cy="17" r="4" opacity="0.35" fill="currentColor"/>
+            <line x1="23.6" y1="23.6" x2="34" y2="34" stroke-width="2"/>
+            <circle cx="34" cy="34" r="1.4" fill="currentColor"/>
+            <rect x="5" y="24" width="22" height="11" rx="1.5"/>
+            <line x1="9" y1="29.5" x2="9" y2="27"/>
+            <rect x="8" y1="28" width="2" height="5" fill="currentColor" opacity="0.2"/>
+            <line x1="14" y1="31" x2="14" y2="26"/>
+            <rect x="13" y1="27" width="2" height="7" fill="currentColor" opacity="0.2"/>
+            <line x1="19" y1="32" x2="19" y2="25"/>
+            <rect x="18" y1="26" width="2" height="8" fill="currentColor" opacity="0.22"/>
+            <line x1="24" y1="30" x2="24" y2="27"/>
+            <rect x="23" y1="28" width="2" height="4" fill="currentColor" opacity="0.18"/>
+        </svg>
+        <svg id="svc-icon-global" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="20" cy="20" r="14"/>
+            <circle cx="20" cy="20" r="10" opacity="0.4"/>
+            <ellipse cx="20" cy="20" rx="14" ry="5.5"/>
+            <ellipse cx="20" cy="20" rx="5.5" ry="14"/>
+            <path d="M9 12 C12.5 10.5 16.5 9.8 20 10 C23.5 10.2 27.5 11.2 31 13" opacity="0.65"/>
+            <path d="M9 28 C13 26.2 16.5 25.5 20 25.5 C23.5 25.5 27 26.5 31 28" opacity="0.65"/>
+            <path d="M10 18 L5 16 L8 13" stroke-width="2"/>
+            <path d="M30 22 L35 24 L32 27" stroke-width="2"/>
+        </svg>
+    </template>
+    <template id="valueIconTemplates" style="display:none;">
+        <svg id="value-icon-0" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M24 4 L40 13 V25 C40 33 32.5 41 24 43 C15.5 41 8 33 8 25 V13 L24 4 Z"/>
+            <path d="M13 25 L20 32 L34 17" stroke-width="2.2"/>
+            <path d="M16 15 L32 15 M16 19 L29 19 M16 23 L24 23" opacity="0.45"/>
+        </svg>
+        <svg id="value-icon-1" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="16" cy="24" r="8.5"/>
+            <circle cx="32" cy="24" r="8.5"/>
+            <circle cx="16" cy="24" r="5.5" fill="currentColor" opacity="0.12"/>
+            <circle cx="32" cy="24" r="5.5" fill="currentColor" opacity="0.12"/>
+            <path d="M21.5 20.5 C22.8 22 23.2 23 24 24 C24.8 25 25.2 26 26.5 27.5" stroke-width="2"/>
+            <path d="M26.5 20.5 C25.2 22 24.8 23 24 24 C23.2 25 22.8 26 21.5 27.5" stroke-width="2" opacity="0.85"/>
+            <path d="M21 37 L23 39 L29 33" stroke-width="2.2"/>
+        </svg>
+        <svg id="value-icon-2" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="19" cy="22" r="9"/>
+            <circle cx="19" cy="22" r="6.5" opacity="0.5"/>
+            <circle cx="19" cy="22" r="3.8" fill="currentColor" opacity="0.2"/>
+            <line x1="25.5" y1="28.5" x2="41" y2="43" stroke-width="2.1"/>
+            <circle cx="41" cy="43" r="1.7" fill="currentColor"/>
+            <path d="M32 8 L30 6 M36 10 L39 7 M39 13 L42 12" stroke-width="1.7"/>
+            <circle cx="34" cy="7" r="1.1" fill="currentColor" opacity="0.85"/>
+            <circle cx="40.5" cy="5.5" r="0.85" fill="currentColor" opacity="0.75"/>
+            <circle cx="43" cy="14.5" r="0.75" fill="currentColor" opacity="0.7"/>
+        </svg>
+        <svg id="value-icon-3" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="8" y1="28" x2="40" y2="28"/>
+            <path d="M12 28 C12 22 16 18 20 18 L28 18 C32 18 36 22 36 28" fill="currentColor" opacity="0.12"/>
+            <path d="M20 18 L20 14 C20 11.8 21.8 10 24 10 C26.2 10 28 11.8 28 14 L28 18"/>
+            <circle cx="24" cy="24" r="2.5"/>
+            <path d="M24 26.5 L24 30" stroke-width="2"/>
+            <path d="M15 34 L17 36 L33 20" stroke-width="2.1"/>
+            <path d="M10 40 L14 40 M19 40 L23 40 M28 40 L32 40" opacity="0.6"/>
+        </svg>
+    </template>
+    <template id="contactIconTemplates" style="display:none;">
+        <svg id="ci-icon-location" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M12 22 S3.5 15.2 3.5 10 C3.5 5.9 6.8 3.2 10 3.2 C11.4 3.2 12.2 3.65 12 4.6 C12.2 3.65 12.6 3.2 14 3.2 C17.2 3.2 20.5 5.9 20.5 10 C20.5 15.2 12 22 12 22 Z"/>
+            <circle cx="12" cy="10.5" r="2.6"/>
+            <circle cx="12" cy="10.5" r="1.2" fill="currentColor" opacity="0.4"/>
+            <path d="M11.2 5 L12.8 5" opacity="0.5"/>
+        </svg>
+        <svg id="ci-icon-phone" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6.5" y="2.5" width="11" height="19" rx="2.5"/>
+            <line x1="9.5" y1="2.5" x2="9.5" y2="2.5"/>
+            <circle cx="12" cy="19.2" r="0.9" fill="currentColor" opacity="0.3"/>
+            <rect x="8.5" y="5" width="7" height="11" rx="1" opacity="0.35" fill="currentColor"/>
+            <path d="M6.8 10 L4.2 11.5 C3.6 11.9 3.4 12.7 3.8 13.3 L4.8 14.9 C5.1 15.4 5.6 15.6 6.2 15.5 L8.2 15" stroke-width="1.85"/>
+            <path d="M17.2 10 L19.8 11.5 C20.4 11.9 20.6 12.7 20.2 13.3 L19.2 14.9 C18.9 15.4 18.4 15.6 17.8 15.5 L15.8 15" stroke-width="1.85"/>
+        </svg>
+        <svg id="ci-icon-email" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="5" width="18" height="14" rx="2"/>
+            <path d="M3.5 7 L12 13.5 L20.5 7" stroke-width="1.75"/>
+            <path d="M7 17 L17 17" opacity="0.5"/>
+            <path d="M8 14.5 L16 14.5" opacity="0.4"/>
+        </svg>
+        <svg id="ci-icon-time" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12.5" r="8.5"/>
+            <circle cx="12" cy="12.5" r="6" opacity="0.45"/>
+            <line x1="12" y1="12.5" x2="12" y2="7.2" stroke-width="1.9"/>
+            <line x1="12" y1="12.5" x2="16.2" y2="9.8" stroke-width="1.9"/>
+            <circle cx="12" cy="12.5" r="1" fill="currentColor"/>
+            <path d="M12 4 L12 2.8 M18.5 5.2 L19.4 4.2 M21 12.5 L22.2 12.5 M18.5 19.8 L19.4 20.8 M12 21 L12 22.2 M5.5 19.8 L4.6 20.8 M3 12.5 L1.8 12.5 M5.5 5.2 L4.6 4.2" stroke-width="1.3" opacity="0.65"/>
+        </svg>
+    </template>
+    <script src="js/i18n.js?v=20261005b"></script>
+    <script src="config.js?v=20261005b"></script>
+    <script src="js/main.js?v=20261005b"></script>
+</body>
+</html>
