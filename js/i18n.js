@@ -926,7 +926,13 @@
         var langDict = DICT[_activeLang] || {};
         Object.keys(langDict).forEach(function (k) {
             if (k === "ui") return;
-            base[k] = cloneJSON(langDict[k]);
+            var langVal = cloneJSON(langDict[k]);
+            var baseVal = base[k];
+            if (langVal && typeof langVal === 'object' && !Array.isArray(langVal) && baseVal && typeof baseVal === 'object' && !Array.isArray(baseVal)) {
+                base[k] = deepMerge(baseVal, langVal);
+            } else {
+                base[k] = langVal;
+            }
         });
         if (_activeLang === "zh_CN") {
             try {

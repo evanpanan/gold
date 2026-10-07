@@ -145,8 +145,12 @@
                 el.setAttribute('href', val);
             } else if (type === 'svg-inner') {
                 if (typeof val === 'string' && val.trim()) {
+                    let html = String(val).trim();
+                    if (html.indexOf('{{LOGO_CN}}') > -1 && cfg.brand && typeof cfg.brand.logoCn === 'string') {
+                        html = html.replace(/\{\{LOGO_CN\}\}/g, cfg.brand.logoCn);
+                    }
                     const tmp = document.createElement('div');
-                    tmp.innerHTML = val.trim();
+                    tmp.innerHTML = html;
                     const newSvg = tmp.querySelector('svg');
                     if (newSvg) {
                         el.innerHTML = '';

@@ -49,6 +49,13 @@ a { color: inherit; }
     color: #fff;
     text-decoration: none;
 }
+.lp-logo-header-img {
+    display: flex; align-items: center; justify-content: center;
+    height: 38px; flex-shrink: 0; min-width: 0;
+}
+.lp-logo-header-img svg {
+    height: 100%; width: auto; max-width: 100%; display: block;
+}
 .lp-logo-icon {
     width: 34px; height: 34px;
     color: var(--lp-gold);

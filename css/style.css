@@ -130,6 +130,34 @@ ul {
     transform: scale(1.02);
 }
 
+.logo-header-img {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 42px;
+    flex-shrink: 0;
+    min-width: 0;
+}
+.logo-header-img svg {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    display: block;
+}
+
+.logo-footer-img {
+    display: block;
+    width: 100%;
+    max-width: 360px;
+    height: auto;
+    margin-bottom: 14px;
+}
+.logo-footer-img svg {
+    width: 100%;
+    height: auto;
+    display: block;
+}
+
 .logo-icon {
     width: 40px;
     height: 40px;

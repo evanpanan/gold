@@ -91,19 +91,13 @@
     }
 
     function renderNavbar() {
-        const logoSvg = (CONFIG.brand && CONFIG.brand.logoSvg) || '';
-        const logoCn = (CONFIG.brand && CONFIG.brand.logoCn) || '金岩石有限公司';
-        const logoEnHtml = (CONFIG.brand && CONFIG.brand.logoEn) || '<span class="logo-en-golden">GOLDEN</span><span class="logo-en-rock">ROCK</span>';
+        const logoHeader = (CONFIG.brand && CONFIG.brand.logoHeaderSvg) || '';
         const nav = document.getElementById('lpNav');
         if (!nav) return;
         nav.innerHTML =
             '<div class="lp-nav-inner">' +
               '<a href="index.html" class="lp-logo">' +
-                (logoSvg ? ('<div class="lp-logo-icon">' + logoSvg + '</div>') : '') +
-                '<div class="lp-logo-text">' +
-                  '<span class="lp-logo-en">' + logoEnHtml + '</span>' +
-                  '<span class="lp-logo-cn">' + esc(logoCn) + '</span>' +
-                '</div>' +
+                '<div class="lp-logo-header-img">' + logoHeader + '</div>' +
               '</a>' +
               '<nav class="lp-nav-links">' +
                 (PAGE_ID !== 'privacy' ? '<a href="privacy.html">' + _it('ui.legalNav.privacy', '隐私政策') + '</a>' : '') +
