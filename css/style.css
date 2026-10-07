@@ -134,15 +134,17 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 42px;
+    height: 56px;
     flex-shrink: 0;
     min-width: 0;
 }
-.logo-header-img svg {
+.logo-header-img svg,
+.logo-header-img img {
     height: 100%;
     width: auto;
     max-width: 100%;
     display: block;
+    object-fit: contain;
 }
 
 .logo-footer-img {

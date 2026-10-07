@@ -385,11 +385,16 @@
         }
     }
     function renderBrandIcons() {
-        const raw = (currentCfg && currentCfg.brand && currentCfg.brand.logoIconOnlySvg) || '';
+        const iconRaw = (currentCfg && currentCfg.brand && currentCfg.brand.logoIconOnlySvg) || '';
+        const headerRaw = (currentCfg && currentCfg.brand && currentCfg.brand.logoHeaderSvg) || '';
         const sidebar = document.getElementById('sidebarBrandIconWrap');
-        if (sidebar && raw) renderBrandIconWrap(sidebar, raw);
-        const login = document.getElementById('loginBrandIconWrap');
-        if (login && raw) renderBrandIconWrap(login, raw);
+        if (sidebar && iconRaw) renderBrandIconWrap(sidebar, iconRaw);
+        const loginHeader = document.getElementById('loginLogoHeaderWrap');
+        if (loginHeader && headerRaw) {
+            renderBrandIconWrap(loginHeader, headerRaw);
+        } else if (loginHeader && DEFAULT_CFG.brand && DEFAULT_CFG.brand.logoHeaderSvg) {
+            renderBrandIconWrap(loginHeader, DEFAULT_CFG.brand.logoHeaderSvg);
+        }
     }
 
     /* ============ INIT ============ */

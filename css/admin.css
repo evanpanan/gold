@@ -86,38 +86,21 @@ code {
     to { opacity: 1; transform: translateY(0); }
 }
 .login-logo {
-    display: flex; align-items: center; gap: 12px;
+    display: flex; align-items: center; justify-content: center;
     margin-bottom: 28px;
 }
-.login-logo-icon {
-    width: 52px; height: 52px;
-    color: var(--admin-gold);
-    background: rgba(201,169,97,0.12);
-    border-radius: 12px;
-    padding: 8px;
+.login-logo-header {
     display: flex; align-items: center; justify-content: center;
+    width: 100%;
+    height: 64px;
 }
-.login-logo-text { display:flex; flex-direction:column; line-height:1.15; }
-.login-logo-en {
-    font-family: var(--admin-font-sans);
-    font-style: italic;
-    font-weight: 800;
-    font-size: 20px;
-    letter-spacing: 0.5px;
-    line-height: 1.05;
-    color: var(--admin-primary);
-    white-space: nowrap;
-    display: inline-flex; align-items: baseline;
-}
-.brand-en-golden { color: var(--admin-gold); letter-spacing: 0.5px; }
-.brand-en-rock   { color: #2B2B2B; letter-spacing: 0.5px; }
-.login-logo-cn {
-    font-family: var(--admin-font-serif);
-    font-size: 13px; font-weight: 500;
-    color: var(--admin-primary);
-    letter-spacing: 2px;
-    margin-top: 5px;
-    white-space: nowrap;
+.login-logo-header svg,
+.login-logo-header img {
+    height: 100%;
+    width: auto;
+    max-width: 100%;
+    display: block;
+    object-fit: contain;
 }
 .login-title {
     font-family: var(--admin-font-serif);
@@ -908,10 +891,8 @@ code {
         border-radius: 16px;
         max-width: 100%;
     }
-    .login-logo { margin-bottom: 20px; gap: 10px; }
-    .login-logo-icon { width: 44px; height: 44px; padding: 6px; border-radius: 10px; }
-    .login-logo-cn { font-size: 18px; letter-spacing: 1.5px; }
-    .login-logo-en { font-size: 9px; letter-spacing: 2px; }
+    .login-logo { margin-bottom: 20px; }
+    .login-logo-header { height: 48px; }
     .login-title { font-size: 21px; letter-spacing: 0.5px; margin-bottom: 4px; }
     .login-subtitle { font-size: 11px; letter-spacing: 0.5px; margin-bottom: 22px; }
     .login-form { gap: 14px; }
