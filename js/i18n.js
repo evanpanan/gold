@@ -958,21 +958,14 @@
         return false;
     }
 
-    function switchLang(v, noConfirm) {
+    function switchLang(v) {
         var nv = normLang(v);
         if (!nv) return;
         if (nv === _activeLang) return;
-        if (!noConfirm && isFormDirty()) {
-            var msg = t("ui.switcher.confirmDirtyForm", "切换语言将丢失已填写内容，确认继续？");
-            if (typeof window.confirm === 'function') {
-                if (!window.confirm(msg)) return;
-            }
-        }
         try { localStorage.setItem(STORAGE_KEY, nv); } catch (e) {}
         var loc = String(window.location);
-        var sep = (loc.indexOf('?') === -1) ? '?' : '&';
         var cleanLoc = loc.replace(/([?&#])lang=[^&#]*&?/g, function (m, p1) { return p1 === '?' ? '?' : ''; }).replace(/[?&]$/, '');
-        sep = (cleanLoc.indexOf('?') === -1) ? '?' : '&';
+        var sep = (cleanLoc.indexOf('?') === -1) ? '?' : '&';
         window.location.href = cleanLoc + sep + 'lang=' + (nv === 'zh_CN' ? 'zh-CN' : (nv === 'zh_TW' ? 'zh-TW' : 'en'));
     }
 

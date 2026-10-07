@@ -105,6 +105,52 @@
         });
     }
 
+    function isImageDataUrl(s) {
+        return typeof s === 'string' && s.indexOf('data:image/') === 0;
+    }
+    function renderFavicon(faviconSlot, raw) {
+        if (!faviconSlot) return;
+        if (isImageDataUrl(raw)) {
+            faviconSlot.setAttribute('href', raw);
+            return;
+        }
+        if (typeof raw === 'string' && raw.trim()) {
+            faviconSlot.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(raw.trim()));
+        }
+    }
+    function renderSvgInner(el, raw, cfg) {
+        if (!el) return;
+        if (isImageDataUrl(raw)) {
+            const img = document.createElement('img');
+            img.src = raw;
+            img.alt = 'logo';
+            img.style.cssText = 'display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;';
+            el.innerHTML = '';
+            el.appendChild(img);
+            return;
+        }
+        let html = String(raw || '').trim();
+        if (!html) return;
+        if (html.indexOf('{{LOGO_CN}}') > -1 && cfg && cfg.brand && typeof cfg.brand.logoCn === 'string') {
+            html = html.replace(/\{\{LOGO_CN\}\}/g, cfg.brand.logoCn);
+        }
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const newSvg = tmp.querySelector('svg');
+        if (newSvg) {
+            el.innerHTML = '';
+            el.appendChild(newSvg);
+            return;
+        }
+        const newImg = tmp.querySelector('img');
+        if (newImg) {
+            el.innerHTML = '';
+            newImg.setAttribute('alt', newImg.getAttribute('alt') || 'logo');
+            newImg.style.cssText = (newImg.getAttribute('style') || '' + ';max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;display:block;');
+            el.appendChild(newImg);
+        }
+    }
+
     function renderDynamicContent() {
         const cfg = GOLDENROCK_CONFIG;
 
@@ -114,16 +160,11 @@
         if (cfg.site && cfg.site.metaDescription && metaDesc) metaDesc.setAttribute('content', cfg.site.metaDescription);
         if (cfg.site && cfg.site.metaKeywords && metaKw) metaKw.setAttribute('content', cfg.site.metaKeywords);
 
-        if (cfg.site && typeof cfg.site.faviconSvg === 'string' && cfg.site.faviconSvg.trim()) {
-            const favSlot = document.querySelector('link[data-favicon-slot]');
-            if (favSlot) {
-                const raw = cfg.site.faviconSvg.trim();
-                const encoded = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(raw);
-                favSlot.setAttribute('href', encoded);
-            }
-        } else if (cfg.site && cfg.site.faviconEmoji) {
-            const favSlot = document.querySelector('link[data-favicon-slot]');
-            if (favSlot) {
+        const favSlot = document.querySelector('link[data-favicon-slot]');
+        if (favSlot && cfg.site) {
+            if (typeof cfg.site.faviconSvg === 'string' && cfg.site.faviconSvg.trim()) {
+                renderFavicon(favSlot, cfg.site.faviconSvg);
+            } else if (cfg.site.faviconEmoji) {
                 const svgStr = '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect width="64" height="64" rx="14" fill="#0A1628"/><text x="50%" y="54%" text-anchor="middle" dominant-baseline="middle" font-size="36">' +
                     cfg.site.faviconEmoji + '</text></svg>';
                 favSlot.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgStr));
@@ -145,17 +186,7 @@
                 el.setAttribute('href', val);
             } else if (type === 'svg-inner') {
                 if (typeof val === 'string' && val.trim()) {
-                    let html = String(val).trim();
-                    if (html.indexOf('{{LOGO_CN}}') > -1 && cfg.brand && typeof cfg.brand.logoCn === 'string') {
-                        html = html.replace(/\{\{LOGO_CN\}\}/g, cfg.brand.logoCn);
-                    }
-                    const tmp = document.createElement('div');
-                    tmp.innerHTML = html;
-                    const newSvg = tmp.querySelector('svg');
-                    if (newSvg) {
-                        el.innerHTML = '';
-                        el.appendChild(newSvg);
-                    }
+                    renderSvgInner(el, val, cfg);
                 }
             } else {
                 el.textContent = val;

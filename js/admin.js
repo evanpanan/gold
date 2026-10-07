@@ -258,22 +258,22 @@
                 }
             ],
             brandLogo: [
-                { sec: '使用场景说明', desc: '5 个 Logo 使用场景，可分别粘贴 SVG 代码覆盖默认造型；不需要修改的场景留空即可（会自动使用 config.js 中的默认值）。中文行（第七字公司名）会随三语切换自动替换。' },
-                { sec: '场景 1 · 顶部导航 / 法律页导航（Header）', desc: '粘贴整图 SVG，例如「第 4 张」造型：左侧石形图标 + 右侧 GOLDEN。对应 Header 和法律页导航两处，同时生效' },
-                { key: 'brand.logoHeaderSvg',    label: '顶部导航整图 SVG',      type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 48,
-                  hint: '建议 viewBox="0 0 240 44"，粘贴完整 <svg> 标签，不要包含 <img src="...">' },
-                { sec: '场景 2 · Footer 品牌大卡（带中文行）', desc: '粘贴整图 SVG，中文字段用 {{LOGO_CN}} 作为占位符，渲染时会根据当前语言自动替换：zh_CN「金岩石有限公司」/ zh_TW「金巖石有限公司」 / en「Golden Rock Limited」' },
-                { key: 'brand.logoFooterSvgTpl', label: 'Footer 大卡 SVG（含 {{LOGO_CN}} 占位）', type: 'code', svgPreview: true, previewBg: 'dark', previewHeight: 108,
-                  hint: '建议 viewBox="0 0 380 108"。如需中文行随语言切换，记得写 {{LOGO_CN}}。深蓝背景下深灰 ROCK 建议改成白色，保证对比度' },
-                { sec: '场景 3 · 纯石形图标（登录卡、侧栏、旧兜底）', desc: '粘贴单图形 SVG（仅一个图形/石形闭合路径，无文字），用作 admin 登录卡 icon、侧栏 brand icon、Favicon 内部图标' },
-                { key: 'brand.logoIconOnlySvg',  label: '纯石形图标 SVG（单图形，无文字）', type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 64,
-                  hint: '建议 viewBox="0 0 200 200"，路径建议 fill="currentColor"（颜色会由父元素 CSS 决定，适配不同背景）' },
-                { sec: '场景 4 · 浏览器标签页 Favicon', desc: '直接粘贴完整 SVG（含金色填充），用作浏览器左上角小图标。建议 64×64 viewBox，不要太大' },
-                { key: 'site.faviconSvg',        label: 'Favicon SVG（浏览器标签小图标）', type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 32,
-                  hint: '建议 viewBox="0 0 200 200" 或 0 0 64 64，直接填充金色（如 fill="#B99642"），不要使用 currentColor（Favicon 上下文无父容器颜色）' },
-                { sec: '场景 5 · 中文行（Footer 品牌名）', desc: '修改此处会同步 Footer 大卡 {{LOGO_CN}} 的 zh_CN 显示内容；zh_TW / en 两种语言仍由 i18n 字典维护（仅简中在此编辑）。' },
+                { sec: '使用说明', desc: '每个场景点「选择图片」上传即可（支持 PNG/JPG/SVG/WebP，建议透明 PNG 或 SVG 矢量）。系统自动保存为图片。不需要修改的场景留空即可，会自动使用 config.js 中的默认 Logo。' },
+                { sec: '场景 1 · 顶部导航 / 法律页导航（Header）', desc: '建议尺寸：横向 Logo，高 44px 的矢量图（SVG）或 2× 分辨率 PNG。对应 Header 和法律页导航两处，同时生效。' },
+                { key: 'brand.logoHeaderSvg',    label: '顶部导航 Logo',      type: 'file',
+                  hint: '上传图片：推荐 SVG 或透明 PNG，建议宽度 400~800px，不要带多余的白边' },
+                { sec: '场景 2 · Footer 品牌大卡（带中文行）', desc: '建议尺寸：横向整图，宽度约 800~1200px，矢量最佳。上传含 {{LOGO_CN}} 的 SVG 时，渲染时会按三语自动替换中文行；若上传普通 PNG/JPG 图，请直接把「金岩石有限公司」做在图片里。' },
+                { key: 'brand.logoFooterSvgTpl', label: 'Footer 大卡 Logo',   type: 'file',
+                  hint: '推荐 SVG 可保留 {{LOGO_CN}} 模板占位符自动切换三语；PNG/JPG 图请直接把公司名做死在图里' },
+                { sec: '场景 3 · 纯石形图标（登录卡、侧栏、旧兜底）', desc: '建议尺寸：正方形 512×512，纯图标（无文字）。' },
+                { key: 'brand.logoIconOnlySvg',  label: '纯图形 Logo（方）',   type: 'file',
+                  hint: '单图形（无文字），用于登录卡图标、侧栏品牌图标等。推荐 SVG 矢量 + currentColor。' },
+                { sec: '场景 4 · 浏览器标签页 Favicon', desc: '建议尺寸：方形 64×64 或 200×200，小图形 PNG/SVG/ICO。' },
+                { key: 'site.faviconSvg',        label: 'Favicon（浏览器小图标）', type: 'file',
+                  hint: '不要使用 currentColor（Favicon 无父容器颜色），直接做金色填充。' },
+                { sec: '场景 5 · Footer 中文行（简中）', desc: '若 Footer 使用了带 {{LOGO_CN}} 的 SVG 模板，此处控制 zh_CN 的公司名显示；zh_TW/en 仍由三语字典维护。' },
                 { key: 'brand.logoCn',           label: 'Footer 中文行（简中）',   type: 'text',
-                  hint: '默认：金岩石有限公司。如果需要修改繁体（巖）或英文 Golden Rock Limited，请联系技术人员修改 i18n.js 三语字典' }
+                  hint: '默认：金岩石有限公司。仅当 Footer 上传 SVG 模板（含 {{LOGO_CN}} 占位符）时生效；PNG 图请直接把文字做死在图片里' }
             ]
         };
     }
@@ -499,11 +499,28 @@
             inputHtml = '<textarea id="' + id + '" data-key="' + f.key + '" rows="3">' + esc(val == null ? '' : val) + '</textarea>';
         } else if (f.type === 'code') {
             inputHtml = '<textarea id="' + id + '" data-key="' + f.key + '" spellcheck="false" class="code-area" rows="10">' + esc(val == null ? '' : val) + '</textarea>';
-            if (f.svgPreview) {
-                const ph = (f.previewHeight || 48);
-                const bg = (f.previewBg === 'dark') ? 'background: linear-gradient(135deg,#0A1628,#0f2140);' : 'background:#fff; border:1px solid #e6ebf5;';
-                inputHtml += '<div class="svg-preview-block" style="margin-top:10px; display:flex; align-items:center; justify-content:center; padding:16px; border-radius:8px; ' + bg + ' height:' + (ph + 32) + 'px;"><div id="prev_' + id + '" data-preview-for="' + id + '" style="height:' + ph + 'px; width:100%; display:flex; align-items:center; justify-content:center; color:#B99642;">' + renderPreviewSnippet(val, f) + '</div></div>';
-            }
+        } else if (f.type === 'file') {
+            const cur = (typeof val === 'string') ? val : '';
+            const previewBg = (f.key === 'brand.logoFooterSvgTpl') ? 'background: linear-gradient(135deg,#0A1628,#0f2140);' : 'background:#fff; border:1px solid #e6ebf5;';
+            const ph = (f.key === 'brand.logoFooterSvgTpl') ? 108 : (f.key === 'site.faviconSvg' ? 32 : (f.key === 'brand.logoIconOnlySvg' ? 64 : 48));
+            const hasVal = (cur && cur.length > 0) ? 1 : 0;
+            inputHtml =
+                '<div class="file-upload-block" style="display:flex; flex-direction:column; gap:10px;">' +
+                    '<input type="file" id="' + id + '" data-key="' + f.key + '" accept="image/*,.svg,image/svg+xml" style="display:none;" class="file-upload-native">' +
+                    '<div style="display:flex; align-items:center; gap:10px;">' +
+                        '<button type="button" class="admin-btn-outline file-upload-pick" data-for="' + id + '">' +
+                            '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" style="width:15px;height:15px;display:inline-block;vertical-align:-2px;margin-right:6px;"><path d="M10 3v9m0 0l-3-3m3 3l3-3M4 14h12" stroke-linecap="round" stroke-linejoin="round"/><path d="M3 17h14"/></svg>' +
+                            '选择图片' +
+                        '</button>' +
+                        '<button type="button" class="admin-btn-secondary file-upload-clear" data-for="' + id + '" style="' + (hasVal ? '' : 'display:none;') + '">' +
+                            '清除该场景（使用默认）' +
+                        '</button>' +
+                        '<span class="file-upload-info" style="color:#6b7a98; font-size:13px;" id="info_' + id + '">' + (hasVal ? '✅ 已上传图片（点击"选择图片"更换）' : '未上传，使用默认 Logo') + '</span>' +
+                    '</div>' +
+                    '<div class="svg-preview-block" style="display:flex; align-items:center; justify-content:center; padding:16px; border-radius:8px; ' + previewBg + ' height:' + (ph + 32) + 'px;">' +
+                        '<div id="prev_' + id + '" data-preview-for="' + id + '" style="height:' + ph + 'px; width:100%; display:flex; align-items:center; justify-content:center; color:#B99642;">' + renderPreviewSnippet(cur, f) + '</div>' +
+                    '</div>' +
+                '</div>';
         } else if (f.type === 'checkbox') {
             inputHtml = '<label class="form-check-inline">' +
                 '<input type="checkbox" id="' + id + '" data-key="' + f.key + '" ' + (val ? 'checked' : '') + '>' +
@@ -533,15 +550,21 @@
 
     function renderPreviewSnippet(rawVal, f) {
         if (rawVal == null || typeof rawVal !== 'string' || !rawVal.trim()) {
-            return '<span style="color:' + (f && f.previewBg === 'dark' ? '#8898b8' : '#b8c1d8') + ';font-size:13px;letter-spacing:0.5px;">（未填写，使用 config.js 默认 Logo）</span>';
+            return '<span style="color:' + (f && f.previewBg === 'dark' ? '#8898b8' : '#b8c1d8') + ';font-size:13px;letter-spacing:0.5px;">（未上传，使用 config.js 默认 Logo）</span>';
         }
         const txt = String(rawVal).trim();
+        if (txt.indexOf('data:image/') === 0) {
+            return '<img src="' + escAttr(txt) + '" style="max-height:100%; max-width:100%; display:block; object-fit:contain;">';
+        }
         try {
             const tmp = document.createElement('div');
             tmp.innerHTML = txt;
             const svg = tmp.querySelector('svg');
             if (!svg) {
-                return '<span style="color:#d7524e; font-size:13px;">⚠️ 未检测到合法 SVG，请粘贴完整 &lt;svg&gt;...&lt;/svg&gt;</span>';
+                if (txt.indexOf('<img') === 0 || txt.indexOf('http') === 0) {
+                    return '<img src="' + escAttr(txt) + '" style="max-height:100%; max-width:100%;">';
+                }
+                return '<span style="color:#d7524e; font-size:13px;">⚠️ 未检测到合法 SVG 或图片，请重新上传</span>';
             }
             svg.style.maxHeight = '100%';
             svg.style.maxWidth = '100%';
@@ -558,7 +581,7 @@
             }
             return svg.outerHTML;
         } catch (e) {
-            return '<span style="color:#d7524e; font-size:13px;">⚠️ SVG 解析失败：' + esc(String(e && e.message || e)) + '</span>';
+            return '<span style="color:#d7524e; font-size:13px;">⚠️ 解析失败：' + esc(String(e && e.message || e)) + '</span>';
         }
     }
 
@@ -648,6 +671,55 @@
                     markDirty();
                 });
             }
+            if (el.classList && el.classList.contains('file-upload-native')) {
+                el.addEventListener('change', function () {
+                    const key = el.getAttribute('data-key');
+                    const file = el.files && el.files[0];
+                    const info = document.getElementById('info_' + el.id);
+                    const clearBtn = c.querySelector('.file-upload-clear[data-for="' + el.id + '"]');
+                    if (!file) return;
+                    const reader = new FileReader();
+                    reader.onload = function (ev) {
+                        const dataUrl = String(ev.target.result || '');
+                        setPath(currentCfg, key, dataUrl);
+                        markDirty();
+                        const f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
+                        const preview = document.getElementById('prev_' + el.id);
+                        if (preview) preview.innerHTML = renderPreviewSnippet(dataUrl, f);
+                        if (info) info.textContent = '✅ 已上传：' + file.name + '（' + formatSize(file.size) + '）- 保存后生效';
+                        if (clearBtn) clearBtn.style.display = '';
+                    };
+                    reader.onerror = function () {
+                        if (info) info.innerHTML = '<span style="color:#d7524e;">❌ 读取失败，请换一张图片</span>';
+                    };
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+
+        c.querySelectorAll('.file-upload-pick').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const id = btn.getAttribute('data-for');
+                const fi = document.getElementById(id);
+                if (fi && fi.click) fi.click();
+            });
+        });
+        c.querySelectorAll('.file-upload-clear').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                const id = btn.getAttribute('data-for');
+                const fi = document.getElementById(id);
+                const key = fi ? fi.getAttribute('data-key') : null;
+                if (!key) return;
+                setPath(currentCfg, key, '');
+                markDirty();
+                if (fi) fi.value = '';
+                const f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
+                const preview = document.getElementById('prev_' + id);
+                if (preview) preview.innerHTML = renderPreviewSnippet('', f);
+                const info = document.getElementById('info_' + id);
+                if (info) info.textContent = '已清除，恢复使用默认 Logo';
+                btn.style.display = 'none';
+            });
         });
 
         c.querySelectorAll('[data-itemkey]').forEach(function (el) {
@@ -898,11 +970,15 @@
         else { el.classList.add('saved'); el.textContent = '已保存'; }
     }
     function esc(s) {
-        return String(s == null ? '' : s)
-            .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+        return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
     function escAttr(s) { return esc(s).replace(/'/g, '&#39;'); }
+    function formatSize(bytes) {
+        if (bytes == null || isNaN(bytes)) return '';
+        if (bytes < 1024) return bytes + ' B';
+        if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + ' KB';
+        return (bytes / (1024 * 1024)).toFixed(2) + ' MB';
+    }
 
     function toast(type, title, msg) {
         const c = document.getElementById('toastContainer');

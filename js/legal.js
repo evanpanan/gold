@@ -43,6 +43,16 @@
 
     const PAGE = (CONFIG.legal && CONFIG.legal[PAGE_ID]) || {};
 
+    function isImageDataUrl(s) {
+        return typeof s === 'string' && s.indexOf('data:image/') === 0;
+    }
+    function buildLogoImgHtml(raw) {
+        if (isImageDataUrl(raw)) {
+            return '<img src="' + raw + '" alt="logo" style="display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;">';
+        }
+        return String(raw || '');
+    }
+
     function esc(s) {
         return String(s == null ? '' : s)
             .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
@@ -97,7 +107,7 @@
         nav.innerHTML =
             '<div class="lp-nav-inner">' +
               '<a href="index.html" class="lp-logo">' +
-                '<div class="lp-logo-header-img">' + logoHeader + '</div>' +
+                '<div class="lp-logo-header-img">' + buildLogoImgHtml(logoHeader) + '</div>' +
               '</a>' +
               '<nav class="lp-nav-links">' +
                 (PAGE_ID !== 'privacy' ? '<a href="privacy.html">' + _it('ui.legalNav.privacy', '隐私政策') + '</a>' : '') +
