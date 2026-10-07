@@ -93,7 +93,89 @@
         </div>
     </div>
 
-    <script src="config.js?v=LOGOadmin4"></script>
-    <script src="js/admin.js?v=LOGOadmin4"></script>
+    <script src="config.js?v=LOGOadmin5"></script>
+    <script src="js/admin.js?v=LOGOadmin5"></script>
+
+    <!-- 图片裁剪弹窗 -->
+    <div id="cropModal" class="crop-modal" style="display:none;">
+        <div class="crop-modal-mask"></div>
+        <div class="crop-modal-card">
+            <div class="crop-modal-header">
+                <h3 class="crop-modal-title">调整 Logo 尺寸</h3>
+                <button type="button" class="crop-modal-close" id="cropCloseBtn" aria-label="关闭">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                        <line x1="4" y1="4" x2="16" y2="16"/><line x1="16" y1="4" x2="4" y2="16"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="crop-modal-body">
+                <div class="crop-stage" id="cropStage">
+                    <img id="cropSource" alt="上传图片预览" draggable="false">
+                    <div class="crop-mask-top"></div>
+                    <div class="crop-mask-bottom"></div>
+                    <div class="crop-mask-left"></div>
+                    <div class="crop-mask-right"></div>
+                    <div class="crop-box" id="cropBox">
+                        <div class="crop-grid-horiz crop-grid-1"></div>
+                        <div class="crop-grid-horiz crop-grid-2"></div>
+                        <div class="crop-grid-vert crop-grid-1"></div>
+                        <div class="crop-grid-vert crop-grid-2"></div>
+                        <span class="crop-handle nw" data-dir="nw"></span>
+                        <span class="crop-handle n" data-dir="n"></span>
+                        <span class="crop-handle ne" data-dir="ne"></span>
+                        <span class="crop-handle w" data-dir="w"></span>
+                        <span class="crop-handle e" data-dir="e"></span>
+                        <span class="crop-handle sw" data-dir="sw"></span>
+                        <span class="crop-handle s" data-dir="s"></span>
+                        <span class="crop-handle se" data-dir="se"></span>
+                    </div>
+                </div>
+                <div class="crop-controls">
+                    <div class="crop-controls-row">
+                        <div class="crop-control">
+                            <label>宽高比</label>
+                            <div class="crop-aspect-row">
+                                <button type="button" class="chip-btn" data-aspect="free">自由</button>
+                                <button type="button" class="chip-btn" data-aspect="header">Header (240:44)</button>
+                                <button type="button" class="chip-btn" data-aspect="footer">Footer (16:3)</button>
+                                <button type="button" class="chip-btn" data-aspect="square">方形 (1:1)</button>
+                                <button type="button" class="chip-btn" data-aspect="login">登录 (25:4)</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="crop-controls-row">
+                        <div class="crop-control">
+                            <label>尺寸缩放</label>
+                            <div class="crop-slider-wrap">
+                                <input type="range" id="cropScale" min="10" max="300" value="100">
+                                <span id="cropScaleLabel">100%</span>
+                            </div>
+                        </div>
+                        <div class="crop-control">
+                            <label>输出格式</label>
+                            <select id="cropFormat">
+                                <option value="image/png">PNG（透明推荐）</option>
+                                <option value="image/svg+xml" disabled>SVG（需原文件为 SVG）</option>
+                                <option value="image/jpeg">JPEG（体积最小）</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="crop-controls-row crop-info-row">
+                        <div class="crop-info" id="cropInfo">选框：— × —　原图：— × —</div>
+                        <div class="crop-output" id="cropOutputInfo">输出：— × —</div>
+                    </div>
+                </div>
+            </div>
+            <div class="crop-modal-footer">
+                <button type="button" class="admin-btn-outline" id="cropCancelBtn">取消</button>
+                <button type="button" class="admin-btn-primary" id="cropConfirmBtn">
+                    <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 12l3 3 9-9"/>
+                    </svg>
+                    确认裁剪
+                </button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

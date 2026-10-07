@@ -440,6 +440,7 @@
         switchTab(activeTab);
         bindTopButtons();
         bindModalClose();
+        bindCropControls();
         renderBrandIcons();
         updateSaveStatus();
     }
@@ -729,13 +730,24 @@
                     const reader = new FileReader();
                     reader.onload = function (ev) {
                         const dataUrl = String(ev.target.result || '');
-                        setPath(currentCfg, key, dataUrl);
-                        markDirty();
-                        const f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
-                        const preview = document.getElementById('prev_' + el.id);
-                        if (preview) preview.innerHTML = renderPreviewSnippet(dataUrl, f);
-                        if (info) info.textContent = '✅ 已上传：' + file.name + '（' + formatSize(file.size) + '）- 保存后生效';
-                        if (clearBtn) clearBtn.style.display = '';
+                        if (dataUrl.slice(0, 5) === 'data:' && dataUrl.indexOf('image/svg+xml') !== -1) {
+                            // SVG 矢量图不裁剪，直接使用
+                            setPath(currentCfg, key, dataUrl);
+                            markDirty();
+                            const f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
+                            const preview = document.getElementById('prev_' + el.id);
+                            if (preview) preview.innerHTML = renderPreviewSnippet(dataUrl, f);
+                            if (info) info.textContent = '✅ 已上传 SVG：' + file.name + '（' + formatSize(file.size) + '）- 保存后生效（矢量图无需裁剪）';
+                            if (clearBtn) clearBtn.style.display = '';
+                            return;
+                        }
+                        // PNG/JPG/位图：打开裁剪弹窗
+                        if (info) info.textContent = '⏳ 正在加载裁剪面板…';
+                        openCropModal(dataUrl, {
+                            name: file.name,
+                            size: file.size,
+                            inputId: el.id
+                        }, key, key.split('.').pop());
                     };
                     reader.onerror = function () {
                         if (info) info.innerHTML = '<span style="color:#d7524e;">❌ 读取失败，请换一张图片</span>';
@@ -1015,6 +1027,461 @@
     }
 
     /* ============ HELPERS ============ */
+
+    // ================= 图片裁剪功能：Canvas + 鼠标拖动裁剪框 =================
+    var CROP = {
+        open: false,
+        mode: null, // null / free / header(240:44) / footer(16:3) / square(1:1) / login(25:4)
+        aspect: null, // number or null
+        rawDataUrl: null,
+        naturalW: 0,
+        naturalH: 0,
+        stageW: 0,
+        stageH: 0,
+        imgScale: 1,
+        imgOffsetX: 0,
+        imgOffsetY: 0,
+        box: { x: 0, y: 0, w: 0, h: 0 },
+        scalePercent: 100,
+        outputFormat: 'image/png',
+        pendingKey: null,
+        pendingFileInputId: null,
+        pendingFileName: '',
+        pendingFileSize: 0
+    };
+
+    function getAspectRatioByKey(key) {
+        switch (key) {
+            case 'header': return 240 / 44;
+            case 'footer': return 16 / 3;
+            case 'square': return 1;
+            case 'login':  return 25 / 4;
+            case 'free':
+            default: return null;
+        }
+    }
+
+    function openCropModal(dataUrl, fileInfo, fieldKey, fieldLabel) {
+        var modal = document.getElementById('cropModal');
+        var img = document.getElementById('cropSource');
+        if (!modal || !img) return toast('error', '裁剪功能不可用', '缺少 DOM 元素');
+
+        CROP.rawDataUrl = dataUrl;
+        CROP.pendingKey = fieldKey || null;
+        CROP.pendingFileInputId = fileInfo.inputId || null;
+        CROP.pendingFileName = fileInfo.name || '图片';
+        CROP.pendingFileSize = fileInfo.size || 0;
+
+        // 根据上传的字段自动推荐默认比例
+        var defAspect = 'free';
+        if (fieldKey === 'brand.logoHeaderSvg') defAspect = 'header';
+        else if (fieldKey === 'brand.logoFooterSvgTpl') defAspect = 'footer';
+        else if (fieldKey === 'brand.logoIconOnlySvg' || fieldKey === 'site.faviconSvg') defAspect = 'square';
+        else if (fieldKey === 'brand.loginLogoSvg') defAspect = 'login';
+        CROP.mode = defAspect;
+        CROP.aspect = getAspectRatioByKey(defAspect);
+
+        // 输出格式默认：PNG
+        CROP.outputFormat = 'image/png';
+        var fmtSel = document.getElementById('cropFormat');
+        if (fmtSel) fmtSel.value = 'image/png';
+
+        // 图片加载后：计算 stage 尺寸和 fit 显示
+        var preImg = new Image();
+        preImg.crossOrigin = 'anonymous';
+        preImg.onload = function () {
+            CROP.naturalW = preImg.naturalWidth || preImg.width;
+            CROP.naturalH = preImg.naturalHeight || preImg.height;
+
+            img.src = dataUrl;
+            modal.style.display = 'flex';
+            CROP.open = true;
+            CROP.scalePercent = 100;
+            var scaleSlider = document.getElementById('cropScale');
+            var scaleLabel = document.getElementById('cropScaleLabel');
+            if (scaleSlider) scaleSlider.value = 100;
+            if (scaleLabel) scaleLabel.textContent = '100%';
+
+            // 给下一个 event loop 等 layout 完成
+            setTimeout(function () {
+                layoutCropStage();
+                // 激活对应比例 chip
+                document.querySelectorAll('#cropModal .chip-btn').forEach(function (btn) {
+                    btn.classList.toggle('active', btn.getAttribute('data-aspect') === CROP.mode);
+                });
+            }, 20);
+        };
+        preImg.onerror = function () {
+            toast('error', '加载图片失败', '请换一个图片重试，或直接原图使用（不裁剪）');
+            // 原图兜底：直接保存，跳过裁剪
+            if (CROP.pendingKey) applyCropResult(dataUrl);
+        };
+        preImg.src = dataUrl;
+    }
+
+    function closeCropModal() {
+        var modal = document.getElementById('cropModal');
+        if (modal) modal.style.display = 'none';
+        CROP.open = false;
+        CROP.rawDataUrl = null;
+    }
+
+    function layoutCropStage() {
+        var stage = document.getElementById('cropStage');
+        var img = document.getElementById('cropSource');
+        if (!stage || !img) return;
+
+        var stageRect = stage.getBoundingClientRect();
+        CROP.stageW = stageRect.width;
+        CROP.stageH = stageRect.height;
+
+        // 以「contain」方式放置原图居中，缩放系数 imgScale
+        var ratio = Math.min(CROP.stageW / CROP.naturalW, CROP.stageH / CROP.naturalH);
+        var baseScale = ratio;
+        var scaleMult = CROP.scalePercent / 100;
+        CROP.imgScale = baseScale * scaleMult;
+        var dispW = CROP.naturalW * CROP.imgScale;
+        var dispH = CROP.naturalH * CROP.imgScale;
+        CROP.imgOffsetX = Math.round((CROP.stageW - dispW) / 2);
+        CROP.imgOffsetY = Math.round((CROP.stageH - dispH) / 2);
+
+        img.style.left = CROP.imgOffsetX + 'px';
+        img.style.top = CROP.imgOffsetY + 'px';
+        img.style.width = dispW + 'px';
+        img.style.height = dispH + 'px';
+
+        // 默认裁剪框：图片 80% 居中（按固定比例时，调整大小）
+        var padding = 0.1;
+        var boxW = dispW * (1 - padding * 2);
+        var boxH = dispH * (1 - padding * 2);
+        if (CROP.aspect) {
+            if (boxW / boxH > CROP.aspect) {
+                boxW = boxH * CROP.aspect;
+            } else {
+                boxH = boxW / CROP.aspect;
+            }
+        }
+        var bx = Math.round((CROP.stageW - boxW) / 2);
+        var by = Math.round((CROP.stageH - boxH) / 2);
+        // 约束在图片显示区域内
+        var constraint = {
+            x1: CROP.imgOffsetX,
+            y1: CROP.imgOffsetY,
+            x2: CROP.imgOffsetX + dispW,
+            y2: CROP.imgOffsetY + dispH
+        };
+        // 若裁剪框初始超界，缩小
+        if (boxW > (constraint.x2 - constraint.x1)) {
+            boxW = constraint.x2 - constraint.x1;
+            if (CROP.aspect) boxH = boxW / CROP.aspect;
+        }
+        if (boxH > (constraint.y2 - constraint.y1)) {
+            boxH = constraint.y2 - constraint.y1;
+            if (CROP.aspect) boxW = boxH * CROP.aspect;
+        }
+        bx = Math.round((CROP.stageW - boxW) / 2);
+        by = Math.round((CROP.stageH - boxH) / 2);
+        CROP.box = { x: bx, y: by, w: Math.round(boxW), h: Math.round(boxH) };
+        renderCropBox();
+    }
+
+    function renderCropBox() {
+        var box = document.getElementById('cropBox');
+        if (!box) return;
+        box.style.left = CROP.box.x + 'px';
+        box.style.top = CROP.box.y + 'px';
+        box.style.width = CROP.box.w + 'px';
+        box.style.height = CROP.box.h + 'px';
+        renderCropInfo();
+    }
+
+    function renderCropInfo() {
+        var info = document.getElementById('cropInfo');
+        var output = document.getElementById('cropOutputInfo');
+        var dispW = Math.round(CROP.naturalW * CROP.imgScale);
+        var dispH = Math.round(CROP.naturalH * CROP.imgScale);
+
+        // 选框在屏幕上的像素 / 对应实际自然尺寸
+        var bxInImgX = CROP.box.x - CROP.imgOffsetX;
+        var bxInImgY = CROP.box.y - CROP.imgOffsetY;
+        var natX = Math.round(bxInImgX / CROP.imgScale);
+        var natY = Math.round(bxInImgY / CROP.imgScale);
+        var natW = Math.round(CROP.box.w / CROP.imgScale);
+        var natH = Math.round(CROP.box.h / CROP.imgScale);
+        if (natX < 0) natX = 0;
+        if (natY < 0) natY = 0;
+        if (natX + natW > CROP.naturalW) natW = CROP.naturalW - natX;
+        if (natY + natH > CROP.naturalH) natH = CROP.naturalH - natY;
+
+        if (info) info.textContent = '选框：' + CROP.box.w + ' × ' + CROP.box.h + '　原图：' + CROP.naturalW + ' × ' + CROP.naturalH + '（显示 ' + dispW + '×' + dispH + '）';
+        if (output) output.textContent = '输出：' + Math.max(natW, 0) + ' × ' + Math.max(natH, 0) + ' px （比例 ' + (natH > 0 ? (natW / natH).toFixed(2) : '—') + '）';
+    }
+
+    // ================= 裁剪框交互：拖动 / 8 把手调整 =================
+    var CROP_GESTURE = {
+        active: false,
+        type: null, // move / resize
+        dir: null, // n/s/e/w/nw/ne/sw/se
+        startX: 0, startY: 0,
+        startBox: null,
+        min: 24
+    };
+
+    function bindCropGestures() {
+        var box = document.getElementById('cropBox');
+        var stage = document.getElementById('cropStage');
+        if (!box || !stage) return;
+        box.addEventListener('mousedown', startCropGesture);
+        box.addEventListener('touchstart', startCropGesture, { passive: false });
+        window.addEventListener('mousemove', moveCropGesture);
+        window.addEventListener('touchmove', moveCropGesture, { passive: false });
+        window.addEventListener('mouseup', endCropGesture);
+        window.addEventListener('touchend', endCropGesture);
+        window.addEventListener('touchcancel', endCropGesture);
+    }
+
+    function startCropGesture(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var pt = getPointer(e);
+        var target = e.target;
+        CROP_GESTURE.startX = pt.x;
+        CROP_GESTURE.startY = pt.y;
+        CROP_GESTURE.startBox = { x: CROP.box.x, y: CROP.box.y, w: CROP.box.w, h: CROP.box.h };
+        CROP_GESTURE.active = true;
+        var dir = target && target.getAttribute && target.getAttribute('data-dir');
+        if (dir) {
+            CROP_GESTURE.type = 'resize';
+            CROP_GESTURE.dir = dir;
+        } else {
+            CROP_GESTURE.type = 'move';
+            CROP_GESTURE.dir = null;
+        }
+    }
+
+    function getPointer(e) {
+        if (e.touches && e.touches.length) return { x: e.touches[0].clientX, y: e.touches[0].clientY };
+        if (e.changedTouches && e.changedTouches.length) return { x: e.changedTouches[0].clientX, y: e.changedTouches[0].clientY };
+        return { x: e.clientX || 0, y: e.clientY || 0 };
+    }
+
+    function clampBox() {
+        var imgRight = CROP.imgOffsetX + CROP.naturalW * CROP.imgScale;
+        var imgBottom = CROP.imgOffsetY + CROP.naturalH * CROP.imgScale;
+        var minX = CROP.imgOffsetX;
+        var minY = CROP.imgOffsetY;
+        var maxX2 = imgRight;
+        var maxY2 = imgBottom;
+
+        if (CROP.box.w < CROP_GESTURE.min) CROP.box.w = CROP_GESTURE.min;
+        if (CROP.box.h < CROP_GESTURE.min) CROP.box.h = CROP_GESTURE.min;
+        if (CROP.box.x < minX) CROP.box.x = minX;
+        if (CROP.box.y < minY) CROP.box.y = minY;
+        if (CROP.box.x + CROP.box.w > maxX2) CROP.box.x = Math.round(maxX2 - CROP.box.w);
+        if (CROP.box.y + CROP.box.h > maxY2) CROP.box.y = Math.round(maxY2 - CROP.box.h);
+        if (CROP.box.x < minX) CROP.box.x = minX;
+        if (CROP.box.y < minY) CROP.box.y = minY;
+    }
+
+    function moveCropGesture(e) {
+        if (!CROP_GESTURE.active) return;
+        e.preventDefault();
+        var pt = getPointer(e);
+        var dx = pt.x - CROP_GESTURE.startX;
+        var dy = pt.y - CROP_GESTURE.startY;
+        var sb = CROP_GESTURE.startBox;
+        var box = { x: sb.x, y: sb.y, w: sb.w, h: sb.h };
+
+        if (CROP_GESTURE.type === 'move') {
+            box.x = sb.x + Math.round(dx);
+            box.y = sb.y + Math.round(dy);
+        } else if (CROP_GESTURE.type === 'resize') {
+            var dir = CROP_GESTURE.dir;
+            var newW = sb.w, newH = sb.h, newX = sb.x, newY = sb.y;
+            if (dir.indexOf('e') !== -1) newW = sb.w + Math.round(dx);
+            if (dir.indexOf('s') !== -1) newH = sb.h + Math.round(dy);
+            if (dir.indexOf('w') !== -1) { newW = sb.w - Math.round(dx); newX = sb.x + (sb.w - newW); }
+            if (dir.indexOf('n') !== -1) { newH = sb.h - Math.round(dy); newY = sb.y + (sb.h - newH); }
+            if (newW < CROP_GESTURE.min) {
+                if (dir.indexOf('w') !== -1) newX = sb.x + sb.w - CROP_GESTURE.min;
+                newW = CROP_GESTURE.min;
+            }
+            if (newH < CROP_GESTURE.min) {
+                if (dir.indexOf('n') !== -1) newY = sb.y + sb.h - CROP_GESTURE.min;
+                newH = CROP_GESTURE.min;
+            }
+            // 固定比例：调整后同步另一维度
+            if (CROP.aspect) {
+                if (newW / newH > CROP.aspect) {
+                    // 太宽 → 宽度收缩并调整左（若 w 侧参与则推 x）
+                    var newW2 = Math.round(newH * CROP.aspect);
+                    if (dir.indexOf('w') !== -1) newX = newX + (newW - newW2);
+                    newW = newW2;
+                } else {
+                    // 太高 → 高度收缩
+                    var newH2 = Math.round(newW / CROP.aspect);
+                    if (dir.indexOf('n') !== -1) newY = newY + (newH - newH2);
+                    newH = newH2;
+                }
+            }
+            box.w = newW; box.h = newH; box.x = newX; box.y = newY;
+        }
+
+        CROP.box = box;
+        clampBox();
+        renderCropBox();
+    }
+
+    function endCropGesture() {
+        CROP_GESTURE.active = false;
+    }
+
+    // ================= 裁剪弹窗控件绑定 =================
+    function bindCropControls() {
+        var closeBtn = document.getElementById('cropCloseBtn');
+        var cancelBtn = document.getElementById('cropCancelBtn');
+        var confirmBtn = document.getElementById('cropConfirmBtn');
+        if (closeBtn) closeBtn.addEventListener('click', function () { closeCropModal(); });
+        if (cancelBtn) cancelBtn.addEventListener('click', function () { closeCropModal(); });
+        var modal = document.getElementById('cropModal');
+        if (modal) {
+            var mask = modal.querySelector('.crop-modal-mask');
+            if (mask) mask.addEventListener('click', function () { closeCropModal(); });
+        }
+        document.querySelectorAll('#cropModal .chip-btn').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                var asp = btn.getAttribute('data-aspect') || 'free';
+                setCropAspect(asp);
+            });
+        });
+        var scaleSlider = document.getElementById('cropScale');
+        var scaleLabel = document.getElementById('cropScaleLabel');
+        if (scaleSlider) {
+            scaleSlider.addEventListener('input', function () {
+                var v = parseInt(scaleSlider.value, 10) || 100;
+                CROP.scalePercent = v;
+                if (scaleLabel) scaleLabel.textContent = v + '%';
+                layoutCropStage();
+            });
+        }
+        var fmtSel = document.getElementById('cropFormat');
+        if (fmtSel) {
+            fmtSel.addEventListener('change', function () {
+                CROP.outputFormat = fmtSel.value || 'image/png';
+                renderCropInfo();
+            });
+        }
+        if (confirmBtn) confirmBtn.addEventListener('click', performCrop);
+
+        window.addEventListener('resize', function () {
+            if (!CROP.open) return;
+            setTimeout(function () { layoutCropStage(); }, 60);
+        });
+
+        bindCropGestures();
+    }
+
+    function setCropAspect(aspKey) {
+        CROP.mode = aspKey;
+        CROP.aspect = getAspectRatioByKey(aspKey);
+        document.querySelectorAll('#cropModal .chip-btn').forEach(function (btn) {
+            btn.classList.toggle('active', btn.getAttribute('data-aspect') === aspKey);
+        });
+        // 按新比例调整当前裁剪框（以中心为基准、尽量放大、不超图）
+        var cx = CROP.box.x + CROP.box.w / 2;
+        var cy = CROP.box.y + CROP.box.h / 2;
+        var w = CROP.box.w;
+        var h = CROP.box.h;
+        if (CROP.aspect) {
+            if (w / h > CROP.aspect) w = Math.round(h * CROP.aspect);
+            else h = Math.round(w / CROP.aspect);
+        }
+        CROP.box = {
+            x: Math.round(cx - w / 2),
+            y: Math.round(cy - h / 2),
+            w: w,
+            h: h
+        };
+        clampBox();
+        renderCropBox();
+    }
+
+    // ================= Canvas 执行裁剪 =================
+    function performCrop() {
+        if (!CROP.open) return;
+        if (!CROP.rawDataUrl) return closeCropModal();
+
+        var bxInImgX = (CROP.box.x - CROP.imgOffsetX) / CROP.imgScale;
+        var bxInImgY = (CROP.box.y - CROP.imgOffsetY) / CROP.imgScale;
+        var bxW = CROP.box.w / CROP.imgScale;
+        var bxH = CROP.box.h / CROP.imgScale;
+
+        var sx = Math.max(0, Math.round(bxInImgX));
+        var sy = Math.max(0, Math.round(bxInImgY));
+        var sw = Math.round(bxW);
+        var sh = Math.round(bxH);
+        if (sx + sw > CROP.naturalW) sw = CROP.naturalW - sx;
+        if (sy + sh > CROP.naturalH) sh = CROP.naturalH - sy;
+        if (sw <= 1 || sh <= 1) {
+            toast('error', '选框过小', '请把裁剪框拉大一些再确认');
+            return;
+        }
+
+        // 读源图，绘制到 Canvas
+        var sourceImg = new Image();
+        sourceImg.crossOrigin = 'anonymous';
+        sourceImg.onload = function () {
+            try {
+                var canvas = document.createElement('canvas');
+                canvas.width = sw;
+                canvas.height = sh;
+                var ctx = canvas.getContext('2d');
+                if (!ctx) throw new Error('no canvas context');
+                ctx.imageSmoothingEnabled = true;
+                ctx.imageSmoothingQuality = 'high';
+                ctx.drawImage(sourceImg, sx, sy, sw, sh, 0, 0, sw, sh);
+                var mime = CROP.outputFormat === 'image/jpeg' ? 'image/jpeg' : 'image/png';
+                var quality = mime === 'image/jpeg' ? 0.94 : undefined;
+                var out = canvas.toDataURL(mime, quality);
+                if (!out || out.length < 100) throw new Error('canvas toDataURL failed');
+                applyCropResult(out);
+            } catch (err) {
+                console.warn('裁剪失败，使用原图兜底：', err);
+                toast('warning', '裁剪失败', '已使用原图，您可到预览中查看是否需要重新上传。');
+                applyCropResult(CROP.rawDataUrl);
+            }
+        };
+        sourceImg.onerror = function () {
+            toast('error', '处理图片失败', '请换一张图片或刷新后重试');
+            applyCropResult(CROP.rawDataUrl);
+        };
+        sourceImg.src = CROP.rawDataUrl;
+    }
+
+    function applyCropResult(resultDataUrl) {
+        var key = CROP.pendingKey;
+        var inputId = CROP.pendingFileInputId;
+        if (!key) { closeCropModal(); return; }
+        setPath(currentCfg, key, resultDataUrl);
+        markDirty();
+        // 刷新预览 + 信息
+        var container = document.getElementById('formContainer');
+        var fi = document.getElementById(inputId);
+        if (fi) {
+            var f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
+            var preview = document.getElementById('prev_' + inputId);
+            if (preview) preview.innerHTML = renderPreviewSnippet(resultDataUrl, f);
+            var info = document.getElementById('info_' + inputId);
+            if (info) {
+                var sizeStr = CROP.pendingFileSize ? ('原图 ' + formatSize(CROP.pendingFileSize) + '，') : '';
+                info.textContent = '✅ 已裁剪：' + (CROP.pendingFileName || '图片') + '（' + sizeStr + '保存后生效）';
+            }
+            var clearBtn = container ? container.querySelector('.file-upload-clear[data-for="' + inputId + '"]') : null;
+            if (clearBtn) clearBtn.style.display = '';
+        }
+        closeCropModal();
+    }
+
     function markDirty() {
         if (!dirty) {
             dirty = true;
