@@ -593,6 +593,28 @@
                 '</svg> ' + _t('ui.form.submitSuccessBtn', '提交成功');
             submitBtn.style.background = 'linear-gradient(135deg, #4CAF50, #45a049)';
 
+            try {
+                var phoneEl = form.querySelector('[name="phone"]');
+                var svcEl = form.querySelector('[name="service"]');
+                var msg = {
+                    id: Date.now().toString(36) + Math.floor(Math.random() * 900 + 100),
+                    ts: Date.now(),
+                    lang: (window.I18N && window.I18N.activeLang) || '',
+                    ua: (navigator.userAgent || '').slice(0, 150),
+                    name: name || '',
+                    email: email || '',
+                    phone: phoneEl ? (phoneEl.value || '') : '',
+                    service: svcEl ? (svcEl.value || '') : '',
+                    message: message || '',
+                    status: 'new'
+                };
+                var arr = [];
+                try { arr = JSON.parse(localStorage.getItem('GOLDENROCK_CONTACT_MESSAGES') || '[]'); } catch (e) { arr = []; }
+                if (!Array.isArray(arr)) arr = [];
+                arr.unshift(msg);
+                localStorage.setItem('GOLDENROCK_CONTACT_MESSAGES', JSON.stringify(arr));
+            } catch (e) { /* 静默失败：提交视觉成功即可 */ }
+
             setTimeout(function () {
                 form.reset();
                 submitBtn.disabled = false;

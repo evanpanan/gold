@@ -903,14 +903,24 @@ code {
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
     z-index: 5;
     touch-action: none;
+    transition: transform 0.10s ease, background-color 0.10s ease;
+    will-change: transform;
+}
+.crop-handle:hover {
+    background: var(--admin-gold);
+    transform: scale(1.22);
 }
 .crop-handle.nw { left: -7px; top: -7px; cursor: nwse-resize; }
 .crop-handle.n  { left: 50%; top: -7px; transform: translateX(-50%); cursor: ns-resize; }
+.crop-handle.n:hover  { transform: translateX(-50%) scale(1.22); }
 .crop-handle.ne { right: -7px; top: -7px; cursor: nesw-resize; }
 .crop-handle.w  { left: -7px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.crop-handle.w:hover  { transform: translateY(-50%) scale(1.22); }
 .crop-handle.e  { right: -7px; top: 50%; transform: translateY(-50%); cursor: ew-resize; }
+.crop-handle.e:hover  { transform: translateY(-50%) scale(1.22); }
 .crop-handle.sw { left: -7px; bottom: -7px; cursor: nesw-resize; }
 .crop-handle.s  { left: 50%; bottom: -7px; transform: translateX(-50%); cursor: ns-resize; }
+.crop-handle.s:hover  { transform: translateX(-50%) scale(1.22); }
 .crop-handle.se { right: -7px; bottom: -7px; cursor: nwse-resize; }
 
 .crop-controls {

@@ -20,6 +20,7 @@
         { id: 'compliance',  label: '合规资质',   icon: shieldIcon(), desc: 'SFC 监管主卡 + 四项安全保障特性' },
         { id: 'cta',         label: '行动召唤',   icon: ctaIcon(),    desc: '金色 CTA 大卡片的标题、描述、双按钮' },
         { id: 'contact',     label: '联系我们',   icon: contactIcon(),desc: '联系方式卡片、表单文案、下拉服务选项' },
+        { id: 'messages',    label: '留言咨询',   icon: messagesIcon(),desc: '用户留言咨询列表 — 查看 / 搜索 / 标记已读 / 标记已回复 / 删除 / 导出。共 0 条，未处理 0 条。' },
         { id: 'footer',      label: '页脚信息',   icon: footerIcon(), desc: '免责声明、版权、法律链接、品牌简介' },
         { id: 'legalPrivacy',    label: '隐私政策',   icon: legalPrivacyIcon(),    desc: '公司如何收集使用共享存储用户信息；Cookie、主体权利、更新与联系方式等完整条款' },
         { id: 'legalTerms',      label: '服务条款',   icon: legalTermsIcon(),      desc: '开户资格、账户安全、风险披露、费用税费、行为准则、争议解决等条款' },
@@ -41,6 +42,7 @@
     function legalPrivacyIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="12" height="8" rx="2"/><path d="M7 10V7a3 3 0 016 0v3"/><circle cx="10" cy="14" r="1.2"/><path d="M10 15.2V16.5"/></svg>'; }
     function legalTermsIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h9l4 4v10a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v4h4"/><path d="M7.5 10h7M7.5 13h5M7.5 16h6"/><path d="M7 7.5l1 1 2.5-2.5"/></svg>'; }
     function legalDisclaimerIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l7 3v6c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z"/><path d="M10 7v4.5"/><circle cx="10" cy="13.5" r="1" fill="currentColor"/></svg>'; }
+    function messagesIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 3h12a1 1 0 011 1v9a1 1 0 01-1 1H7l-3 3V4a1 1 0 011-1z"/><path d="M7 8h6M7 11h4"/></svg>'; }
 
     function buildFieldSchemas() {
         return {
@@ -463,7 +465,13 @@
         });
         const item = NAV_ITEMS.find(function (n) { return n.id === id; });
         document.getElementById('pageTitle').textContent = item ? item.label : '';
-        document.getElementById('pageDesc').textContent = item ? item.desc : '';
+        if (id === 'messages') {
+            var st = messagesStats();
+            document.getElementById('pageDesc').textContent =
+                '用户留言咨询列表 — 查看 / 搜索 / 标记已读 / 标记已回复 / 删除 / 导出。共 ' + st.total + ' 条，未处理 ' + st.newCount + ' 条。';
+        } else {
+            document.getElementById('pageDesc').textContent = item ? item.desc : '';
+        }
         renderForm(id);
         closeSidebar();
         window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -500,6 +508,10 @@
     /* ============ FORM RENDER ============ */
     function renderForm(tabId) {
         const container = document.getElementById('formContainer');
+        if (tabId === 'messages') {
+            renderMessagesView();
+            return;
+        }
         const schema = FIELD_SCHEMAS[tabId] || [];
         renderedSchemaFields = [];
         const frag = document.createDocumentFragment();
@@ -1231,8 +1243,37 @@
         var box = document.getElementById('cropBox');
         var stage = document.getElementById('cropStage');
         if (!box || !stage) return;
+        function onStageDown(e) {
+            // 若点击在 cropBox 或其内部把手，则交给 box 的 handler 处理
+            var t = e.target;
+            while (t) {
+                if (t === box) return;
+                t = t.parentNode;
+            }
+            // 启动移动模式：计算点击点相对裁剪框左上角的偏移
+            var pt = getPointer(e);
+            e.preventDefault();
+            // 将 pointer 坐标转换为 stage 内相对坐标（getBoundingClientRect）
+            var stageRect = stage.getBoundingClientRect();
+            var relX = pt.x - stageRect.left;
+            var relY = pt.y - stageRect.top;
+            var offX = relX - CROP.box.x;
+            var offY = relY - CROP.box.y;
+            CROP_GESTURE.startX = pt.x;
+            CROP_GESTURE.startY = pt.y;
+            CROP_GESTURE.startBox = { x: CROP.box.x, y: CROP.box.y, w: CROP.box.w, h: CROP.box.h };
+            // 校正：移动距离 = 当前指针 - startPointer，所以我们需要让 移动后的 box.x = startBox.x + (pt.x - startX)
+            // 希望 pt.x 对应的 box.x = relX - offX，即：startBox.x + (pt.x - startX) = relX - offX
+            // 也就是 offX = relX - startBox.x （刚好就是上面的定义）
+            // 所以 startX 不需要调整，直接用 pt.x 即可。那么 dx = pt.x_now - startX；box.x = startBox.x + dx
+            CROP_GESTURE.active = true;
+            CROP_GESTURE.type = 'move';
+            CROP_GESTURE.dir = null;
+        }
         box.addEventListener('mousedown', startCropGesture);
         box.addEventListener('touchstart', startCropGesture, { passive: false });
+        stage.addEventListener('mousedown', onStageDown);
+        stage.addEventListener('touchstart', onStageDown, { passive: false });
         window.addEventListener('mousemove', moveCropGesture);
         window.addEventListener('touchmove', moveCropGesture, { passive: false });
         window.addEventListener('mouseup', endCropGesture);
@@ -1266,15 +1307,28 @@
     }
 
     function clampBox() {
-        var imgRight = CROP.imgOffsetX + CROP.naturalW * CROP.imgScale;
-        var imgBottom = CROP.imgOffsetY + CROP.naturalH * CROP.imgScale;
-        var minX = CROP.imgOffsetX;
-        var minY = CROP.imgOffsetY;
-        var maxX2 = imgRight;
-        var maxY2 = imgBottom;
+        var dispW = CROP.naturalW * CROP.imgScale;
+        var dispH = CROP.naturalH * CROP.imgScale;
+        var imgX1 = CROP.imgOffsetX;
+        var imgY1 = CROP.imgOffsetY;
+        var imgX2 = imgX1 + dispW;
+        var imgY2 = imgY1 + dispH;
+        var stageX1 = 0;
+        var stageY1 = 0;
+        var stageX2 = CROP.stageW || 0;
+        var stageY2 = CROP.stageH || 0;
+        var minX  = Math.max(imgX1, stageX1);
+        var minY  = Math.max(imgY1, stageY1);
+        var maxX2 = Math.min(imgX2, stageX2);
+        var maxY2 = Math.min(imgY2, stageY2);
+        var maxW = Math.max(CROP_GESTURE.min, Math.round(maxX2 - minX));
+        var maxH = Math.max(CROP_GESTURE.min, Math.round(maxY2 - minY));
 
         if (CROP.box.w < CROP_GESTURE.min) CROP.box.w = CROP_GESTURE.min;
         if (CROP.box.h < CROP_GESTURE.min) CROP.box.h = CROP_GESTURE.min;
+        if (CROP.box.w > maxW) CROP.box.w = maxW;
+        if (CROP.box.h > maxH) CROP.box.h = maxH;
+
         if (CROP.box.x < minX) CROP.box.x = minX;
         if (CROP.box.y < minY) CROP.box.y = minY;
         if (CROP.box.x + CROP.box.w > maxX2) CROP.box.x = Math.round(maxX2 - CROP.box.w);
@@ -1297,11 +1351,20 @@
             box.y = sb.y + Math.round(dy);
         } else if (CROP_GESTURE.type === 'resize') {
             var dir = CROP_GESTURE.dir;
+            var aspect = CROP.aspect || 0;
+            var dispW = CROP.naturalW * CROP.imgScale;
+            var dispH = CROP.naturalH * CROP.imgScale;
+            var minX = Math.max(CROP.imgOffsetX, 0);
+            var minY = Math.max(CROP.imgOffsetY, 0);
+            var maxX2 = Math.min(CROP.imgOffsetX + dispW, CROP.stageW || 0);
+            var maxY2 = Math.min(CROP.imgOffsetY + dispH, CROP.stageH || 0);
+
             var newW = sb.w, newH = sb.h, newX = sb.x, newY = sb.y;
             if (dir.indexOf('e') !== -1) newW = sb.w + Math.round(dx);
             if (dir.indexOf('s') !== -1) newH = sb.h + Math.round(dy);
             if (dir.indexOf('w') !== -1) { newW = sb.w - Math.round(dx); newX = sb.x + (sb.w - newW); }
             if (dir.indexOf('n') !== -1) { newH = sb.h - Math.round(dy); newY = sb.y + (sb.h - newH); }
+
             if (newW < CROP_GESTURE.min) {
                 if (dir.indexOf('w') !== -1) newX = sb.x + sb.w - CROP_GESTURE.min;
                 newW = CROP_GESTURE.min;
@@ -1310,18 +1373,50 @@
                 if (dir.indexOf('n') !== -1) newY = sb.y + sb.h - CROP_GESTURE.min;
                 newH = CROP_GESTURE.min;
             }
-            // 固定比例：调整后同步另一维度
-            if (CROP.aspect) {
-                if (newW / newH > CROP.aspect) {
-                    // 太宽 → 宽度收缩并调整左（若 w 侧参与则推 x）
-                    var newW2 = Math.round(newH * CROP.aspect);
-                    if (dir.indexOf('w') !== -1) newX = newX + (newW - newW2);
-                    newW = newW2;
+
+            if (aspect > 0) {
+                var hasX = (dir.indexOf('e') !== -1) || (dir.indexOf('w') !== -1);
+                var hasY = (dir.indexOf('s') !== -1) || (dir.indexOf('n') !== -1);
+                if (hasX && hasY) {
+                    var absDx = Math.abs(dx), absDy = Math.abs(dy);
+                    if (absDx >= absDy) {
+                        newH = Math.round(newW / aspect);
+                        if (dir.indexOf('n') !== -1) newY = sb.y + sb.h - newH;
+                    } else {
+                        newW = Math.round(newH * aspect);
+                        if (dir.indexOf('w') !== -1) newX = sb.x + sb.w - newW;
+                    }
+                } else if (hasX) {
+                    newH = Math.round(newW / aspect);
+                    if (dir.indexOf('n') !== -1) newY = sb.y + sb.h - newH;
+                } else if (hasY) {
+                    newW = Math.round(newH * aspect);
+                    if (dir.indexOf('w') !== -1) newX = sb.x + sb.w - newW;
+                }
+            }
+
+            // 单次到位：若超界则按超界比例整体回缩
+            var overX = 0, overY = 0;
+            if (newX < minX) overX = minX - newX;
+            if (newY < minY) overY = minY - newY;
+            if (newX + newW > maxX2) overX = Math.min(overX, (newX + newW) - maxX2);
+            if (newY + newH > maxY2) overY = Math.min(overY, (newY + newH) - maxY2);
+            if (aspect > 0 && (overX !== 0 || overY !== 0)) {
+                // 取较大方向按比例整体回缩
+                if (Math.abs(overX) * (1/aspect) >= Math.abs(overY)) {
+                    var deltaW = Math.sign(overX) * Math.max(Math.abs(overX), Math.abs(overY) * aspect);
+                    var deltaH = Math.round(deltaW / aspect);
+                    if (dir.indexOf('e') !== -1) newW -= deltaW;
+                    if (dir.indexOf('w') !== -1) { newW -= deltaW; newX += deltaW; }
+                    if (dir.indexOf('s') !== -1) newH -= deltaH;
+                    if (dir.indexOf('n') !== -1) { newH -= deltaH; newY += deltaH; }
                 } else {
-                    // 太高 → 高度收缩
-                    var newH2 = Math.round(newW / CROP.aspect);
-                    if (dir.indexOf('n') !== -1) newY = newY + (newH - newH2);
-                    newH = newH2;
+                    var deltaH2 = Math.sign(overY) * Math.max(Math.abs(overY), Math.abs(overX) / aspect);
+                    var deltaW2 = Math.round(deltaH2 * aspect);
+                    if (dir.indexOf('s') !== -1) newH -= deltaH2;
+                    if (dir.indexOf('n') !== -1) { newH -= deltaH2; newY += deltaH2; }
+                    if (dir.indexOf('e') !== -1) newW -= deltaW2;
+                    if (dir.indexOf('w') !== -1) { newW -= deltaW2; newX += deltaW2; }
                 }
             }
             box.w = newW; box.h = newH; box.x = newX; box.y = newY;
@@ -1524,5 +1619,277 @@
             e.returnValue = '有未保存的更改，确定离开吗？';
         }
     });
+
+    // ================= 留言咨询：数据层 =================
+    var MESSAGES_KEY = 'GOLDENROCK_CONTACT_MESSAGES';
+    var MESSAGES_STATUS = {
+        new:      { label: '新提交', cls: 'status-new',     dot: '#ef4444' },
+        read:     { label: '已读',   cls: 'status-read',    dot: '#3b82f6' },
+        replied:  { label: '已回复', cls: 'status-replied', dot: '#10b981' },
+        deleted:  { label: '已删除', cls: 'status-deleted', dot: '#9ca3af' }
+    };
+    function loadMessages() {
+        try {
+            var raw = localStorage.getItem(MESSAGES_KEY);
+            var arr = raw ? JSON.parse(raw) : [];
+            return Array.isArray(arr) ? arr : [];
+        } catch (e) { return []; }
+    }
+    function saveMessages(arr) {
+        try { localStorage.setItem(MESSAGES_KEY, JSON.stringify(arr || [])); } catch (e) {}
+    }
+    function messagesStats() {
+        var arr = loadMessages();
+        var total = arr.length;
+        var newCount = arr.filter(function (m) { return m.status === 'new'; }).length;
+        return { total: total, newCount: newCount, arr: arr };
+    }
+    function formatMsgTime(ts) {
+        try {
+            var d = new Date(ts || 0);
+            function p2(n) { return (n < 10 ? '0' : '') + n; }
+            return d.getFullYear() + '-' + p2(d.getMonth()+1) + '-' + p2(d.getDate()) +
+                   ' ' + p2(d.getHours()) + ':' + p2(d.getMinutes()) + ':' + p2(d.getSeconds());
+        } catch (e) { return ''; }
+    }
+    function langFlag(l) {
+        if (!l) return '<span title="未识别" style="opacity:.55">—</span>';
+        var map = { zh_CN: '简中', zh_TW: '繁中', en: 'EN' };
+        return '<span style="font-variant-numeric: tabular-nums;">' + (map[l] || l) + '</span>';
+    }
+    function filterMessages(arr, status, q) {
+        var s = (status || 'all').toLowerCase();
+        var kw = (q || '').trim().toLowerCase();
+        return arr.filter(function (m) {
+            if (s !== 'all' && (m.status || 'new') !== s) return false;
+            if (!kw) return true;
+            var hay = [m.name, m.email, m.phone, m.service, m.message, m.lang].join(' | ').toLowerCase();
+            return hay.indexOf(kw) !== -1;
+        });
+    }
+    // ================= 留言咨询：视图层 =================
+    var _msgState = { status: 'all', q: '', expandId: null };
+    function renderMessagesView() {
+        var container = document.getElementById('formContainer');
+        if (!container) return;
+        var st = messagesStats();
+        var arr = st.arr;
+        var filtered = filterMessages(arr, _msgState.status, _msgState.q);
+        var deletedCount = arr.filter(function (m) { return m.status === 'deleted'; }).length;
+        var readCount   = arr.filter(function (m) { return m.status === 'read'; }).length;
+        var repliedCount = arr.filter(function (m) { return m.status === 'replied'; }).length;
+        var newCount    = st.newCount;
+        var total       = st.total;
+
+        var chips = [
+            { k: 'all',     label: '全部',   n: total },
+            { k: 'new',     label: '新提交', n: newCount },
+            { k: 'read',    label: '已读',   n: readCount },
+            { k: 'replied', label: '已回复', n: repliedCount },
+            { k: 'deleted', label: '回收站', n: deletedCount }
+        ].map(function (c) {
+            var active = _msgState.status === c.k ? ' active' : '';
+            return '<button type="button" class="chip-btn' + active + '" data-ms-status="' + c.k + '">' +
+                   c.label + (c.k === 'all' ? '' : (' <span style="font-variant-numeric: tabular-nums;">' + c.n + '</span>')) +
+                   '</button>';
+        }).join('');
+
+        var tableRows;
+        if (!filtered.length) {
+            tableRows = '<tr><td colspan="10" style="text-align:center;padding:56px 16px;color:#7a8699;">' +
+                        '<div style="font-size:36px;margin-bottom:10px;">📭</div>' +
+                        '<div>暂无符合条件的留言。<br><span style="font-size:12px;opacity:.75;">提示：由于无后端数据库，数据保存在访问者浏览器 localStorage，同一浏览器/设备才能看到。</span></div>' +
+                        '</td></tr>';
+        } else {
+            tableRows = filtered.map(function (m, i) {
+                var status = MESSAGES_STATUS[m.status] || MESSAGES_STATUS.new;
+                var expandCls = _msgState.expandId === m.id ? ' open' : '';
+                var preview = (m.message || '').length > 80
+                              ? esc(m.message.slice(0, 80)) + '<span style="color:#C9A961;">…</span>'
+                              : esc(m.message || '');
+                return '<tr class="msg-row' + expandCls + '" data-id="' + escAttr(m.id) + '">' +
+                       '<td style="font-variant-numeric: tabular-nums;color:#7a8699;">' + (i+1) + '</td>' +
+                       '<td style="font-variant-numeric: tabular-nums;white-space:nowrap;">' + formatMsgTime(m.ts) + '</td>' +
+                       '<td>' + langFlag(m.lang) + '</td>' +
+                       '<td style="font-weight:600;">' + esc(m.name) + '</td>' +
+                       '<td style="font-variant-numeric: tabular-nums;">' + esc(m.phone || '—') + '</td>' +
+                       '<td>' + esc(m.email || '—') + '</td>' +
+                       '<td>' + esc(m.service || '—') + '</td>' +
+                       '<td style="color:#4b5563;max-width:360px;">' + (preview || '—') + '</td>' +
+                       '<td><span class="msg-status-chip ' + status.cls + '" style="--dot:' + status.dot + ';">' + status.label + '</span></td>' +
+                       '<td class="msg-ops">' +
+                         (m.status !== 'new'     ? '<button type="button" class="op-btn" data-act="new"     data-id="' + escAttr(m.id) + '">标新</button>'  : '') +
+                         (m.status !== 'read'    ? '<button type="button" class="op-btn" data-act="read"    data-id="' + escAttr(m.id) + '">已读</button>' : '') +
+                         (m.status !== 'replied' ? '<button type="button" class="op-btn op-reply" data-act="replied" data-id="' + escAttr(m.id) + '">已回复</button>' : '') +
+                         (m.status !== 'deleted' ? '<button type="button" class="op-btn op-del"   data-act="deleted" data-id="' + escAttr(m.id) + '">删除</button>'
+                                                 : '<button type="button" class="op-btn op-del"   data-act="purge"   data-id="' + escAttr(m.id) + '" style="color:#ef4444;border-color:#ef4444;">彻底删除</button>') +
+                       '</td>' +
+                       '</tr>' +
+                       '<tr class="msg-detail-row' + expandCls + '" data-detail="' + escAttr(m.id) + '">' +
+                       '<td colspan="10"><div class="msg-detail-inner">' +
+                         '<div class="msg-detail-grid">' +
+                           '<div class="msg-detail-kv"><span class="kv-k">提交时间</span><span class="kv-v" style="font-variant-numeric: tabular-nums;">' + formatMsgTime(m.ts) + '（毫秒戳 ' + m.ts + '）</span></div>' +
+                           '<div class="msg-detail-kv"><span class="kv-k">消息 ID</span><span class="kv-v" style="font-variant-numeric: tabular-nums;">' + esc(m.id) + '</span></div>' +
+                           '<div class="msg-detail-kv"><span class="kv-k">浏览器环境</span><span class="kv-v" style="font-family: ui-monospace, Menlo, Consolas, monospace;font-size:12px;line-height:1.6;">' + esc(m.ua || '') + '</span></div>' +
+                           '<div class="msg-detail-kv"><span class="kv-k">完整留言</span><span class="kv-v" style="white-space:pre-wrap;background:#f7f9fc;padding:10px 12px;border-radius:8px;border:1px solid #e6e8ee;">' + esc(m.message || '') + '</span></div>' +
+                         '</div>' +
+                         '<div style="margin-top:12px;display:flex;flex-wrap:wrap;gap:8px;">' +
+                           (m.phone ? '<button type="button" class="op-btn" data-copy="tel" data-val="' + escAttr(m.phone) + '">复制电话 ' + esc(m.phone) + '</button>' : '') +
+                           (m.email ? '<button type="button" class="op-btn" data-copy="email" data-val="' + escAttr(m.email) + '">复制邮箱 ' + esc(m.email) + '</button>' : '') +
+                         '</div>' +
+                       '</div></td></tr>';
+            }).join('');
+        }
+
+        container.innerHTML =
+            '<div class="msg-toolbar">' +
+              '<div class="msg-toolbar-left">' +
+                '<div class="msg-search-wrap"><svg viewBox="0 0 18 18" width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.8" class="msg-search-ico"><circle cx="8" cy="8" r="5"/><path d="M12 12l4 4"/></svg>' +
+                '<input type="text" id="msgSearchInput" placeholder="搜索姓名 / 邮箱 / 电话 / 留言内容…" value="' + escAttr(_msgState.q) + '"></div>' +
+                '<div class="msg-chip-row">' + chips + '</div>' +
+              '</div>' +
+              '<div class="msg-toolbar-right">' +
+                '<div class="msg-stat">共 <b style="font-variant-numeric: tabular-nums;">' + filtered.length + '</b> / ' + total + ' 条　' +
+                (_msgState.status === 'all' ? '<span style="color:#ef4444;">未处理 ' + st.newCount + '</span>' : '') +
+                '</div>' +
+                '<button type="button" id="msgExportBtn" class="primary-btn" style="padding:8px 14px;border-radius:10px;font-size:13px;">导出 JSON</button>' +
+              '</div>' +
+            '</div>' +
+            '<div class="msg-table-wrap"><table class="msg-table"><thead><tr>' +
+              '<th style="width:56px;">#</th><th>时间</th><th style="width:96px;">语言</th><th>姓名</th><th>电话</th><th>邮箱</th><th>咨询服务</th>' +
+              '<th>留言摘要</th><th style="width:96px;">状态</th><th style="width:258px;">操作</th>' +
+            '</tr></thead><tbody>' + tableRows + '</tbody></table></div>' +
+            '<style>' +
+            '.msg-toolbar{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap;margin-bottom:16px;}' +
+            '.msg-toolbar-left{display:flex;flex-direction:column;gap:12px;flex:1 1 360px;}' +
+            '.msg-toolbar-right{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}' +
+            '.msg-search-wrap{position:relative;max-width:520px;}' +
+            '.msg-search-wrap input{width:100%;padding:10px 14px 10px 36px;border-radius:12px;border:1px solid #dde2ea;background:#fff;font-size:14px;outline:none;transition:border-color .15s;}' +
+            '.msg-search-wrap input:focus{border-color:#C9A961;}' +
+            '.msg-search-ico{position:absolute;left:11px;top:50%;transform:translateY(-50%);color:#9aa4b2;}' +
+            '.msg-chip-row{display:flex;flex-wrap:wrap;gap:8px;}' +
+            '.msg-stat{font-size:13px;color:#5b6676;}' +
+            '.msg-stat b{color:#0A1628;}' +
+            '.msg-table-wrap{background:#fff;border:1px solid #e6e8ee;border-radius:14px;overflow:auto;}' +
+            '.msg-table{width:100%;border-collapse:collapse;font-size:13px;}' +
+            '.msg-table th{background:#f7f9fc;text-align:left;padding:12px 14px;color:#4b5563;font-weight:600;border-bottom:1px solid #e6e8ee;white-space:nowrap;}' +
+            '.msg-table td{padding:12px 14px;border-bottom:1px solid #f0f2f6;vertical-align:top;}' +
+            '.msg-table tr.msg-row{cursor:pointer;transition:background .15s;}' +
+            '.msg-table tr.msg-row:hover{background:#fafbfe;}' +
+            '.msg-table tr.msg-row.open{background:#fff8ec;}' +
+            '.msg-table tr.msg-row.open td{border-bottom:1px solid transparent;}' +
+            '.msg-table tr.msg-detail-row{display:none;}' +
+            '.msg-table tr.msg-detail-row.open{display:table-row;}' +
+            '.msg-table tr.msg-detail-row td{padding:14px 24px 22px;background:#fff8ec;border-bottom:1px solid #f0f2f6;}' +
+            '.msg-detail-inner{max-width:1200px;}' +
+            '.msg-detail-grid{display:grid;grid-template-columns:1fr;gap:10px;}' +
+            '.msg-detail-kv{display:flex;gap:14px;align-items:flex-start;}' +
+            '.msg-detail-kv .kv-k{flex:0 0 88px;color:#7a8699;font-weight:600;padding-top:2px;}' +
+            '.msg-detail-kv .kv-v{flex:1;color:#0A1628;word-break:break-word;}' +
+            '.msg-status-chip{display:inline-flex;align-items:center;gap:6px;padding:3px 10px;border-radius:999px;font-size:12px;font-weight:500;background:#f4f5f7;color:#4b5563;}' +
+            '.msg-status-chip::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--dot,#9ca3af);}' +
+            '.msg-status-chip.status-new{background:#fef2f2;color:#991b1b;--dot:#ef4444;}' +
+            '.msg-status-chip.status-read{background:#eff6ff;color:#1e40af;--dot:#3b82f6;}' +
+            '.msg-status-chip.status-replied{background:#ecfdf5;color:#065f46;--dot:#10b981;}' +
+            '.msg-status-chip.status-deleted{background:#f4f5f7;color:#4b5563;--dot:#9ca3af;}' +
+            '.msg-ops{display:flex;flex-wrap:wrap;gap:6px;}' +
+            '.op-btn{padding:4px 10px;border-radius:8px;border:1px solid #dde2ea;background:#fff;font-size:12px;cursor:pointer;color:#0A1628;transition:all .12s;white-space:nowrap;}' +
+            '.op-btn:hover{border-color:#C9A961;color:#8a6e2d;}' +
+            '.op-btn.op-reply{color:#065f46;border-color:#10b981;}' +
+            '.op-btn.op-reply:hover{background:#ecfdf5;}' +
+            '.op-btn.op-del:hover{color:#b91c1c;border-color:#fca5a5;background:#fef2f2;}' +
+            '@media (max-width:768px){' +
+              '.msg-table th:nth-child(6),.msg-table td:nth-child(6),.msg-table th:nth-child(3),.msg-table td:nth-child(3){display:none;}' +
+              '.msg-detail-kv{flex-direction:column;gap:4px;}' +
+              '.msg-detail-kv .kv-k{flex:0 0 auto;}' +
+            '}' +
+            '</style>';
+
+        bindMessagesEvents(container);
+    }
+    function bindMessagesEvents(container) {
+        var searchInput = document.getElementById('msgSearchInput');
+        if (searchInput) {
+            var _t = null;
+            searchInput.addEventListener('input', function () {
+                if (_t) clearTimeout(_t);
+                var v = searchInput.value;
+                _t = setTimeout(function () { _msgState.q = v; renderMessagesView(); }, 180);
+            });
+            searchInput.addEventListener('keydown', function (e) { if (e.key === 'Enter') { _msgState.q = searchInput.value; renderMessagesView(); }});
+        }
+        container.querySelectorAll('[data-ms-status]').forEach(function (btn) {
+            btn.addEventListener('click', function () {
+                _msgState.status = btn.getAttribute('data-ms-status') || 'all';
+                renderMessagesView();
+            });
+        });
+        var exportBtn = document.getElementById('msgExportBtn');
+        if (exportBtn) exportBtn.addEventListener('click', function () {
+            var arr = loadMessages();
+            var blob = new Blob([JSON.stringify(arr, null, 2)], { type: 'application/json' });
+            var url = URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            var d = new Date(); function p2(n){return (n<10?'0':'')+n;}
+            a.href = url;
+            a.download = 'goldenrock_messages_' + d.getFullYear() + p2(d.getMonth()+1) + p2(d.getDate()) + '_' + p2(d.getHours()) + p2(d.getMinutes()) + '.json';
+            document.body.appendChild(a); a.click(); a.remove();
+            setTimeout(function () { URL.revokeObjectURL(url); }, 2000);
+            toast('success', '导出成功', '已导出 ' + arr.length + ' 条留言');
+        });
+        container.querySelectorAll('tr.msg-row').forEach(function (tr) {
+            tr.addEventListener('click', function (e) {
+                if (e.target.closest('.op-btn')) return;
+                var id = tr.getAttribute('data-id') || '';
+                _msgState.expandId = (_msgState.expandId === id) ? null : id;
+                renderMessagesView();
+            });
+        });
+        container.querySelectorAll('tr.msg-row [data-act]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var id = btn.getAttribute('data-id') || '';
+                var act = btn.getAttribute('data-act') || '';
+                var arr = loadMessages();
+                var idx = arr.findIndex(function (m) { return m.id === id; });
+                if (idx < 0) return;
+                if (act === 'purge') {
+                    if (!confirm('确定要【彻底删除】这条留言吗？删除后无法恢复。')) return;
+                    arr.splice(idx, 1);
+                    saveMessages(arr);
+                    toast('success', '已彻底删除', '该留言已永久删除');
+                } else {
+                    arr[idx].status = act;
+                    saveMessages(arr);
+                    var lbl = MESSAGES_STATUS[act] ? MESSAGES_STATUS[act].label : act;
+                    toast('success', '状态变更', '已标记为「' + lbl + '」');
+                }
+                if (_msgState.expandId === id && act === 'purge') _msgState.expandId = null;
+                renderMessagesView();
+                var navItem = NAV_ITEMS.find(function (n) { return n.id === 'messages'; });
+                if (navItem) {
+                    var s2 = messagesStats();
+                    navItem.desc = '用户留言咨询列表 — 查看 / 搜索 / 标记已读 / 标记已回复 / 删除 / 导出。共 ' + s2.total + ' 条，未处理 ' + s2.newCount + ' 条。';
+                    if (activeTab === 'messages') document.getElementById('pageDesc').textContent = navItem.desc;
+                }
+            });
+        });
+        container.querySelectorAll('[data-copy]').forEach(function (btn) {
+            btn.addEventListener('click', function (e) {
+                e.stopPropagation();
+                var v = btn.getAttribute('data-val') || '';
+                var type = btn.getAttribute('data-copy') || '';
+                if (!v) return;
+                try {
+                    if (navigator.clipboard && navigator.clipboard.writeText) {
+                        navigator.clipboard.writeText(v);
+                    } else {
+                        var ta = document.createElement('textarea'); ta.value = v; document.body.appendChild(ta); ta.select(); document.execCommand('copy'); ta.remove();
+                    }
+                    toast('success', '复制成功', (type === 'email' ? '邮箱' : (type === 'tel' ? '电话' : '内容')) + '已复制到剪贴板');
+                } catch (e) { toast('error', '复制失败', '请手动选中复制'); }
+            });
+        });
+    }
 
 })();
