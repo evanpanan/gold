@@ -11,7 +11,8 @@
     let renderedSchemaFields = [];
 
     const NAV_ITEMS = [
-        { id: 'site',        label: '站点设置',   icon: siteIcon(),   desc: '网站标题、关键词、品牌名称、LOGO SVG、登录密码等基础信息' },
+        { id: 'site',        label: '站点设置',   icon: siteIcon(),   desc: '网站标题、关键词、品牌名称、品牌标语、登录密码等基础信息' },
+        { id: 'brandLogo',   label: '品牌Logo',   icon: brandLogoIcon(), desc: '5 个使用场景独立编辑：顶部导航、页脚大卡、登录图标、Favicon、中文行（三语切换）' },
         { id: 'hero',        label: '首页首屏',   icon: heroIcon(),   desc: '主标题、副标题、CTA 按钮、数据统计卡片' },
         { id: 'about',       label: '关于我们',   icon: aboutIcon(),  desc: '公司简介、企业愿景、使命、信息展示卡片' },
         { id: 'values',      label: '核心价值观', icon: valuesIcon(), desc: '四项核心价值观：标题 + 描述，可增删排序' },
@@ -36,6 +37,7 @@
     function ctaIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="8"/><path d="M10 6v4l3 2"/></svg>'; }
     function contactIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="5" width="14" height="12" rx="2"/><path d="M3 7l7 5 7-5"/></svg>'; }
     function footerIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M2 15h16M2 12h16M5 17h10"/><path d="M10 2l6 4v4H4V6z"/></svg>'; }
+    function brandLogoIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M4 4h4v4H4z"/><path d="M10 4h6v4h-6z"/><path d="M4 10h4v6H4z"/><path d="M10 10h6v2h-6z M10 14h6v2h-6z"/><circle cx="12" cy="12" r="0.5" fill="currentColor"/></svg>'; }
     function legalPrivacyIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="4" y="10" width="12" height="8" rx="2"/><path d="M7 10V7a3 3 0 016 0v3"/><circle cx="10" cy="14" r="1.2"/><path d="M10 15.2V16.5"/></svg>'; }
     function legalTermsIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M5 3h9l4 4v10a1 1 0 01-1 1H5a1 1 0 01-1-1V4a1 1 0 011-1z"/><path d="M14 3v4h4"/><path d="M7.5 10h7M7.5 13h5M7.5 16h6"/><path d="M7 7.5l1 1 2.5-2.5"/></svg>'; }
     function legalDisclaimerIcon() { return '<svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M10 2l7 3v6c0 4-3 7-7 8-4-1-7-4-7-8V5l7-3z"/><path d="M10 7v4.5"/><circle cx="10" cy="13.5" r="1" fill="currentColor"/></svg>'; }
@@ -254,6 +256,24 @@
                       }
                   ]
                 }
+            ],
+            brandLogo: [
+                { sec: '使用场景说明', desc: '5 个 Logo 使用场景，可分别粘贴 SVG 代码覆盖默认造型；不需要修改的场景留空即可（会自动使用 config.js 中的默认值）。中文行（第七字公司名）会随三语切换自动替换。' },
+                { sec: '场景 1 · 顶部导航 / 法律页导航（Header）', desc: '粘贴整图 SVG，例如「第 4 张」造型：左侧石形图标 + 右侧 GOLDEN。对应 Header 和法律页导航两处，同时生效' },
+                { key: 'brand.logoHeaderSvg',    label: '顶部导航整图 SVG',      type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 48,
+                  hint: '建议 viewBox="0 0 240 44"，粘贴完整 <svg> 标签，不要包含 <img src="...">' },
+                { sec: '场景 2 · Footer 品牌大卡（带中文行）', desc: '粘贴整图 SVG，中文字段用 {{LOGO_CN}} 作为占位符，渲染时会根据当前语言自动替换：zh_CN「金岩石有限公司」/ zh_TW「金巖石有限公司」 / en「Golden Rock Limited」' },
+                { key: 'brand.logoFooterSvgTpl', label: 'Footer 大卡 SVG（含 {{LOGO_CN}} 占位）', type: 'code', svgPreview: true, previewBg: 'dark', previewHeight: 108,
+                  hint: '建议 viewBox="0 0 380 108"。如需中文行随语言切换，记得写 {{LOGO_CN}}。深蓝背景下深灰 ROCK 建议改成白色，保证对比度' },
+                { sec: '场景 3 · 纯石形图标（登录卡、侧栏、旧兜底）', desc: '粘贴单图形 SVG（仅一个图形/石形闭合路径，无文字），用作 admin 登录卡 icon、侧栏 brand icon、Favicon 内部图标' },
+                { key: 'brand.logoIconOnlySvg',  label: '纯石形图标 SVG（单图形，无文字）', type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 64,
+                  hint: '建议 viewBox="0 0 200 200"，路径建议 fill="currentColor"（颜色会由父元素 CSS 决定，适配不同背景）' },
+                { sec: '场景 4 · 浏览器标签页 Favicon', desc: '直接粘贴完整 SVG（含金色填充），用作浏览器左上角小图标。建议 64×64 viewBox，不要太大' },
+                { key: 'site.faviconSvg',        label: 'Favicon SVG（浏览器标签小图标）', type: 'code', svgPreview: true, previewBg: 'light', previewHeight: 32,
+                  hint: '建议 viewBox="0 0 200 200" 或 0 0 64 64，直接填充金色（如 fill="#B99642"），不要使用 currentColor（Favicon 上下文无父容器颜色）' },
+                { sec: '场景 5 · 中文行（Footer 品牌名）', desc: '修改此处会同步 Footer 大卡 {{LOGO_CN}} 的 zh_CN 显示内容；zh_TW / en 两种语言仍由 i18n 字典维护（仅简中在此编辑）。' },
+                { key: 'brand.logoCn',           label: 'Footer 中文行（简中）',   type: 'text',
+                  hint: '默认：金岩石有限公司。如果需要修改繁体（巖）或英文 Golden Rock Limited，请联系技术人员修改 i18n.js 三语字典' }
             ]
         };
     }
@@ -453,6 +473,7 @@
                 html += '<div class="form-grid ' + (f.grid || '') + '">';
                 return;
             }
+            renderedSchemaFields.push(f);
             html += renderField(f);
         });
         pushSection();
@@ -478,6 +499,11 @@
             inputHtml = '<textarea id="' + id + '" data-key="' + f.key + '" rows="3">' + esc(val == null ? '' : val) + '</textarea>';
         } else if (f.type === 'code') {
             inputHtml = '<textarea id="' + id + '" data-key="' + f.key + '" spellcheck="false" class="code-area" rows="10">' + esc(val == null ? '' : val) + '</textarea>';
+            if (f.svgPreview) {
+                const ph = (f.previewHeight || 48);
+                const bg = (f.previewBg === 'dark') ? 'background: linear-gradient(135deg,#0A1628,#0f2140);' : 'background:#fff; border:1px solid #e6ebf5;';
+                inputHtml += '<div class="svg-preview-block" style="margin-top:10px; display:flex; align-items:center; justify-content:center; padding:16px; border-radius:8px; ' + bg + ' height:' + (ph + 32) + 'px;"><div id="prev_' + id + '" data-preview-for="' + id + '" style="height:' + ph + 'px; width:100%; display:flex; align-items:center; justify-content:center; color:#B99642;">' + renderPreviewSnippet(val, f) + '</div></div>';
+            }
         } else if (f.type === 'checkbox') {
             inputHtml = '<label class="form-check-inline">' +
                 '<input type="checkbox" id="' + id + '" data-key="' + f.key + '" ' + (val ? 'checked' : '') + '>' +
@@ -503,6 +529,47 @@
             return '<div class="form-group ' + colCls + '"><label>' + esc(f.label) + labelTip + '</label>' + inputHtml + '</div>';
         }
         return '<div class="form-group ' + colCls + '"><label for="' + id + '">' + esc(f.label) + labelTip + '</label>' + inputHtml + '</div>';
+    }
+
+    function renderPreviewSnippet(rawVal, f) {
+        if (rawVal == null || typeof rawVal !== 'string' || !rawVal.trim()) {
+            return '<span style="color:' + (f && f.previewBg === 'dark' ? '#8898b8' : '#b8c1d8') + ';font-size:13px;letter-spacing:0.5px;">（未填写，使用 config.js 默认 Logo）</span>';
+        }
+        const txt = String(rawVal).trim();
+        try {
+            const tmp = document.createElement('div');
+            tmp.innerHTML = txt;
+            const svg = tmp.querySelector('svg');
+            if (!svg) {
+                return '<span style="color:#d7524e; font-size:13px;">⚠️ 未检测到合法 SVG，请粘贴完整 &lt;svg&gt;...&lt;/svg&gt;</span>';
+            }
+            svg.style.maxHeight = '100%';
+            svg.style.maxWidth = '100%';
+            svg.style.height = '100%';
+            svg.style.width = 'auto';
+            if (svg.getAttribute('fill') === 'currentColor' || (svg.querySelector && svg.querySelector('[fill="currentColor"]'))) {
+                svg.style.color = '#B99642';
+            } else if (!svg.style.color) {
+                svg.style.color = '#B99642';
+            }
+            if (f && f.key && String(f.key).indexOf('logoFooterSvgTpl') > -1 && txt.indexOf('{{LOGO_CN}}') > -1) {
+                const cnVal = (currentCfg && currentCfg.brand) ? currentCfg.brand.logoCn : null;
+                if (cnVal) svg.innerHTML = svg.innerHTML.replace(/\{\{LOGO_CN\}\}/g, String(cnVal));
+            }
+            return svg.outerHTML;
+        } catch (e) {
+            return '<span style="color:#d7524e; font-size:13px;">⚠️ SVG 解析失败：' + esc(String(e && e.message || e)) + '</span>';
+        }
+    }
+
+    function refreshSvgPreview(textareaEl) {
+        if (!textareaEl) return;
+        const pid = 'prev_' + textareaEl.id;
+        const preview = document.getElementById(pid);
+        if (!preview) return;
+        const key = textareaEl.getAttribute('data-key');
+        const f = (renderedSchemaFields && renderedSchemaFields.length) ? renderedSchemaFields.find(function (s) { return s.key === key; }) : null;
+        preview.innerHTML = renderPreviewSnippet(textareaEl.value, f);
     }
 
     function renderListEditor(f, id, list) {
@@ -570,6 +637,9 @@
                 else v = el.value;
                 setPath(currentCfg, key, v);
                 markDirty();
+                if (el.classList && el.classList.contains('code-area')) {
+                    refreshSvgPreview(el);
+                }
             });
             if (el.type === 'checkbox') {
                 el.addEventListener('change', function () {
