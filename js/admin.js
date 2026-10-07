@@ -269,7 +269,10 @@
                 { sec: '场景 4 · 浏览器标签页 Favicon', desc: '建议尺寸：方形 64×64 或 200×200，小图形 PNG/SVG/ICO。' },
                 { key: 'site.faviconSvg',        label: 'Favicon（浏览器小图标）', type: 'file',
                   hint: '不要使用 currentColor（Favicon 无父容器颜色），直接做金色填充。' },
-                { sec: '场景 5 · Footer 中文行（简中）', desc: '若 Footer 使用了带 {{LOGO_CN}} 的 SVG 模板，此处控制 zh_CN 的公司名显示；zh_TW/en 仍由三语字典维护。' },
+                { sec: '场景 5 · 登录页专属 Logo（白色背景）', desc: '建议尺寸：横向整图 500×120px，建议白底、深色字（登录卡片背景纯白）。此 Logo 仅用于后台登录卡顶部，不会影响首页（深蓝背景）的 Logo。' },
+                { key: 'brand.loginLogoSvg',     label: '登录页 Logo（白底）',    type: 'file',
+                  hint: '登录卡是白底，颜色要与纯白背景对比强烈（深蓝字/金色字）。留空则使用顶部导航 Logo 做兜底。' },
+                { sec: '场景 6 · Footer 中文行（简中）', desc: '若 Footer 使用了带 {{LOGO_CN}} 的 SVG 模板，此处控制 zh_CN 的公司名显示；zh_TW/en 仍由三语字典维护。' },
                 { key: 'brand.logoCn',           label: 'Footer 中文行（简中）',   type: 'text',
                   hint: '默认：金岩石有限公司。仅当 Footer 上传 SVG 模板（含 {{LOGO_CN}} 占位符）时生效；PNG 图请直接把文字做死在图片里' }
             ]
@@ -386,15 +389,15 @@
     }
     function renderBrandIcons() {
         const iconRaw = (currentCfg && currentCfg.brand && currentCfg.brand.logoIconOnlySvg) || '';
-        const headerRaw = (currentCfg && currentCfg.brand && currentCfg.brand.logoHeaderSvg) || '';
+        const loginRaw = (currentCfg && currentCfg.brand && currentCfg.brand.loginLogoSvg)
+                      || (DEFAULT_CFG.brand && DEFAULT_CFG.brand.loginLogoSvg)
+                      || (currentCfg && currentCfg.brand && currentCfg.brand.logoHeaderSvg)
+                      || (DEFAULT_CFG.brand && DEFAULT_CFG.brand.logoHeaderSvg)
+                      || '';
         const sidebar = document.getElementById('sidebarBrandIconWrap');
         if (sidebar && iconRaw) renderBrandIconWrap(sidebar, iconRaw);
         const loginHeader = document.getElementById('loginLogoHeaderWrap');
-        if (loginHeader && headerRaw) {
-            renderBrandIconWrap(loginHeader, headerRaw);
-        } else if (loginHeader && DEFAULT_CFG.brand && DEFAULT_CFG.brand.logoHeaderSvg) {
-            renderBrandIconWrap(loginHeader, DEFAULT_CFG.brand.logoHeaderSvg);
-        }
+        if (loginHeader && loginRaw) renderBrandIconWrap(loginHeader, loginRaw);
     }
 
     /* ============ INIT ============ */
@@ -547,7 +550,7 @@
         } else if (f.type === 'file') {
             const cur = (typeof val === 'string') ? val : '';
             const previewBg = (f.key === 'brand.logoFooterSvgTpl') ? 'background: linear-gradient(135deg,#0A1628,#0f2140);' : 'background:#fff; border:1px solid #e6ebf5;';
-            const ph = (f.key === 'brand.logoFooterSvgTpl') ? 108 : (f.key === 'site.faviconSvg' ? 32 : (f.key === 'brand.logoIconOnlySvg' ? 64 : 48));
+            const ph = (f.key === 'brand.logoFooterSvgTpl') ? 108 : (f.key === 'site.faviconSvg' ? 32 : (f.key === 'brand.logoIconOnlySvg' ? 64 : (f.key === 'brand.loginLogoSvg' ? 80 : 48)));
             const hasVal = (cur && cur.length > 0) ? 1 : 0;
             inputHtml =
                 '<div class="file-upload-block" style="display:flex; flex-direction:column; gap:10px;">' +

@@ -134,7 +134,7 @@ ul {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 56px;
+    height: 72px;
     flex-shrink: 0;
     min-width: 0;
 }
@@ -145,6 +145,9 @@ ul {
     max-width: 100%;
     display: block;
     object-fit: contain;
+}
+.navbar.scrolled .logo-header-img {
+    height: 56px;
 }
 
 .logo-footer-img {
@@ -2138,6 +2141,9 @@ ul {
 }
 
 @media (max-width: 480px) {
+    .logo-header-img { height: 52px; }
+    .navbar.scrolled .logo-header-img { height: 44px; }
+
     .hero-title {
         letter-spacing: 1px;
     }
