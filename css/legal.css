@@ -54,9 +54,30 @@ a { color: inherit; }
     color: var(--lp-gold);
     flex-shrink: 0;
 }
-.lp-logo-text { display: flex; flex-direction: column; line-height: 1.2; }
-.lp-logo-cn { font-family: var(--lp-font-serif); font-size: 16px; font-weight: 700; letter-spacing: 1.5px; color: #fff; }
-.lp-logo-en { font-size: 9px; letter-spacing: 2px; color: var(--lp-gold-light); opacity: 0.85; margin-top: 2px; font-weight: 600; }
+.lp-logo-text { display: flex; flex-direction: column; line-height: 1.15; min-width:0; }
+.lp-logo-en {
+  font-family: var(--lp-font-sans);
+  font-style: italic;
+  font-weight: 800;
+  font-size: 17px;
+  letter-spacing: 0.4px;
+  line-height: 1.05;
+  color: #fff;
+  white-space: nowrap;
+  display: inline-flex; align-items: baseline;
+}
+.lp-logo-en .logo-en-golden { color: var(--lp-gold); }
+.lp-logo-en .logo-en-rock   { color: #fff; }
+.lp-logo-cn {
+  font-family: var(--lp-font-serif);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 2px;
+  color: var(--lp-gold-light);
+  opacity: 0.92;
+  margin-top: 4px;
+  white-space: nowrap;
+}
 .lp-nav-links {
     display: flex; align-items: center; gap: 28px;
 }

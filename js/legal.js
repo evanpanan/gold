@@ -92,6 +92,8 @@
 
     function renderNavbar() {
         const logoSvg = (CONFIG.brand && CONFIG.brand.logoSvg) || '';
+        const logoCn = (CONFIG.brand && CONFIG.brand.logoCn) || '金岩石有限公司';
+        const logoEnHtml = (CONFIG.brand && CONFIG.brand.logoEn) || '<span class="logo-en-golden">GOLDEN</span><span class="logo-en-rock">ROCK</span>';
         const nav = document.getElementById('lpNav');
         if (!nav) return;
         nav.innerHTML =
@@ -99,8 +101,8 @@
               '<a href="index.html" class="lp-logo">' +
                 (logoSvg ? ('<div class="lp-logo-icon">' + logoSvg + '</div>') : '') +
                 '<div class="lp-logo-text">' +
-                  '<span class="lp-logo-cn">' + esc((CONFIG.brand && CONFIG.brand.logoCn) || '金岩石') + '</span>' +
-                  '<span class="lp-logo-en">' + esc((CONFIG.brand && CONFIG.brand.logoEn) || 'GOLDEN ROCK') + '</span>' +
+                  '<span class="lp-logo-en">' + logoEnHtml + '</span>' +
+                  '<span class="lp-logo-cn">' + esc(logoCn) + '</span>' +
                 '</div>' +
               '</a>' +
               '<nav class="lp-nav-links">' +

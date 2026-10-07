@@ -97,18 +97,27 @@ code {
     padding: 8px;
     display: flex; align-items: center; justify-content: center;
 }
+.login-logo-text { display:flex; flex-direction:column; line-height:1.15; }
+.login-logo-en {
+    font-family: var(--admin-font-sans);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    line-height: 1.05;
+    color: var(--admin-primary);
+    white-space: nowrap;
+    display: inline-flex; align-items: baseline;
+}
+.brand-en-golden { color: var(--admin-gold); letter-spacing: 0.5px; }
+.brand-en-rock   { color: #2B2B2B; letter-spacing: 0.5px; }
 .login-logo-cn {
     font-family: var(--admin-font-serif);
-    font-size: 20px; font-weight: 700;
+    font-size: 13px; font-weight: 500;
     color: var(--admin-primary);
     letter-spacing: 2px;
-}
-.login-logo-en {
-    font-size: 10px;
-    letter-spacing: 2.5px;
-    color: var(--admin-gold-dark);
-    font-weight: 600;
-    margin-top: 2px;
+    margin-top: 5px;
+    white-space: nowrap;
 }
 .login-title {
     font-family: var(--admin-font-serif);
@@ -314,17 +323,27 @@ code {
     padding: 6px;
     display: flex; align-items: center; justify-content: center;
 }
+.admin-brand-text { display:flex; flex-direction:column; line-height:1.15; min-width:0; }
+.admin-brand-en {
+    font-family: var(--admin-font-sans);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 16px;
+    letter-spacing: 0.3px;
+    line-height: 1.05;
+    color: #fff;
+    white-space: nowrap;
+    display: inline-flex; align-items: baseline;
+}
+.admin-sidebar .brand-en-rock { color: #fff; }
 .admin-brand-cn {
     font-family: var(--admin-font-serif);
-    font-size: 15px; font-weight: 700;
-    letter-spacing: 1px;
-    color: #fff;
-}
-.admin-brand-en {
-    font-size: 9px; letter-spacing: 2px;
+    font-size: 12px; font-weight: 500;
+    letter-spacing: 1.5px;
     color: var(--admin-gold-light);
-    opacity: 0.85;
-    margin-top: 2px;
+    opacity: 0.92;
+    margin-top: 4px;
+    white-space: nowrap;
 }
 
 .admin-nav {

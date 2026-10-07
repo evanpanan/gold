@@ -140,24 +140,37 @@ ul {
 .logo-text {
     display: flex;
     flex-direction: column;
-    line-height: 1.2;
-}
-
-.logo-cn {
-    font-family: var(--font-serif);
-    font-size: 18px;
-    font-weight: 700;
-    letter-spacing: 2px;
-    color: var(--color-white);
+    line-height: 1.15;
+    justify-content: center;
+    min-width: 0;
 }
 
 .logo-en {
-    font-size: 10px;
-    font-weight: 600;
-    letter-spacing: 2.5px;
-    color: var(--color-gold-light);
-    opacity: 0.9;
-    margin-top: 2px;
+    font-family: var(--font-sans);
+    font-style: italic;
+    font-weight: 800;
+    font-size: 20px;
+    letter-spacing: 0.5px;
+    line-height: 1.05;
+    color: var(--color-white);
+    white-space: nowrap;
+    display: inline-flex;
+    align-items: baseline;
+}
+.logo-en-golden { color: var(--color-gold); letter-spacing: 0.5px; }
+.logo-en-rock   { color: var(--color-white, #2B2B2B); letter-spacing: 0.5px; margin-left: 0; }
+.footer .logo-en-rock,
+.footer .logo-en { color: var(--color-white); }
+
+.logo-cn {
+    font-family: var(--font-serif);
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: var(--color-white);
+    opacity: 0.92;
+    margin-top: 4px;
+    white-space: nowrap;
 }
 
 .nav-menu {

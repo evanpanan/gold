@@ -4,11 +4,12 @@ window.GOLDENROCK_CONFIG = {
     metaDescription: "金岩石有限公司 Golden Rock Limited - 扎根香港国际金融中心的专业金融服务机构，专注全球资本市场证券业务服务。",
     metaKeywords: "金岩石, GoldenRock, 香港券商, 证券交易, 投资咨询, 跨境资产配置, 港股, 美股",
     faviconEmoji: "🏛️",
-    faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><defs><linearGradient id='g' x1='0' y1='0' x2='1' y2='1'><stop offset='0' stop-color='#E4C887'/><stop offset='1' stop-color='#B28C4A'/></linearGradient></defs><rect x='4' y='4' width='56' height='56' rx='14' fill='#0A1628' stroke='url(#g)' stroke-width='2'/><path d='M20 42V22l12-8 12 8v20' fill='url(#g)' opacity='0.12' stroke='url(#g)' stroke-width='2.2' stroke-linejoin='round'/><line x1='26' y1='42' x2='26' y2='30' stroke='url(#g)' stroke-width='2.2' stroke-linecap='round'/><line x1='32' y1='42' x2='32' y2='26' stroke='url(#g)' stroke-width='2.2' stroke-linecap='round'/><line x1='38' y1='42' x2='38' y2='30' stroke='url(#g)' stroke-width='2.2' stroke-linecap='round'/><path d='M14 44h36' stroke='url(#g)' stroke-width='2.2' stroke-linecap='round'/></svg>"
+    faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path fill='#B99642' d='M32 4.5c8.2 2.3 14.4 8.9 16 17.2 1 5.4-.4 10.6-3.9 14.6 2.2 2.3 3.5 5.3 3.6 8.6-.5 8.2-6.9 14.9-15.7 14.8-8.8-.1-15.1-6.9-15.5-15.1-.2-4.6 1.7-8.9 5.2-11.9C17.6 29.5 16 25.2 16.4 20.8c.4-8.5 7.4-15.2 15.6-16.3z'/><path fill='#fff' d='M30.8 15c-10.4 2-15 11.7-10.6 21.4 2.4 5.3 7.5 7.4 10.8 6.1-6.4 2.3-9.3 7.7-9.5 12.2C33.7 57.9 48 51.4 48 37.1c-.2-6-3-11.1-8-14.7 4.8-2 7.7-6.7 7.5-11.7-1.7-9.4-12.4-15.5-16.7-4.2z'/></svg>"
   },
   brand: {
-    logoCn: "金岩石",
-    logoEn: "GOLDEN ROCK",
+    logoSvg: "<svg viewBox='0 0 40 40' fill='none' xmlns='http://www.w3.org/2000/svg'><path fill='currentColor' d='M20 2.8c5.1 1.4 9 5.5 10 10.8.6 3.4-.3 6.6-2.4 9.1 1.4 1.5 2.2 3.3 2.2 5.4-.3 5.1-4.3 9.3-9.8 9.3-5.5-.1-9.4-4.3-9.7-9.5-.1-2.9 1.1-5.5 3.2-7.5C9.8 20.5 8.8 17.8 9 15.5c.3-5.3 4.6-9.4 11-10.2z'/><path fill='#ffffff' d='M19.3 9.4C12.8 10.7 9.9 16.8 12.6 22.8c1.5 3.3 4.7 4.6 6.8 3.8-4 1.5-5.8 4.8-5.9 7.6.2 4.5 3.9 8.4 9 8.8 3.8.2 7.1-1.4 9.1-4.4-6.8 1.7-11.2-2.3-11.4-8.7-.1-3.7 1.9-6.9 5-9.3 3-1.2 4.8-4.2 4.7-7.3-.1-5.8-7.6-10.2-11.6-3.9z'/></svg>",
+    logoCn: "金岩石有限公司",
+    logoEn: "<span class='logo-en-golden'>GOLDEN</span><span class='logo-en-rock'>ROCK</span>",
     logoEnFull: "GOLDEN ROCK LIMITED",
     taglinePrimary: "磐石固本",
     taglineSecondary: "金石创富",
