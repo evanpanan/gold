@@ -16,22 +16,21 @@
         return out;
     }
     function _clone(o) { return JSON.parse(JSON.stringify(o == null ? {} : o)); }
+    function _getRawBaseCfg() {
+        if (window.I18N && typeof window.I18N.___rawBaseCfg === 'function') return window.I18N.___rawBaseCfg();
+        var base = window.GOLDENROCK_CONFIG || {};
+        try {
+            var overrideStr = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
+            if (overrideStr) return _dM(_clone(base), JSON.parse(overrideStr));
+        } catch (e) {}
+        return base;
+    }
 
     const GOLDENROCK_CONFIG = (function loadConfig() {
         if (window.I18N && typeof window.I18N.getConfig === 'function') {
             return window.I18N.getConfig();
         }
-        const base = window.GOLDENROCK_CONFIG || {};
-        try {
-            const overrideStr = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
-            if (overrideStr) {
-                const override = JSON.parse(overrideStr);
-                return _dM(base, override);
-            }
-        } catch (e) {
-            console.warn('[GoldenRock] 配置读取失败，使用默认配置', e);
-        }
-        return base;
+        return _getRawBaseCfg();
     })();
 
     window.GOLDENROCK_CONFIG_RESOLVED = GOLDENROCK_CONFIG;
@@ -153,6 +152,7 @@
 
     function renderDynamicContent() {
         const cfg = GOLDENROCK_CONFIG;
+        const rawCfg = (typeof _getRawBaseCfg === 'function') ? _getRawBaseCfg() : cfg;
 
         document.title = cfg.site && cfg.site.title ? cfg.site.title : document.title;
         const metaDesc = document.querySelector('meta[name="description"]');
@@ -174,7 +174,17 @@
         document.querySelectorAll('[data-dyn]').forEach(function (el) {
             const key = el.getAttribute('data-dyn');
             const type = el.getAttribute('data-type') || 'text';
-            const val = resolvePath(cfg, key);
+
+            var useCfg = cfg;
+            if (key === 'brand.logoHeaderSvg'
+                || key === 'brand.logoFooterSvgTpl'
+                || key === 'brand.logoIconOnlySvg'
+                || key === 'brand.loginLogoSvg'
+                || key === 'site.faviconSvg') {
+                useCfg = rawCfg;
+            }
+
+            const val = resolvePath(useCfg, key);
             if (val === undefined || val === null) return;
 
             if (type === 'html') {
@@ -186,7 +196,7 @@
                 el.setAttribute('href', val);
             } else if (type === 'svg-inner') {
                 if (typeof val === 'string' && val.trim()) {
-                    renderSvgInner(el, val, cfg);
+                    renderSvgInner(el, val, useCfg);
                 }
             } else {
                 el.textContent = val;

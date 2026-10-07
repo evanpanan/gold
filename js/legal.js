@@ -29,17 +29,24 @@
         return o;
     }
 
-    const CONFIG = (function loadConfig() {
-        if (window.I18N && typeof window.I18N.getConfig === 'function') {
-            return window.I18N.getConfig();
-        }
+    function getRawCfg() {
+        if (window.I18N && typeof window.I18N.___rawBaseCfg === 'function') return window.I18N.___rawBaseCfg();
         const base = cloneJSON(window.GOLDENROCK_CONFIG || {});
         try {
             const s = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
             if (s) return _dM(base, JSON.parse(s));
         } catch (e) { console.warn(e); }
         return base;
+    }
+
+    const CONFIG = (function loadConfig() {
+        if (window.I18N && typeof window.I18N.getConfig === 'function') {
+            return window.I18N.getConfig();
+        }
+        return getRawCfg();
     })();
+
+    const RAW_CFG = getRawCfg();
 
     const PAGE = (CONFIG.legal && CONFIG.legal[PAGE_ID]) || {};
 
@@ -101,7 +108,9 @@
     }
 
     function renderNavbar() {
-        const logoHeader = (CONFIG.brand && CONFIG.brand.logoHeaderSvg) || '';
+        const logoHeader = (RAW_CFG && RAW_CFG.brand && RAW_CFG.brand.logoHeaderSvg)
+                        || (CONFIG.brand && CONFIG.brand.logoHeaderSvg)
+                        || '';
         const nav = document.getElementById('lpNav');
         if (!nav) return;
         nav.innerHTML =
