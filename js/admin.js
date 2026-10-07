@@ -56,8 +56,6 @@
                 { key: 'brand.heroBadge',         label: '首屏徽章文字', type: 'text' },
                 { key: 'brand.taglinePrimary',    label: '首屏主标语',   type: 'text' },
                 { key: 'brand.taglineSecondary',  label: '首屏金色标语', type: 'text' },
-                { sec: '品牌 LOGO (SVG)', desc: '粘贴 SVG 代码即可更新，替换默认石形图标。留空使用默认图标' },
-                { key: 'brand.logoSvg',   label: 'LOGO SVG 代码', type: 'code', hint: '完整 <svg>...</svg> 标签，viewBox 建议 0 0 40 40' },
                 { sec: '后台安全', desc: '登录密码与权限' },
                 { key: 'admin.loginPassword', label: '管理员登录密码', type: 'text', hint: '请使用复杂密码，避免默认 admin123' }
             ],
@@ -354,6 +352,46 @@
     }
     function clearAuth() { sessionStorage.removeItem(AUTH_KEY); }
 
+    function isImageDataUrl(s) {
+        return typeof s === 'string' && s.indexOf('data:image/') === 0;
+    }
+    function renderBrandIconWrap(el, raw) {
+        if (!el) return;
+        if (isImageDataUrl(raw)) {
+            const img = document.createElement('img');
+            img.src = raw;
+            img.alt = 'brand';
+            img.style.cssText = 'display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;';
+            el.innerHTML = '';
+            el.appendChild(img);
+            return;
+        }
+        const html = String(raw || '').trim();
+        if (!html) return;
+        const tmp = document.createElement('div');
+        tmp.innerHTML = html;
+        const svg = tmp.querySelector('svg');
+        if (svg) {
+            svg.style.color = '#B99642';
+            el.innerHTML = '';
+            el.appendChild(svg);
+            return;
+        }
+        const img = tmp.querySelector('img');
+        if (img) {
+            el.innerHTML = '';
+            img.style.cssText = 'display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;';
+            el.appendChild(img);
+        }
+    }
+    function renderBrandIcons() {
+        const raw = (currentCfg && currentCfg.brand && currentCfg.brand.logoIconOnlySvg) || '';
+        const sidebar = document.getElementById('sidebarBrandIconWrap');
+        if (sidebar && raw) renderBrandIconWrap(sidebar, raw);
+        const login = document.getElementById('loginBrandIconWrap');
+        if (login && raw) renderBrandIconWrap(login, raw);
+    }
+
     /* ============ INIT ============ */
     document.addEventListener('DOMContentLoaded', init);
 
@@ -361,6 +399,7 @@
         if (!checkAuth()) {
             document.getElementById('loginView').style.display = 'flex';
             document.getElementById('adminView').style.display = 'none';
+            renderBrandIcons();
             bindLogin();
         } else {
             enterAdmin();
@@ -393,6 +432,7 @@
         switchTab(activeTab);
         bindTopButtons();
         bindModalClose();
+        renderBrandIcons();
         updateSaveStatus();
     }
 
@@ -883,6 +923,7 @@
             saveConfig(currentCfg);
             dirty = false;
             updateSaveStatus();
+            renderBrandIcons();
             toast('success', '已保存', '更改已保存到浏览器，官网实时生效（此浏览器 localStorage）');
         });
         document.getElementById('resetBtn').addEventListener('click', function () {
@@ -892,6 +933,7 @@
             dirty = false;
             updateSaveStatus();
             rerenderCurrentTab();
+            renderBrandIcons();
             toast('success', '已恢复默认', '所有内容已重置为出厂配置');
         });
         document.getElementById('previewBtn').addEventListener('click', function () {
@@ -903,7 +945,8 @@
             clearAuth();
             location.reload();
         });
-        document.getElementById('exportBtn').addEventListener('click', function () {
+        const exportBtn = document.getElementById('exportBtn');
+        if (exportBtn) exportBtn.addEventListener('click', function () {
             closeSidebar();
             openExportModal();
         });
@@ -911,17 +954,22 @@
 
     function bindModalClose() {
         const md = document.getElementById('exportModal');
+        if (!md) return;
         md.querySelectorAll('[data-modal], [data-modal-close]').forEach(function (el) {
             el.addEventListener('click', function () { closeModal(); });
         });
-        document.getElementById('copyConfigBtn').addEventListener('click', function () {
+        const copyBtn = document.getElementById('copyConfigBtn');
+        if (copyBtn) copyBtn.addEventListener('click', function () {
             const ta = document.getElementById('exportTextarea');
+            if (!ta) return;
             ta.select();
             document.execCommand('copy');
             toast('success', '已复制', '内容配置已复制，可直接粘贴到邮件或对接人员的聊天中发送。');
         });
-        document.getElementById('downloadConfigBtn').addEventListener('click', function () {
+        const downBtn = document.getElementById('downloadConfigBtn');
+        if (downBtn) downBtn.addEventListener('click', function () {
             const ta = document.getElementById('exportTextarea');
+            if (!ta) return;
             const blob = new Blob([ta.value], { type: 'application/javascript;charset=utf-8' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
@@ -937,12 +985,14 @@
     }
 
     function closeModal() {
-        document.getElementById('exportModal').style.display = 'none';
+        const md = document.getElementById('exportModal');
+        if (md) md.style.display = 'none';
     }
 
     function openExportModal() {
         const md = document.getElementById('exportModal');
         const ta = document.getElementById('exportTextarea');
+        if (!md || !ta) return;
         const finalCfg = cloneJSON(currentCfg);
         ta.value = generateConfigJS(finalCfg);
         md.style.display = 'flex';
