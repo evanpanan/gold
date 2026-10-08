@@ -21,11 +21,21 @@
               document.documentElement.style.scrollBehavior = 'auto';
               window.scrollTo(0, y);
               var prevY = y;
+              var countdown = 11; // 8ms × 11 = 88ms 最多 ~100ms，绝不无限轮询（防无限scrollTo导致浏览器取消导航跳转）
               var _t0 = setInterval(function () {
-                window.scrollTo(0, prevY);
+                countdown--;
+                if (countdown <= 0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; return; }
+                try { window.scrollTo(0, prevY); } catch (e) {}
               }, 8);
-              setTimeout(function () { clearInterval(_t0); window.scrollTo(0, prevY); }, 80);
-              window.addEventListener('load', function () { window.scrollTo(0, prevY); }, { once: true });
+              setTimeout(function () { if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; } try { window.scrollTo(0, prevY); } catch (e) {} }, 120);
+              window.addEventListener('load', function () { try { window.scrollTo(0, prevY); } catch (e) {} }, { once: true });
+              window.GR_ABORT_SCROLL_LOCK = (function (prev) {
+                return function () {
+                  if (prev) try { prev(); } catch (e) {}
+                  if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; }
+                  try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e) {}
+                };
+              })(window.GR_ABORT_SCROLL_LOCK);
             }
           }
         } catch (e) {}
@@ -612,8 +622,8 @@
             <path d="M12 4 L12 2.8 M18.5 5.2 L19.4 4.2 M21 12.5 L22.2 12.5 M18.5 19.8 L19.4 20.8 M12 21 L12 22.2 M5.5 19.8 L4.6 20.8 M3 12.5 L1.8 12.5 M5.5 5.2 L4.6 4.2" stroke-width="1.3" opacity="0.65"/>
         </svg>
     </template>
-    <script src="js/i18n.js?v=JUMPv1"></script>
-    <script src="config.js?v=JUMPv1"></script>
-    <script src="js/main.js?v=JUMPv1"></script>
+    <script src="js/i18n.js?v=FIXv1"></script>
+    <script src="config.js?v=FIXv1"></script>
+    <script src="js/main.js?v=FIXv1"></script>
 </body>
 </html>

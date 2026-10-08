@@ -20,9 +20,21 @@
               document.documentElement.style.scrollBehavior = 'auto';
               window.scrollTo(0, y);
               var prevY = y;
-              var _t0 = setInterval(function () { window.scrollTo(0, prevY); }, 8);
-              setTimeout(function () { clearInterval(_t0); window.scrollTo(0, prevY); }, 80);
-              window.addEventListener('load', function () { window.scrollTo(0, prevY); }, { once: true });
+              var countdown = 11;
+              var _t0 = setInterval(function () {
+                countdown--;
+                if (countdown <= 0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; return; }
+                try { window.scrollTo(0, prevY); } catch (e) {}
+              }, 8);
+              setTimeout(function () { if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; } try { window.scrollTo(0, prevY); } catch (e) {} }, 120);
+              window.addEventListener('load', function () { try { window.scrollTo(0, prevY); } catch (e) {} }, { once: true });
+              window.GR_ABORT_SCROLL_LOCK = (function (prev) {
+                return function () {
+                  if (prev) try { prev(); } catch (e) {}
+                  if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; }
+                  try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e) {}
+                };
+              })(window.GR_ABORT_SCROLL_LOCK);
             }
           }
         } catch (e) {}
@@ -55,8 +67,8 @@
         </svg>
     </button>
 
-    <script src="js/i18n.js?v=JUMPv1"></script>
-    <script src="config.js?v=JUMPv1"></script>
-    <script src="js/legal.js?v=JUMPv1"></script>
+    <script src="js/i18n.js?v=FIXv1"></script>
+    <script src="config.js?v=FIXv1"></script>
+    <script src="js/legal.js?v=FIXv1"></script>
 </body>
 </html>

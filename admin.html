@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>金岩石官网 · 内容管理后台</title>
-    <link rel="stylesheet" href="css/admin.css?v=JUMPv1">
+        <link rel="stylesheet" href="css/admin.css?v=FIXv1">
   <style>
     /* 防止登录页首帧高度抖动：先把 body 最小高锁死 */
     body { min-height: 100vh; margin: 0; }
@@ -21,9 +21,21 @@
             document.documentElement.style.scrollBehavior = 'auto';
             window.scrollTo(0, y);
             var prevY = y;
-            var _t0 = setInterval(function () { window.scrollTo(0, prevY); }, 8);
-            setTimeout(function () { clearInterval(_t0); window.scrollTo(0, prevY); }, 80);
-            window.addEventListener('load', function () { window.scrollTo(0, prevY); }, { once: true });
+            var countdown = 11;
+            var _t0 = setInterval(function () {
+              countdown--;
+              if (countdown <= 0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; return; }
+              try { window.scrollTo(0, prevY); } catch (e) {}
+            }, 8);
+            setTimeout(function () { if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; } try { window.scrollTo(0, prevY); } catch (e) {} }, 120);
+            window.addEventListener('load', function () { try { window.scrollTo(0, prevY); } catch (e) {} }, { once: true });
+            window.GR_ABORT_SCROLL_LOCK = (function (prev) {
+              return function () {
+                if (prev) try { prev(); } catch (e) {}
+                if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; }
+                try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e) {}
+              };
+            })(window.GR_ABORT_SCROLL_LOCK);
           }
         }
       } catch (e) {}
@@ -117,8 +129,8 @@
         </div>
     </div>
 
-    <script src="config.js?v=JUMPv1"></script>
-    <script src="js/admin.js?v=JUMPv1"></script>
+    <script src="config.js?v=FIXv1"></script>
+    <script src="js/admin.js?v=FIXv1"></script>
 
     <!-- 图片裁剪弹窗 -->
     <div id="cropModal" class="crop-modal" style="display:none;">

@@ -964,10 +964,16 @@
         if (nv === _activeLang) return;
         try { localStorage.setItem(STORAGE_KEY, nv); } catch (e) {}
         try { sessionStorage.setItem('GR_SCROLL_RESTORE', String(window.scrollY || window.pageYOffset || 0)); } catch (e) {}
+        // 立即中止任何正在进行中的滚动锁/轮询（<head> 抢跑或 restoreScroll 的轮询/rAF 会导致 href 跳转被浏览器取消）
+        if (typeof window.GR_ABORT_SCROLL_LOCK === 'function') try { window.GR_ABORT_SCROLL_LOCK(); } catch (e) {}
         var loc = String(window.location);
         var cleanLoc = loc.replace(/([?&#])lang=[^&#]*&?/g, function (m, p1) { return p1 === '?' ? '?' : ''; }).replace(/[?&]$/, '');
         var sep = (cleanLoc.indexOf('?') === -1) ? '?' : '&';
-        window.location.href = cleanLoc + sep + 'lang=' + (nv === 'zh_CN' ? 'zh-CN' : (nv === 'zh_TW' ? 'zh-TW' : 'en'));
+        var target = cleanLoc + sep + 'lang=' + (nv === 'zh_CN' ? 'zh-CN' : (nv === 'zh_TW' ? 'zh-TW' : 'en'));
+        try { window.location.href = target; } catch (e) {}
+        // 双重保险：50ms 后若未跳转则 location.assign；150ms 后 reload 兜底
+        setTimeout(function () { try { window.location.assign(target); } catch (e2) {} }, 50);
+        setTimeout(function () { try { window.location.reload(); } catch (e3) {} }, 150);
     }
 
     function applyI18nAttrs(scope) {
@@ -1026,36 +1032,50 @@
         try {
             var raw = sessionStorage.getItem('GR_SCROLL_RESTORE');
             if (raw == null) {
-                // 不需要恢复 → 重新允许 history 自动接管（正常跳转场景）
                 if ('scrollRestoration' in history) try { history.scrollRestoration = 'auto'; } catch (e) {}
                 return;
             }
             var y = parseInt(raw, 10);
             if (!isFinite(y) || y < 0) y = 0;
             if (y > 0) {
-                // 临时关闭 smooth scroll，保证一次到位无动画（否则会"滑过去"的跳动感）
                 var htmlEl = document.documentElement;
                 var prevSB = htmlEl.style.scrollBehavior || '';
                 htmlEl.style.scrollBehavior = 'auto';
                 var doneCount = 0;
+                var guardId = 0;
+                function abort() {
+                    if (guardId) { try { clearInterval(guardId); } catch (e) {} guardId = 0; }
+                }
+                if (typeof window.GR_ABORT_SCROLL_LOCK !== 'function') {
+                    window.GR_ABORT_SCROLL_LOCK = abort;
+                } else {
+                    var prev = window.GR_ABORT_SCROLL_LOCK;
+                    window.GR_ABORT_SCROLL_LOCK = function () { try { prev(); } catch (e) {} abort(); };
+                }
                 function doScroll() {
-                    window.scrollTo(0, y);
+                    try { window.scrollTo(0, y); } catch (e) {}
                     doneCount++;
                     if (doneCount >= 2) {
                         try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
                         try { history.scrollRestoration = 'auto'; } catch (e2) {}
-                        // 下一帧再恢复 smooth，避免闪烁
                         if (typeof requestAnimationFrame === 'function') {
                             requestAnimationFrame(function () {
-                                requestAnimationFrame(function () { htmlEl.style.scrollBehavior = prevSB; });
+                                requestAnimationFrame(function () {
+                                    try { htmlEl.style.scrollBehavior = prevSB; } catch (e) {}
+                                    abort();
+                                });
                             });
                         } else {
-                            setTimeout(function () { htmlEl.style.scrollBehavior = prevSB; }, 32);
+                            setTimeout(function () { try { htmlEl.style.scrollBehavior = prevSB; } catch (e) {} abort(); }, 32);
                         }
                     }
                 }
-                doScroll(); // ① 立即执行
-                // ② load 事件：所有资源到位后再一次对齐，防止字体/图片加载后高度变
+                doScroll();
+                // 保护性短轮询：8ms × 12 次 = 96ms，防止字体/图片高度变化导致的偏差，超时必停避免干扰后续跳转
+                guardId = setInterval(function () {
+                    if (doneCount < 2) { try { window.scrollTo(0, y); } catch (e) {} }
+                }, 8);
+                setTimeout(function () { if (guardId) { try { clearInterval(guardId); guardId = 0; } catch (e) {} } }, 120);
                 window.addEventListener('load', function () { doScroll(); }, { once: true });
             } else {
                 try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
