@@ -963,6 +963,7 @@
         if (!nv) return;
         if (nv === _activeLang) return;
         try { localStorage.setItem(STORAGE_KEY, nv); } catch (e) {}
+        try { sessionStorage.setItem('GR_SCROLL_RESTORE', String(window.scrollY || window.pageYOffset || 0)); } catch (e) {}
         var loc = String(window.location);
         var cleanLoc = loc.replace(/([?&#])lang=[^&#]*&?/g, function (m, p1) { return p1 === '?' ? '?' : ''; }).replace(/[?&]$/, '');
         var sep = (cleanLoc.indexOf('?') === -1) ? '?' : '&';
@@ -1007,8 +1008,32 @@
         _activeLang = detectLang();
         setHtmlLang();
         try {
-            if (document.readyState !== 'loading') setSwitcherActive();
-            else document.addEventListener('DOMContentLoaded', setSwitcherActive);
+            if (document.readyState !== 'loading') {
+                setSwitcherActive();
+                restoreScroll();
+            } else {
+                document.addEventListener('DOMContentLoaded', function () {
+                    setSwitcherActive();
+                    restoreScroll();
+                });
+            }
+        } catch (e) {}
+    }
+
+    function restoreScroll() {
+        try {
+            var raw = sessionStorage.getItem('GR_SCROLL_RESTORE');
+            if (raw == null) return;
+            var y = parseInt(raw, 10);
+            if (!isFinite(y) || y < 0) y = 0;
+            if (y > 0) {
+                // 等待首屏资源可能影响高度，双保险：立即设一次 + load 后再设一次
+                window.scrollTo(0, y);
+                window.addEventListener('load', function () { window.scrollTo(0, y); }, { once: true });
+                setTimeout(function () { window.scrollTo(0, y); }, 40);
+                setTimeout(function () { window.scrollTo(0, y); }, 240);
+            }
+            try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
         } catch (e) {}
     }
 
