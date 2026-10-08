@@ -1138,22 +1138,21 @@
         CROP.rawDataUrl = null;
     }
 
-    function layoutCropStage() {
+    function layoutCropStage(preserveUserBox) {
         var stage = document.getElementById('cropStage');
         var img = document.getElementById('cropSource');
         if (!stage || !img) return;
 
         var stageRect = stage.getBoundingClientRect();
-        CROP.stageW = stageRect.width;
-        CROP.stageH = stageRect.height;
+        CROP.stageW = Math.max(1, stageRect.width);
+        CROP.stageH = Math.max(1, stageRect.height);
 
-        // 以「contain」方式放置原图居中，缩放系数 imgScale
         var ratio = Math.min(CROP.stageW / CROP.naturalW, CROP.stageH / CROP.naturalH);
         var baseScale = ratio;
         var scaleMult = CROP.scalePercent / 100;
         CROP.imgScale = baseScale * scaleMult;
-        var dispW = CROP.naturalW * CROP.imgScale;
-        var dispH = CROP.naturalH * CROP.imgScale;
+        var dispW = Math.max(1, CROP.naturalW * CROP.imgScale);
+        var dispH = Math.max(1, CROP.naturalH * CROP.imgScale);
         CROP.imgOffsetX = Math.round((CROP.stageW - dispW) / 2);
         CROP.imgOffsetY = Math.round((CROP.stageH - dispH) / 2);
 
@@ -1162,39 +1161,57 @@
         img.style.width = dispW + 'px';
         img.style.height = dispH + 'px';
 
-        // 默认裁剪框：图片 80% 居中（按固定比例时，调整大小）
+        // preserveUserBox=true（滑块缩放 / 窗口 resize）：保持用户裁剪框相对于图片的中心+比例不变，只做坐标换算
+        if (preserveUserBox && CROP.box && CROP.box.w > 0 && CROP.box.h > 0) {
+            try {
+                var prevScale = (CROP._prevScale > 0) ? CROP._prevScale : CROP.imgScale;
+                var prevOffX = (typeof CROP._prevOffX === 'number') ? CROP._prevOffX : CROP.imgOffsetX;
+                var prevOffY = (typeof CROP._prevOffY === 'number') ? CROP._prevOffY : CROP.imgOffsetY;
+                var relCx = ((CROP.box.x + CROP.box.w / 2) - prevOffX) / prevScale;
+                var relCy = ((CROP.box.y + CROP.box.h / 2) - prevOffY) / prevScale;
+                var relW = CROP.box.w / prevScale;
+                var relH = CROP.box.h / prevScale;
+                if (isFinite(relCx) && isFinite(relCy) && isFinite(relW) && isFinite(relH)) {
+                    var newW = Math.max(CROP_GESTURE.min, Math.round(relW * CROP.imgScale));
+                    var newH = Math.max(CROP_GESTURE.min, Math.round(relH * CROP.imgScale));
+                    var newCx = CROP.imgOffsetX + Math.round(relCx * CROP.imgScale);
+                    var newCy = CROP.imgOffsetY + Math.round(relCy * CROP.imgScale);
+                    CROP.box = {
+                        x: Math.round(newCx - newW / 2),
+                        y: Math.round(newCy - newH / 2),
+                        w: newW,
+                        h: newH
+                    };
+                    clampBox();
+                    renderCropBox();
+                    CROP._prevScale = CROP.imgScale;
+                    CROP._prevOffX = CROP.imgOffsetX;
+                    CROP._prevOffY = CROP.imgOffsetY;
+                    return;
+                }
+            } catch (e) {}
+        }
+
+        // 首次 / preserve 失败：默认框 = 图片矩形 80% 居中（按图片中心而非 stage 中心，避免小图片时框半在图片外）
         var padding = 0.1;
         var boxW = dispW * (1 - padding * 2);
         var boxH = dispH * (1 - padding * 2);
         if (CROP.aspect) {
-            if (boxW / boxH > CROP.aspect) {
-                boxW = boxH * CROP.aspect;
-            } else {
-                boxH = boxW / CROP.aspect;
-            }
+            if (boxW / boxH > CROP.aspect) boxW = boxH * CROP.aspect;
+            else boxH = boxW / CROP.aspect;
         }
-        var bx = Math.round((CROP.stageW - boxW) / 2);
-        var by = Math.round((CROP.stageH - boxH) / 2);
-        // 约束在图片显示区域内
-        var constraint = {
-            x1: CROP.imgOffsetX,
-            y1: CROP.imgOffsetY,
-            x2: CROP.imgOffsetX + dispW,
-            y2: CROP.imgOffsetY + dispH
-        };
-        // 若裁剪框初始超界，缩小
-        if (boxW > (constraint.x2 - constraint.x1)) {
-            boxW = constraint.x2 - constraint.x1;
-            if (CROP.aspect) boxH = boxW / CROP.aspect;
-        }
-        if (boxH > (constraint.y2 - constraint.y1)) {
-            boxH = constraint.y2 - constraint.y1;
-            if (CROP.aspect) boxW = boxH * CROP.aspect;
-        }
-        bx = Math.round((CROP.stageW - boxW) / 2);
-        by = Math.round((CROP.stageH - boxH) / 2);
-        CROP.box = { x: bx, y: by, w: Math.round(boxW), h: Math.round(boxH) };
+        boxW = Math.max(CROP_GESTURE.min, Math.round(boxW));
+        boxH = Math.max(CROP_GESTURE.min, Math.round(boxH));
+        var imgCx = CROP.imgOffsetX + Math.round(dispW / 2);
+        var imgCy = CROP.imgOffsetY + Math.round(dispH / 2);
+        var bx = imgCx - Math.round(boxW / 2);
+        var by = imgCy - Math.round(boxH / 2);
+        CROP.box = { x: bx, y: by, w: boxW, h: boxH };
+        clampBox();
         renderCropBox();
+        CROP._prevScale = CROP.imgScale;
+        CROP._prevOffX = CROP.imgOffsetX;
+        CROP._prevOffY = CROP.imgOffsetY;
     }
 
     function renderCropBox() {
@@ -1240,20 +1257,24 @@
     };
 
     function bindCropGestures() {
+        if (bindCropGestures._bound === true) return; // 守卫：防止重复绑定（多次 enterAdmin 会导致手势两遍执行→框抖动）
+        bindCropGestures._bound = false;
         var box = document.getElementById('cropBox');
         var stage = document.getElementById('cropStage');
+        var img = document.getElementById('cropSource');
         if (!box || !stage) return;
+        // 防止浏览器原生图片拖拽 / 文字选择干扰自定义手势（"拖了半天图片在动框不动的伪不稳定）
+        img.setAttribute('draggable', 'false');
+        img.ondragstart = function () { return false; };
         function onStageDown(e) {
-            // 若点击在 cropBox 或其内部把手，则交给 box 的 handler 处理
             var t = e.target;
             while (t) {
                 if (t === box) return;
                 t = t.parentNode;
             }
-            // 启动移动模式：计算点击点相对裁剪框左上角的偏移
             var pt = getPointer(e);
             e.preventDefault();
-            // 将 pointer 坐标转换为 stage 内相对坐标（getBoundingClientRect）
+            if (e.stopPropagation) try { e.stopPropagation(); } catch (e0) {}
             var stageRect = stage.getBoundingClientRect();
             var relX = pt.x - stageRect.left;
             var relY = pt.y - stageRect.top;
@@ -1262,10 +1283,6 @@
             CROP_GESTURE.startX = pt.x;
             CROP_GESTURE.startY = pt.y;
             CROP_GESTURE.startBox = { x: CROP.box.x, y: CROP.box.y, w: CROP.box.w, h: CROP.box.h };
-            // 校正：移动距离 = 当前指针 - startPointer，所以我们需要让 移动后的 box.x = startBox.x + (pt.x - startX)
-            // 希望 pt.x 对应的 box.x = relX - offX，即：startBox.x + (pt.x - startX) = relX - offX
-            // 也就是 offX = relX - startBox.x （刚好就是上面的定义）
-            // 所以 startX 不需要调整，直接用 pt.x 即可。那么 dx = pt.x_now - startX；box.x = startBox.x + dx
             CROP_GESTURE.active = true;
             CROP_GESTURE.type = 'move';
             CROP_GESTURE.dir = null;
@@ -1279,6 +1296,7 @@
         window.addEventListener('mouseup', endCropGesture);
         window.addEventListener('touchend', endCropGesture);
         window.addEventListener('touchcancel', endCropGesture);
+        bindCropGestures._bound = true;
     }
 
     function startCropGesture(e) {
@@ -1307,39 +1325,50 @@
     }
 
     function clampBox() {
-        var dispW = CROP.naturalW * CROP.imgScale;
-        var dispH = CROP.naturalH * CROP.imgScale;
-        var imgX1 = CROP.imgOffsetX;
-        var imgY1 = CROP.imgOffsetY;
-        var imgX2 = imgX1 + dispW;
-        var imgY2 = imgY1 + dispH;
-        var stageX1 = 0;
-        var stageY1 = 0;
-        var stageX2 = CROP.stageW || 0;
-        var stageY2 = CROP.stageH || 0;
-        var minX  = Math.max(imgX1, stageX1);
-        var minY  = Math.max(imgY1, stageY1);
-        var maxX2 = Math.min(imgX2, stageX2);
-        var maxY2 = Math.min(imgY2, stageY2);
-        var maxW = Math.max(CROP_GESTURE.min, Math.round(maxX2 - minX));
-        var maxH = Math.max(CROP_GESTURE.min, Math.round(maxY2 - minY));
+        var dispW = Math.max(1, CROP.naturalW * CROP.imgScale);
+        var dispH = Math.max(1, CROP.naturalH * CROP.imgScale);
+        var minX  = Math.max(CROP.imgOffsetX, 0);
+        var minY  = Math.max(CROP.imgOffsetY, 0);
+        var maxX2 = Math.min(CROP.imgOffsetX + dispW, (CROP.stageW || 0));
+        var maxY2 = Math.min(CROP.imgOffsetY + dispH, (CROP.stageH || 0));
+        var availW = Math.max(CROP_GESTURE.min, Math.round(maxX2 - minX));
+        var availH = Math.max(CROP_GESTURE.min, Math.round(maxY2 - minY));
 
-        if (CROP.box.w < CROP_GESTURE.min) CROP.box.w = CROP_GESTURE.min;
-        if (CROP.box.h < CROP_GESTURE.min) CROP.box.h = CROP_GESTURE.min;
-        if (CROP.box.w > maxW) CROP.box.w = maxW;
-        if (CROP.box.h > maxH) CROP.box.h = maxH;
-
-        if (CROP.box.x < minX) CROP.box.x = minX;
-        if (CROP.box.y < minY) CROP.box.y = minY;
-        if (CROP.box.x + CROP.box.w > maxX2) CROP.box.x = Math.round(maxX2 - CROP.box.w);
-        if (CROP.box.y + CROP.box.h > maxY2) CROP.box.y = Math.round(maxY2 - CROP.box.h);
-        if (CROP.box.x < minX) CROP.box.x = minX;
-        if (CROP.box.y < minY) CROP.box.y = minY;
+        // 二步收敛：第一步按 aspect 同步 w/h 到可用范围内
+        for (var i = 0; i < 3; i++) {
+            if (CROP.box.w < CROP_GESTURE.min) CROP.box.w = CROP_GESTURE.min;
+            if (CROP.box.h < CROP_GESTURE.min) CROP.box.h = CROP_GESTURE.min;
+            if (CROP.box.w > availW) CROP.box.w = availW;
+            if (CROP.box.h > availH) CROP.box.h = availH;
+            if (CROP.aspect && CROP.aspect > 0) {
+                // 若宽高比不合 → 取较小一侧向另一侧同步，保证永远不超 avail
+                if (CROP.box.w / CROP.box.h > CROP.aspect) {
+                    var nW = Math.round(CROP.box.h * CROP.aspect);
+                    if (nW <= availW) CROP.box.w = nW; else CROP.box.h = Math.round(availW / CROP.aspect);
+                } else {
+                    var nH = Math.round(CROP.box.w / CROP.aspect);
+                    if (nH <= availH) CROP.box.h = nH; else CROP.box.w = Math.round(availH * CROP.aspect);
+                }
+            }
+        }
+        // 第二步定位 x/y，先居中对齐再按边界压
+        var x = CROP.box.x;
+        var y = CROP.box.y;
+        if (x + CROP.box.w > maxX2) x = Math.round(maxX2 - CROP.box.w);
+        if (y + CROP.box.h > maxY2) y = Math.round(maxY2 - CROP.box.h);
+        if (x < minX) x = minX;
+        if (y < minY) y = minY;
+        // x/y 仍超（框刚好=avail，minX+availW > maxX2？极端情况）：直接贴死
+        if (x + CROP.box.w > maxX2) x = Math.round(maxX2 - CROP.box.w);
+        if (y + CROP.box.h > maxY2) y = Math.round(maxY2 - CROP.box.h);
+        CROP.box.x = x;
+        CROP.box.y = y;
     }
 
     function moveCropGesture(e) {
         if (!CROP_GESTURE.active) return;
         e.preventDefault();
+        if (e.stopPropagation) try { e.stopPropagation(); } catch (e0) {}
         var pt = getPointer(e);
         var dx = pt.x - CROP_GESTURE.startX;
         var dy = pt.y - CROP_GESTURE.startY;
@@ -1352,19 +1381,13 @@
         } else if (CROP_GESTURE.type === 'resize') {
             var dir = CROP_GESTURE.dir;
             var aspect = CROP.aspect || 0;
-            var dispW = CROP.naturalW * CROP.imgScale;
-            var dispH = CROP.naturalH * CROP.imgScale;
-            var minX = Math.max(CROP.imgOffsetX, 0);
-            var minY = Math.max(CROP.imgOffsetY, 0);
-            var maxX2 = Math.min(CROP.imgOffsetX + dispW, CROP.stageW || 0);
-            var maxY2 = Math.min(CROP.imgOffsetY + dispH, CROP.stageH || 0);
-
             var newW = sb.w, newH = sb.h, newX = sb.x, newY = sb.y;
             if (dir.indexOf('e') !== -1) newW = sb.w + Math.round(dx);
             if (dir.indexOf('s') !== -1) newH = sb.h + Math.round(dy);
             if (dir.indexOf('w') !== -1) { newW = sb.w - Math.round(dx); newX = sb.x + (sb.w - newW); }
             if (dir.indexOf('n') !== -1) { newH = sb.h - Math.round(dy); newY = sb.y + (sb.h - newH); }
 
+            // 第一阶段下限保护（仅 < min 时），不做超界保护，最后一次性 clamp
             if (newW < CROP_GESTURE.min) {
                 if (dir.indexOf('w') !== -1) newX = sb.x + sb.w - CROP_GESTURE.min;
                 newW = CROP_GESTURE.min;
@@ -1395,34 +1418,11 @@
                 }
             }
 
-            // 单次到位：若超界则按超界比例整体回缩
-            var overX = 0, overY = 0;
-            if (newX < minX) overX = minX - newX;
-            if (newY < minY) overY = minY - newY;
-            if (newX + newW > maxX2) overX = Math.min(overX, (newX + newW) - maxX2);
-            if (newY + newH > maxY2) overY = Math.min(overY, (newY + newH) - maxY2);
-            if (aspect > 0 && (overX !== 0 || overY !== 0)) {
-                // 取较大方向按比例整体回缩
-                if (Math.abs(overX) * (1/aspect) >= Math.abs(overY)) {
-                    var deltaW = Math.sign(overX) * Math.max(Math.abs(overX), Math.abs(overY) * aspect);
-                    var deltaH = Math.round(deltaW / aspect);
-                    if (dir.indexOf('e') !== -1) newW -= deltaW;
-                    if (dir.indexOf('w') !== -1) { newW -= deltaW; newX += deltaW; }
-                    if (dir.indexOf('s') !== -1) newH -= deltaH;
-                    if (dir.indexOf('n') !== -1) { newH -= deltaH; newY += deltaH; }
-                } else {
-                    var deltaH2 = Math.sign(overY) * Math.max(Math.abs(overY), Math.abs(overX) / aspect);
-                    var deltaW2 = Math.round(deltaH2 * aspect);
-                    if (dir.indexOf('s') !== -1) newH -= deltaH2;
-                    if (dir.indexOf('n') !== -1) { newH -= deltaH2; newY += deltaH2; }
-                    if (dir.indexOf('e') !== -1) newW -= deltaW2;
-                    if (dir.indexOf('w') !== -1) { newW -= deltaW2; newX += deltaW2; }
-                }
-            }
             box.w = newW; box.h = newH; box.x = newX; box.y = newY;
         }
 
         CROP.box = box;
+        // 最后一步统一 clamp（含 aspect 同步 + 边界 + 二次收敛），避免中途多次 clamp 造成"拉不动/反弹"
         clampBox();
         renderCropBox();
     }
@@ -1456,7 +1456,7 @@
                 var v = parseInt(scaleSlider.value, 10) || 100;
                 CROP.scalePercent = v;
                 if (scaleLabel) scaleLabel.textContent = v + '%';
-                layoutCropStage();
+                layoutCropStage(true); // preserve=true：滑块缩放时保持用户选框相对位置
             });
         }
         var fmtSel = document.getElementById('cropFormat');
@@ -1470,7 +1470,7 @@
 
         window.addEventListener('resize', function () {
             if (!CROP.open) return;
-            setTimeout(function () { layoutCropStage(); }, 60);
+            setTimeout(function () { layoutCropStage(true); }, 80); // preserve=true：窗口 resize 保留选框相对位置，不跳中间
         });
 
         bindCropGestures();
@@ -1482,21 +1482,47 @@
         document.querySelectorAll('#cropModal .chip-btn').forEach(function (btn) {
             btn.classList.toggle('active', btn.getAttribute('data-aspect') === aspKey);
         });
-        // 按新比例调整当前裁剪框（以中心为基准、尽量放大、不超图）
+        // 保持裁剪框中心点不变，按新比例「尽量向外扩展到刚好贴到图片边界（但不超界」→ 不会再出现切比例弹到角落
+        var dispW = Math.max(1, CROP.naturalW * CROP.imgScale);
+        var dispH = Math.max(1, CROP.naturalH * CROP.imgScale);
+        var minX = Math.max(CROP.imgOffsetX, 0);
+        var minY = Math.max(CROP.imgOffsetY, 0);
+        var maxX2 = Math.min(CROP.imgOffsetX + dispW, CROP.stageW || 0);
+        var maxY2 = Math.min(CROP.imgOffsetY + dispH, CROP.stageH || 0);
         var cx = CROP.box.x + CROP.box.w / 2;
         var cy = CROP.box.y + CROP.box.h / 2;
-        var w = CROP.box.w;
-        var h = CROP.box.h;
-        if (CROP.aspect) {
-            if (w / h > CROP.aspect) w = Math.round(h * CROP.aspect);
-            else h = Math.round(w / CROP.aspect);
+        // 若中心点已经跑到图片外面或边界异常：直接用图片中心
+        if (!(cx > minX && cx < maxX2)) cx = (minX + maxX2) / 2;
+        if (!(cy > minY && cy < maxY2)) cy = (minY + maxY2) / 2;
+        // availMax：中心点到四边的最小距离 × 2 = 在此中心下可扩到最大
+        var availLeft = cx - minX;
+        var availRight = maxX2 - cx;
+        var availTop = cy - minY;
+        var availBottom = maxY2 - cy;
+        var w, h;
+        if (CROP.aspect && CROP.aspect > 0) {
+            // 计算以 cx/cy 为中心，四方向最大可能的尺寸（每侧方向最大w/h）
+            var maxByX = Math.min(availLeft, availRight) * 2;
+            var maxByY = Math.min(availTop, availBottom) * 2;
+            // 按 aspect 同步：maxByX 对应的 h = maxByX / aspect；maxByY 对应的 w = maxByY * aspect
+            var maxByXh = maxByX / CROP.aspect;
+            var maxByYw = maxByY * CROP.aspect;
+            if (maxByXh <= maxByY) { w = Math.round(maxByX); h = Math.round(maxByXh); }
+            else { w = Math.round(maxByYw); h = Math.round(maxByY); }
+            w = Math.max(CROP_GESTURE.min, w);
+            h = Math.max(CROP_GESTURE.min, h);
+        } else {
+            // free：中心点不变，先取当前 w/h 或 80% 取大的那一侧
+            w = Math.max(CROP_GESTURE.min, CROP.box.w);
+            h = Math.max(CROP_GESTURE.min, CROP.box.h);
+            var maxW = Math.round(Math.min(availLeft, availRight) * 2);
+            var maxH = Math.round(Math.min(availTop, availBottom) * 2);
+            if (w > maxW) w = maxW;
+            if (h > maxH) h = maxH;
         }
-        CROP.box = {
-            x: Math.round(cx - w / 2),
-            y: Math.round(cy - h / 2),
-            w: w,
-            h: h
-        };
+        var bx = Math.round(cx - w / 2);
+        var by = Math.round(cy - h / 2);
+        CROP.box = { x: bx, y: by, w: w, h: h };
         clampBox();
         renderCropBox();
     }
