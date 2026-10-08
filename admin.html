@@ -4,7 +4,31 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>金岩石官网 · 内容管理后台</title>
-    <link rel="stylesheet" href="css/admin.css?v=BUGB1v1">
+    <link rel="stylesheet" href="css/admin.css?v=JUMPv1">
+  <style>
+    /* 防止登录页首帧高度抖动：先把 body 最小高锁死 */
+    body { min-height: 100vh; margin: 0; }
+    html { scroll-behavior: auto; }
+  </style>
+  <script>
+    (function () {
+      try { if (typeof history !== 'undefined' && 'scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+      try {
+        var raw = typeof sessionStorage !== 'undefined' && sessionStorage.getItem ? sessionStorage.getItem('GR_SCROLL_RESTORE') : null;
+        if (raw != null) {
+          var y = parseInt(raw, 10);
+          if (isFinite(y) && y > 0) {
+            document.documentElement.style.scrollBehavior = 'auto';
+            window.scrollTo(0, y);
+            var prevY = y;
+            var _t0 = setInterval(function () { window.scrollTo(0, prevY); }, 8);
+            setTimeout(function () { clearInterval(_t0); window.scrollTo(0, prevY); }, 80);
+            window.addEventListener('load', function () { window.scrollTo(0, prevY); }, { once: true });
+          }
+        }
+      } catch (e) {}
+    })();
+  </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -93,8 +117,8 @@
         </div>
     </div>
 
-    <script src="config.js?v=SCROLLv1"></script>
-    <script src="js/admin.js?v=SCROLLv1"></script>
+    <script src="config.js?v=JUMPv1"></script>
+    <script src="js/admin.js?v=JUMPv1"></script>
 
     <!-- 图片裁剪弹窗 -->
     <div id="cropModal" class="crop-modal" style="display:none;">

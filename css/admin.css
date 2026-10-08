@@ -34,6 +34,8 @@ html, body {
     background: var(--admin-bg);
     -webkit-font-smoothing: antialiased;
 }
+html { scrollbar-gutter: stable both-edges; }
+body { overflow-y: scroll; }
 a { color: inherit; text-decoration: none; }
 button { font-family: inherit; cursor: pointer; border: 0; background: transparent; }
 input, textarea, select { font-family: inherit; font-size: 14px; }

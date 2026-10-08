@@ -1008,6 +1008,8 @@
         _activeLang = detectLang();
         setHtmlLang();
         try {
+            // 立即关闭历史滚动自动恢复，避免与我们的 restoreScroll 竞争造成跳动
+            if ('scrollRestoration' in history) try { history.scrollRestoration = 'manual'; } catch (e) {}
             if (document.readyState !== 'loading') {
                 setSwitcherActive();
                 restoreScroll();
@@ -1023,17 +1025,42 @@
     function restoreScroll() {
         try {
             var raw = sessionStorage.getItem('GR_SCROLL_RESTORE');
-            if (raw == null) return;
+            if (raw == null) {
+                // 不需要恢复 → 重新允许 history 自动接管（正常跳转场景）
+                if ('scrollRestoration' in history) try { history.scrollRestoration = 'auto'; } catch (e) {}
+                return;
+            }
             var y = parseInt(raw, 10);
             if (!isFinite(y) || y < 0) y = 0;
             if (y > 0) {
-                // 等待首屏资源可能影响高度，双保险：立即设一次 + load 后再设一次
-                window.scrollTo(0, y);
-                window.addEventListener('load', function () { window.scrollTo(0, y); }, { once: true });
-                setTimeout(function () { window.scrollTo(0, y); }, 40);
-                setTimeout(function () { window.scrollTo(0, y); }, 240);
+                // 临时关闭 smooth scroll，保证一次到位无动画（否则会"滑过去"的跳动感）
+                var htmlEl = document.documentElement;
+                var prevSB = htmlEl.style.scrollBehavior || '';
+                htmlEl.style.scrollBehavior = 'auto';
+                var doneCount = 0;
+                function doScroll() {
+                    window.scrollTo(0, y);
+                    doneCount++;
+                    if (doneCount >= 2) {
+                        try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
+                        try { history.scrollRestoration = 'auto'; } catch (e2) {}
+                        // 下一帧再恢复 smooth，避免闪烁
+                        if (typeof requestAnimationFrame === 'function') {
+                            requestAnimationFrame(function () {
+                                requestAnimationFrame(function () { htmlEl.style.scrollBehavior = prevSB; });
+                            });
+                        } else {
+                            setTimeout(function () { htmlEl.style.scrollBehavior = prevSB; }, 32);
+                        }
+                    }
+                }
+                doScroll(); // ① 立即执行
+                // ② load 事件：所有资源到位后再一次对齐，防止字体/图片加载后高度变
+                window.addEventListener('load', function () { doScroll(); }, { once: true });
+            } else {
+                try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
+                if ('scrollRestoration' in history) try { history.scrollRestoration = 'auto'; } catch (e) {}
             }
-            try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
         } catch (e) {}
     }
 
