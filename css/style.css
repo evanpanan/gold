@@ -369,38 +369,23 @@ ul {
     position: absolute;
     inset: 0;
     background:
-        radial-gradient(ellipse at 15% 18%, rgba(201, 169, 97, 0.085) 0%, transparent 58%),
-        radial-gradient(ellipse at 85% 82%, rgba(201, 169, 97, 0.07) 0%, transparent 60%),
         linear-gradient(135deg, var(--color-primary) 0%, var(--color-primary-light) 50%, var(--color-primary) 100%);
-    animation: heroBgShift 18s ease-in-out infinite alternate;
-    background-size: 200% 200%;
+    background-size: 100% 100%;
 }
 
 .hero-bg::before {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(201, 169, 97, 0.09) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(201, 169, 97, 0.09) 1px, transparent 1px);
-    background-size: 60px 60px;
-    mask-image: radial-gradient(ellipse at center, black 62%, transparent 90%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 62%, transparent 90%);
-    animation: heroGridMoveA 22s linear infinite;
-    opacity: 1;
+    opacity: 0;
+    pointer-events: none;
 }
 
 .hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    background-image:
-        linear-gradient(rgba(228, 198, 133, 0.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(228, 198, 133, 0.055) 1px, transparent 1px);
-    background-size: 120px 120px;
-    mask-image: radial-gradient(ellipse at center, black 58%, transparent 92%);
-    -webkit-mask-image: radial-gradient(ellipse at center, black 58%, transparent 92%);
-    animation: heroGridMoveB 34s linear infinite;
+    opacity: 0;
     pointer-events: none;
 }
 
