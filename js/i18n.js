@@ -962,18 +962,40 @@
         var nv = normLang(v);
         if (!nv) return;
         if (nv === _activeLang) return;
+        // 1) 记住当前滚动位置（原地重绘其实不会位移，但有保险更好）
+        var sy = window.scrollY || window.pageYOffset || 0;
+        // 2) 写 localStorage
         try { localStorage.setItem(STORAGE_KEY, nv); } catch (e) {}
-        try { sessionStorage.setItem('GR_SCROLL_RESTORE', String(window.scrollY || window.pageYOffset || 0)); } catch (e) {}
-        // 立即中止任何正在进行中的滚动锁/轮询（<head> 抢跑或 restoreScroll 的轮询/rAF 会导致 href 跳转被浏览器取消）
-        if (typeof window.GR_ABORT_SCROLL_LOCK === 'function') try { window.GR_ABORT_SCROLL_LOCK(); } catch (e) {}
-        var loc = String(window.location);
-        var cleanLoc = loc.replace(/([?&#])lang=[^&#]*&?/g, function (m, p1) { return p1 === '?' ? '?' : ''; }).replace(/[?&]$/, '');
-        var sep = (cleanLoc.indexOf('?') === -1) ? '?' : '&';
-        var target = cleanLoc + sep + 'lang=' + (nv === 'zh_CN' ? 'zh-CN' : (nv === 'zh_TW' ? 'zh-TW' : 'en'));
-        try { window.location.href = target; } catch (e) {}
-        // 双重保险：50ms 后若未跳转则 location.assign；150ms 后 reload 兜底
-        setTimeout(function () { try { window.location.assign(target); } catch (e2) {} }, 50);
-        setTimeout(function () { try { window.location.reload(); } catch (e3) {} }, 150);
+        // 3) 切换 active lang
+        _activeLang = nv;
+        // 4) html lang 属性
+        setHtmlLang();
+        // 5) 切换按钮状态
+        setSwitcherActive();
+        // 6) 全局属性级重绘（data-i18n / data-i18n-html / data-i18n-attr）
+        try { applyI18nAttrs(document); } catch (e) {}
+        // 7) 页面注册的渲染钩子（首页 main.renderDynamicContent / legal.renderNavbarFooter…）
+        try { if (typeof window.GR_RENDER_ALL === 'function') window.GR_RENDER_ALL(); } catch (e) {}
+        // 8) 更新 URL 参数 ?lang= （replaceState 不刷新、不回退、不触发浏览器导航，没有失败的可能）
+        try {
+            var loc = String(window.location);
+            var cleanLoc = loc.replace(/([?&#])lang=[^&#]*&?/g, function (m, p1) { return p1 === '?' ? '?' : ''; }).replace(/[?#]$/, '');
+            // 去掉可能的 #hash 尾段
+            var hashIdx = cleanLoc.indexOf('#');
+            var hashPart = (hashIdx !== -1) ? cleanLoc.slice(hashIdx) : '';
+            var locNoHash = (hashIdx !== -1) ? cleanLoc.slice(0, hashIdx) : cleanLoc;
+            var sep = (locNoHash.indexOf('?') === -1) ? '?' : '&';
+            var langQ = 'lang=' + (nv === 'zh_CN' ? 'zh-CN' : (nv === 'zh_TW' ? 'zh-TW' : 'en'));
+            var target = locNoHash + sep + langQ + hashPart;
+            if (target !== String(window.location)) {
+                try { window.history.replaceState({ lang: nv }, '', target); } catch (e2) {}
+            }
+        } catch (e) {}
+        // 9) 若在极个别浏览器里，原地重绘后因字体/高度变化，scrollY 差 1~2px → 拉回原位
+        try {
+            window.scrollTo(0, sy);
+            setTimeout(function () { try { window.scrollTo(0, sy); } catch (e) {} }, 0);
+        } catch (e) {}
     }
 
     function applyI18nAttrs(scope) {
@@ -1013,75 +1035,19 @@
     function init() {
         _activeLang = detectLang();
         setHtmlLang();
-        try {
-            // 立即关闭历史滚动自动恢复，避免与我们的 restoreScroll 竞争造成跳动
-            if ('scrollRestoration' in history) try { history.scrollRestoration = 'manual'; } catch (e) {}
-            if (document.readyState !== 'loading') {
-                setSwitcherActive();
-                restoreScroll();
-            } else {
-                document.addEventListener('DOMContentLoaded', function () {
-                    setSwitcherActive();
-                    restoreScroll();
-                });
-            }
-        } catch (e) {}
-    }
-
-    function restoreScroll() {
-        try {
-            var raw = sessionStorage.getItem('GR_SCROLL_RESTORE');
-            if (raw == null) {
-                if ('scrollRestoration' in history) try { history.scrollRestoration = 'auto'; } catch (e) {}
-                return;
-            }
-            var y = parseInt(raw, 10);
-            if (!isFinite(y) || y < 0) y = 0;
-            if (y > 0) {
-                var htmlEl = document.documentElement;
-                var prevSB = htmlEl.style.scrollBehavior || '';
-                htmlEl.style.scrollBehavior = 'auto';
-                var doneCount = 0;
-                var guardId = 0;
-                function abort() {
-                    if (guardId) { try { clearInterval(guardId); } catch (e) {} guardId = 0; }
-                }
-                if (typeof window.GR_ABORT_SCROLL_LOCK !== 'function') {
-                    window.GR_ABORT_SCROLL_LOCK = abort;
-                } else {
-                    var prev = window.GR_ABORT_SCROLL_LOCK;
-                    window.GR_ABORT_SCROLL_LOCK = function () { try { prev(); } catch (e) {} abort(); };
-                }
-                function doScroll() {
-                    try { window.scrollTo(0, y); } catch (e) {}
-                    doneCount++;
-                    if (doneCount >= 2) {
-                        try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
-                        try { history.scrollRestoration = 'auto'; } catch (e2) {}
-                        if (typeof requestAnimationFrame === 'function') {
-                            requestAnimationFrame(function () {
-                                requestAnimationFrame(function () {
-                                    try { htmlEl.style.scrollBehavior = prevSB; } catch (e) {}
-                                    abort();
-                                });
-                            });
-                        } else {
-                            setTimeout(function () { try { htmlEl.style.scrollBehavior = prevSB; } catch (e) {} abort(); }, 32);
-                        }
-                    }
-                }
-                doScroll();
-                // 保护性短轮询：8ms × 12 次 = 96ms，防止字体/图片高度变化导致的偏差，超时必停避免干扰后续跳转
-                guardId = setInterval(function () {
-                    if (doneCount < 2) { try { window.scrollTo(0, y); } catch (e) {} }
-                }, 8);
-                setTimeout(function () { if (guardId) { try { clearInterval(guardId); guardId = 0; } catch (e) {} } }, 120);
-                window.addEventListener('load', function () { doScroll(); }, { once: true });
-            } else {
-                try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e2) {}
-                if ('scrollRestoration' in history) try { history.scrollRestoration = 'auto'; } catch (e) {}
-            }
-        } catch (e) {}
+        // 默认的全局重渲染 hook：页面未注册时，兜底把所有 data-i18n 文案都刷掉
+        if (typeof window.GR_RENDER_ALL !== 'function') {
+            window.GR_RENDER_ALL = function () {
+                try { applyI18nAttrs(document); } catch (e) {}
+            };
+        }
+        function afterDomReady() {
+            setSwitcherActive();
+            // 首次进入页面也把 data-i18n 刷一遍（DOMContentLoaded 比 body 末尾脚本更早，防止首屏留白字）
+            try { applyI18nAttrs(document); } catch (e) {}
+        }
+        if (document.readyState !== 'loading') afterDomReady();
+        else document.addEventListener('DOMContentLoaded', afterDomReady);
     }
 
     window.I18N = {

@@ -378,6 +378,23 @@
         initHeroInteractions();
     }
 
+    // 语言切换时原地 SPA 重渲染（不刷新页面），供 window.GR_RENDER_ALL 调用
+    function renderAllOnLangChange() {
+        renderDynamicContent();
+        injectCustomIcons();
+        // 滚动/激活 nav 重新计算
+        handleNavbarScroll();
+        handleActiveNav();
+        // data-i18n 属性级补全（applyI18nAttrs 已在 I18N.switchLang 调用过，这里兜底）
+        try { if (window.I18N && typeof window.I18N.applyI18nAttrs === 'function') window.I18N.applyI18nAttrs(document); } catch (e) {}
+    }
+    if (typeof window.GR_RENDER_ALL !== 'function') {
+        window.GR_RENDER_ALL = renderAllOnLangChange;
+    } else {
+        var prev = window.GR_RENDER_ALL;
+        window.GR_RENDER_ALL = function () { try { prev(); } catch (e) {} try { renderAllOnLangChange(); } catch (e) {} };
+    }
+
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', bootstrap);
     } else {

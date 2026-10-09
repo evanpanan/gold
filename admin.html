@@ -10,37 +10,6 @@
     body { min-height: 100vh; margin: 0; }
     html { scroll-behavior: auto; }
   </style>
-  <script>
-    (function () {
-      try { if (typeof history !== 'undefined' && 'scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
-      try {
-        var raw = typeof sessionStorage !== 'undefined' && sessionStorage.getItem ? sessionStorage.getItem('GR_SCROLL_RESTORE') : null;
-        if (raw != null) {
-          var y = parseInt(raw, 10);
-          if (isFinite(y) && y > 0) {
-            document.documentElement.style.scrollBehavior = 'auto';
-            window.scrollTo(0, y);
-            var prevY = y;
-            var countdown = 11;
-            var _t0 = setInterval(function () {
-              countdown--;
-              if (countdown <= 0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; return; }
-              try { window.scrollTo(0, prevY); } catch (e) {}
-            }, 8);
-            setTimeout(function () { if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; } try { window.scrollTo(0, prevY); } catch (e) {} }, 120);
-            window.addEventListener('load', function () { try { window.scrollTo(0, prevY); } catch (e) {} }, { once: true });
-            window.GR_ABORT_SCROLL_LOCK = (function (prev) {
-              return function () {
-                if (prev) try { prev(); } catch (e) {}
-                if (_t0) { try { clearInterval(_t0); } catch (e) {} _t0 = 0; }
-                try { sessionStorage.removeItem('GR_SCROLL_RESTORE'); } catch (e) {}
-              };
-            })(window.GR_ABORT_SCROLL_LOCK);
-          }
-        }
-      } catch (e) {}
-    })();
-  </script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 </head>
@@ -129,8 +98,8 @@
         </div>
     </div>
 
-    <script src="config.js?v=CLRV2"></script>
-    <script src="js/admin.js?v=CLRV2"></script>
+    <script src="config.js?v=LANGv3"></script>
+    <script src="js/admin.js?v=LANGv3"></script>
 
     <!-- 图片裁剪弹窗 -->
     <div id="cropModal" class="crop-modal" style="display:none;">

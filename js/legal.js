@@ -254,6 +254,23 @@
         bindInteractions();
     }
 
+    // 语言切换时 SPA 原地重渲染（不刷新页面）
+    function renderAllOnLangChange() {
+        renderHead();
+        renderNavbar();
+        renderHero();
+        renderContent();
+        renderFooter();
+        try { bindInteractions(); } catch (e) {}
+        try { if (window.I18N && typeof window.I18N.applyI18nAttrs === 'function') window.I18N.applyI18nAttrs(document); } catch (e) {}
+    }
+    if (typeof window.GR_RENDER_ALL !== 'function') {
+        window.GR_RENDER_ALL = renderAllOnLangChange;
+    } else {
+        var prev = window.GR_RENDER_ALL;
+        window.GR_RENDER_ALL = function () { try { prev(); } catch (e) {} try { renderAllOnLangChange(); } catch (e) {} };
+    }
+
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);
     else init();
 })();
