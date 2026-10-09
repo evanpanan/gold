@@ -66,6 +66,37 @@
         node.querySelectorAll('[data-dyn-f]').forEach(function (el) { applyBindings(el); });
     }
 
+    function resetAllListContainers(root) {
+        root = root || document;
+        const containers = root.querySelectorAll('[data-dyn-list]');
+        containers.forEach(function (container) {
+            // 如果存了模板快照：重置容器 innerHTML = tmpl（带 data-dyn-tmpl 属性）+ 清所有 processed 标记
+            const snap = container.getAttribute('data-dyn-tmpl-snap');
+            const tmpl = container.querySelector('[data-dyn-tmpl]');
+            if (snap) {
+                try {
+                    const wrap = document.createElement('div');
+                    wrap.innerHTML = snap;
+                    const tmplNode = wrap.firstElementChild;
+                    if (tmplNode) {
+                        tmplNode.setAttribute('data-dyn-tmpl', '');
+                        container.innerHTML = '';
+                        container.appendChild(tmplNode);
+                        container.removeAttribute('data-dyn-list-processed');
+                    }
+                } catch (e) { /* ignore */ }
+            } else if (tmpl) {
+                // 还没存过快照（第一次渲染前）：保留模板、清 processed
+                Array.prototype.slice.call(container.children).forEach(function (ch) {
+                    if (ch !== tmpl) container.removeChild(ch);
+                });
+                container.removeAttribute('data-dyn-list-processed');
+            } else {
+                container.removeAttribute('data-dyn-list-processed');
+            }
+        });
+    }
+
     function processListContainers(root, cfg, scope) {
         const containers = root.querySelectorAll('[data-dyn-list]');
         containers.forEach(function (container) {
@@ -80,13 +111,17 @@
             }
             tmpl.removeAttribute('data-dyn-tmpl');
             const tmplHtml = tmpl.outerHTML;
-            const parent = tmpl.parentNode;
+            // 首次存模板快照，后续 resetAllListContainers 用
+            if (!container.hasAttribute('data-dyn-tmpl-snap')) {
+                container.setAttribute('data-dyn-tmpl-snap', tmplHtml);
+            }
             tmpl.remove();
             container.setAttribute('data-dyn-list-processed', '1');
             items.forEach(function (item, idx) {
                 const wrap = document.createElement('div');
                 wrap.innerHTML = tmplHtml;
                 const node = wrap.firstElementChild;
+                if (!node) return;
 
                 processDynFieldBindings(node, item);
 
@@ -207,9 +242,11 @@
             }
         });
 
+        resetAllListContainers(document);
         processListContainers(document, cfg);
 
         document.querySelectorAll('.service-card').forEach(function (card) {
+            card.classList.remove('service-card-featured');
             if (card.querySelector('.featured-badge')) {
                 card.classList.add('service-card-featured');
             }
