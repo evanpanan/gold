@@ -243,16 +243,18 @@ code {
     width: 100%;
     padding: 10px 16px;
     font-size: 13px; font-weight: 600;
-    color: rgba(255,255,255,0.9);
-    background: rgba(201,169,97,0.15);
-    border: 1px solid rgba(201,169,97,0.3);
+    color: #000;
+    background: rgba(201,169,97,0.2);
+    border: 1px solid rgba(201,169,97,0.45);
     border-radius: var(--admin-radius-sm);
     transition: all 0.2s ease;
+    white-space: nowrap;
 }
 .admin-btn-secondary svg { width: 16px; height: 16px; }
 .admin-btn-secondary:hover {
-    background: rgba(201,169,97,0.25);
-    color: #fff;
+    background: rgba(201,169,97,0.45);
+    color: #000;
+    border-color: rgba(201,169,97,0.8);
 }
 
 .admin-btn-ghost {
