@@ -31,25 +31,40 @@
 
     function getRawCfg() {
         if (window.I18N && typeof window.I18N.___rawBaseCfg === 'function') return window.I18N.___rawBaseCfg();
-        const base = cloneJSON(window.GOLDENROCK_CONFIG || {});
+        var baseRaw = window.GOLDENROCK_CONFIG || {};
+        var base = cloneJSON(baseRaw);
         try {
-            const s = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
-            if (s) return _dM(base, JSON.parse(s));
+            var s = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
+            if (s) base = _dM(base, JSON.parse(s));
         } catch (e) { console.warn(e); }
+        if (window.I18N && typeof window.I18N._lockLogoFields === 'function') {
+            try { window.I18N._lockLogoFields(base, baseRaw); } catch (e2) {}
+        }
         return base;
     }
 
     function _mergedCfg() {
+        var baseRaw = window.GOLDENROCK_CONFIG || {};
         var base = getRawCfg();
         if (window.I18N && typeof window.I18N.getCfgOverrides === 'function') {
             try { base = _dM(base, window.I18N.getCfgOverrides()); } catch (e) {}
+        }
+        if (window.I18N && typeof window.I18N._lockLogoFields === 'function') {
+            try { window.I18N._lockLogoFields(base, baseRaw); } catch (e2) {}
         }
         return base;
     }
 
     let CONFIG = (function loadConfig() {
         if (window.I18N && typeof window.I18N.getConfig === 'function') {
-            return _dM(window.I18N.getConfig(), (window.I18N.getCfgOverrides && window.I18N.getCfgOverrides()) || {});
+            var cfg = window.I18N.getConfig();
+            if (window.I18N.getCfgOverrides) {
+                try { cfg = _dM(cfg, window.I18N.getCfgOverrides() || {}); } catch (e) {}
+            }
+            if (window.I18N._lockLogoFields) {
+                try { window.I18N._lockLogoFields(cfg, window.GOLDENROCK_CONFIG || {}); } catch (e) {}
+            }
+            return cfg;
         }
         return _mergedCfg();
     })();

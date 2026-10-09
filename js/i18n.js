@@ -8,8 +8,6 @@
                 title: "金岩石有限公司 | Golden Rock Limited",
                 metaDescription: "金岩石有限公司 Golden Rock Limited - 扎根香港国际金融中心的专业金融服务机构，专注全球资本市场证券业务服务。",
                 metaKeywords: "金岩石, GoldenRock, 香港券商, 证券交易, 投资咨询, 跨境资产配置, 港股, 美股",
-                faviconEmoji: "\uD83C\uDFDB\uFE0F",
-                faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path fill='#B99642' d='M32 4.5c8.2 2.3 14.4 8.9 16 17.2 1 5.4-.4 10.6-3.9 14.6 2.2 2.3 3.5 5.3 3.6 8.6-.5 8.2-6.9 14.9-15.7 14.8-8.8-.1-15.1-6.9-15.5-15.1-.2-4.6 1.7-8.9 5.2-11.9C17.6 29.5 16 25.2 16.4 20.8c.4-8.5 7.4-15.2 15.6-16.3z'/><path fill='#fff' d='M30.8 15c-10.4 2-15 11.7-10.6 21.4 2.4 5.3 7.5 7.4 10.8 6.1-6.4 2.3-9.3 7.7-9.5 12.2C33.7 57.9 48 51.4 48 37.1c-.2-6-3-11.1-8-14.7 4.8-2 7.7-6.7 7.5-11.7-1.7-9.4-12.4-15.5-16.7-4.2z'/></svg>"
             },
             brand: {
                 logoCn: "金岩石有限公司",
@@ -284,8 +282,6 @@
                 title: "金巖石有限公司 | Golden Rock Limited",
                 metaDescription: "金巖石有限公司 Golden Rock Limited - 紮根香港國際金融中心之專業金融服務機構，專注全球資本市場證券業務。",
                 metaKeywords: "金岩石, GoldenRock, 香港券商, 證券交易, 投資諮詢, 跨境資產配置, 港股, 美股",
-                faviconEmoji: "\uD83C\uDFDB\uFE0F",
-                faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path fill='#B99642' d='M32 4.5c8.2 2.3 14.4 8.9 16 17.2 1 5.4-.4 10.6-3.9 14.6 2.2 2.3 3.5 5.3 3.6 8.6-.5 8.2-6.9 14.9-15.7 14.8-8.8-.1-15.1-6.9-15.5-15.1-.2-4.6 1.7-8.9 5.2-11.9C17.6 29.5 16 25.2 16.4 20.8c.4-8.5 7.4-15.2 15.6-16.3z'/><path fill='#fff' d='M30.8 15c-10.4 2-15 11.7-10.6 21.4 2.4 5.3 7.5 7.4 10.8 6.1-6.4 2.3-9.3 7.7-9.5 12.2C33.7 57.9 48 51.4 48 37.1c-.2-6-3-11.1-8-14.7 4.8-2 7.7-6.7 7.5-11.7-1.7-9.4-12.4-15.5-16.7-4.2z'/></svg>"
             },
             brand: {
                 logoCn: "金巖石有限公司",
@@ -560,8 +556,6 @@
                 title: "Golden Rock Limited | Hong Kong Licensed Brokerage",
                 metaDescription: "Golden Rock Limited — a Hong Kong-based professional financial services firm specializing in global capital markets securities business, licensed and regulated by the SFC.",
                 metaKeywords: "GoldenRock, Hong Kong Brokerage, Securities Trading, Investment Advisory, Cross-border Asset Allocation, HK Stocks, US Stocks",
-                faviconEmoji: "\uD83C\uDFDB\uFE0F",
-                faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path fill='#B99642' d='M32 4.5c8.2 2.3 14.4 8.9 16 17.2 1 5.4-.4 10.6-3.9 14.6 2.2 2.3 3.5 5.3 3.6 8.6-.5 8.2-6.9 14.9-15.7 14.8-8.8-.1-15.1-6.9-15.5-15.1-.2-4.6 1.7-8.9 5.2-11.9C17.6 29.5 16 25.2 16.4 20.8c.4-8.5 7.4-15.2 15.6-16.3z'/><path fill='#fff' d='M30.8 15c-10.4 2-15 11.7-10.6 21.4 2.4 5.3 7.5 7.4 10.8 6.1-6.4 2.3-9.3 7.7-9.5 12.2C33.7 57.9 48 51.4 48 37.1c-.2-6-3-11.1-8-14.7 4.8-2 7.7-6.7 7.5-11.7-1.7-9.4-12.4-15.5-16.7-4.2z'/></svg>"
             },
             brand: {
                 logoCn: "Golden Rock Limited",
@@ -1053,6 +1047,33 @@
         return o;
     }
 
+    var _LOGO_LOCK_KEYS = [
+        'brand.logoHeaderSvg',
+        'brand.logoFooterSvgTpl',
+        'brand.logoIconOnlySvg',
+        'brand.loginLogoSvg',
+        'brand.logoSvg',
+        'site.faviconSvg',
+        'site.faviconEmoji'
+    ];
+    function _lockLogoFields(target, source) {
+        if (!target || !source) return target;
+        _LOGO_LOCK_KEYS.forEach(function (dotPath) {
+            var sv = resolveKey(source, dotPath);
+            if (sv !== undefined) {
+                var parts = String(dotPath).split('.');
+                var cur = target;
+                for (var i = 0; i < parts.length - 1; i++) {
+                    var k = parts[i];
+                    if (!cur[k] || typeof cur[k] !== 'object' || Array.isArray(cur[k])) cur[k] = {};
+                    cur = cur[k];
+                }
+                cur[parts[parts.length - 1]] = cloneJSON(sv);
+            }
+        });
+        return target;
+    }
+
     function normLang(x) {
         if (!x) return null;
         var s = String(x).trim().toLowerCase().replace(/\-/g, '_');
@@ -1112,7 +1133,8 @@
     }
 
     function getConfig() {
-        var base = cloneJSON(window.GOLDENROCK_CONFIG || {});
+        var baseRaw = window.GOLDENROCK_CONFIG || {};
+        var base = cloneJSON(baseRaw);
         var langDict = DICT[_activeLang] || {};
         Object.keys(langDict).forEach(function (k) {
             if (k === "ui") return;
@@ -1124,12 +1146,14 @@
                 base[k] = langVal;
             }
         });
+        _lockLogoFields(base, baseRaw);
         if (_activeLang === "zh_CN") {
             try {
                 var s = localStorage.getItem(OVERRIDE_KEY);
                 if (s) base = deepMerge(base, JSON.parse(s));
             } catch (e) {}
         }
+        _lockLogoFields(base, baseRaw);
         return base;
     }
 
@@ -1252,6 +1276,17 @@
         setSwitcherActive: setSwitcherActive,
         normLang: normLang,
         getCfgOverrides: getCfgOverrides,
+        _lockLogoFields: _lockLogoFields,
+        ___rawBaseCfg: function () {
+            var baseRaw = window.GOLDENROCK_CONFIG || {};
+            var base = cloneJSON(baseRaw);
+            try {
+                var s = localStorage.getItem('GOLDENROCK_CONFIG_OVERRIDE');
+                if (s) base = deepMerge(base, JSON.parse(s));
+            } catch (e) {}
+            _lockLogoFields(base, baseRaw);
+            return base;
+        },
         get activeLang() { return _activeLang; }
     };
 
