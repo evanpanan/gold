@@ -1,1 +1,5 @@
-{"rewrites":[{"source":"/((?!admin\\.html|privacy\\.html|terms\\.html|disclaimer\\.html|.*\\.css|.*\\.js|.*\\.png|.*\\.jpg|.*\\.jpeg|.*\\.gif|.*\\.svg|.*\\.ico|.*\\.webp|robots\\.txt|sitemap\\.xml).*)","destination":"/index.html"}]}
+{"rewrites":[
+  {"source":"/:path*.:ext(css|js|png|jpg|jpeg|gif|svg|ico|webp|woff|woff2|ttf|otf|txt|xml|json|webmanifest)","destination":"/:path.:ext"},
+  {"source":"/:page(index|admin|privacy|terms|disclaimer).html","destination":"/:page.html"},
+  {"source":"/:rest(.*)","destination":"/index.html"}
+]}

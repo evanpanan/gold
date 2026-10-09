@@ -67,10 +67,19 @@
         return typeof s === 'string' && s.indexOf('data:image/') === 0;
     }
     function buildLogoImgHtml(raw) {
+        if (!raw) return '';
+        raw = String(raw);
+        var styleAttr = ' style="display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;flex-shrink:0;" ';
         if (isImageDataUrl(raw)) {
-            return '<img src="' + raw + '" alt="logo" style="display:block;max-width:100%;max-height:100%;height:100%;width:auto;object-fit:contain;">';
+            return '<img src="' + raw + '" alt="logo"' + styleAttr + '>';
         }
-        return String(raw || '');
+        if (/^\s*<img\b/i.test(raw)) {
+            return raw.replace(/<img\b/i, '<img' + styleAttr);
+        }
+        if (raw.substr(0, 1) === '/' || raw.substr(0, 4) === 'http' || /\.(png|jpg|jpeg|gif|webp|svg|ico)(\?|$)/i.test(raw)) {
+            return '<img src="' + raw + '" alt="logo"' + styleAttr + '>';
+        }
+        return raw;
     }
 
     function esc(s) {
