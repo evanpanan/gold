@@ -144,13 +144,18 @@
     }
     function renderFavicon(faviconSlot, raw) {
         if (!faviconSlot) return;
+        if (typeof raw !== 'string') return;
+        raw = raw.trim();
+        if (!raw) return;
         if (isImageDataUrl(raw)) {
             faviconSlot.setAttribute('href', raw);
             return;
         }
-        if (typeof raw === 'string' && raw.trim()) {
-            faviconSlot.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(raw.trim()));
+        if (raw.substr(0, 1) === '/' || raw.substr(0, 4) === 'http' || /\.(png|jpg|jpeg|gif|webp|svg|ico)(\?|$)/i.test(raw)) {
+            faviconSlot.setAttribute('href', raw);
+            return;
         }
+        faviconSlot.setAttribute('href', 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(raw));
     }
     function renderSvgInner(el, raw, cfg) {
         if (!el) return;
