@@ -1889,6 +1889,11 @@ ul {
         padding: 0 20px;
     }
 
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
     .btn {
         white-space: normal;
     }
@@ -1953,11 +1958,29 @@ ul {
 
     .hero-title {
         letter-spacing: 2px;
+        font-size: clamp(34px, 8vw, 64px);
+    }
+
+    .hero-subtitle {
+        font-size: 14.5px;
+        line-height: 1.85;
     }
 
     .hero-stats {
-        padding: 28px 24px;
-        gap: 32px;
+        padding: 24px 20px;
+        gap: 24px;
+    }
+
+    .hero-stats-inline {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px 0;
+        width: 100%;
+    }
+
+    .hero-stats-inline .stat-item {
+        padding: 0 20px;
+        min-width: 90px;
     }
 
     .stat-item {
@@ -1968,12 +1991,31 @@ ul {
         display: none;
     }
 
+    .stat-value {
+        font-size: 30px;
+    }
+
+    .stat-label {
+        font-size: 12.5px;
+        white-space: normal;
+        line-height: 1.5;
+        text-align: center;
+    }
+
     .section {
         padding: 72px 0;
     }
 
     .section-header {
         margin-bottom: 56px;
+    }
+
+    .section-title {
+        font-size: clamp(30px, 5vw, 40px);
+    }
+
+    .section-desc {
+        font-size: 15px;
     }
 
     .about-vision-mission {
@@ -2141,20 +2183,170 @@ ul {
     }
 }
 
+@media (max-width: 640px) {
+    html, body, .wrapper, #app, main, .site-root {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+        width: 100% !important;
+    }
+
+    * {
+        max-width: 100vw;
+    }
+
+    .container,
+    .section .container {
+        padding: 0 16px;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+
+    .hero-title {
+        letter-spacing: 1.5px;
+        font-size: clamp(26px, 8.2vw, 44px);
+    }
+
+    .hero-subtitle {
+        font-size: 14px;
+        line-height: 1.82;
+        word-break: break-word;
+    }
+
+    .hero-stats {
+        padding: 20px 16px;
+        max-width: 100%;
+        width: 100%;
+        box-sizing: border-box;
+    }
+
+    .hero-stats-inline {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px 0;
+        width: 100%;
+    }
+
+    .hero-stats-inline .stat-item {
+        padding: 10px 10px 8px;
+        width: 100%;
+        min-width: 0;
+        border: 0 !important;
+        box-sizing: border-box;
+    }
+
+    .hero-stats-inline .stat-item + .stat-item {
+        border-left: 0 !important;
+    }
+
+    .hero-stats-inline .stat-item:nth-child(2) {
+        border-left: 1px solid rgba(201, 169, 97, 0.35) !important;
+    }
+
+    .hero-stats-inline .stat-item:nth-child(3) {
+        grid-column: 1 / -1;
+        padding-top: 14px;
+        margin-top: 0;
+        border-top: 1px solid rgba(201, 169, 97, 0.35) !important;
+    }
+
+    .stat-value {
+        font-size: 28px;
+        word-break: break-word;
+    }
+
+    .stat-label {
+        font-size: 12.5px;
+        white-space: normal;
+        line-height: 1.5;
+        text-align: center;
+        word-break: break-word;
+    }
+
+    .section {
+        padding: 64px 0;
+    }
+
+    .section-header {
+        margin-bottom: 48px;
+    }
+
+    .section-title {
+        font-size: clamp(26px, 7vw, 36px);
+        letter-spacing: 1px;
+        word-break: break-word;
+    }
+
+    .section-desc {
+        font-size: 14.5px;
+        word-break: break-word;
+    }
+}
+
 @media (max-width: 480px) {
     .logo-header-img { height: 52px; }
     .navbar.scrolled .logo-header-img { height: 44px; }
 
     .hero-title {
         letter-spacing: 1px;
+        font-size: clamp(28px, 8.5vw, 40px);
+        margin-bottom: 24px;
+    }
+
+    .hero-subtitle {
+        font-size: 14px;
+        line-height: 1.8;
+        margin: 0 auto 36px;
+        max-width: 100%;
+        padding: 0 4px;
+    }
+
+    .hero-badge {
+        padding: 7px 16px;
+        font-size: 12px;
+        letter-spacing: 0.5px;
+        margin-bottom: 28px;
+        gap: 6px;
     }
 
     .hero-actions {
         flex-direction: column;
+        gap: 12px;
+        margin-bottom: 56px;
     }
 
     .hero-actions .btn {
         width: 100%;
+    }
+
+    .hero {
+        padding: 124px 0 80px;
+    }
+
+    .stat-value {
+        font-size: 26px;
+    }
+
+    .stat-label {
+        font-size: 12px;
+    }
+
+    .section {
+        padding: 56px 0;
+    }
+
+    .section-header {
+        margin-bottom: 40px;
+    }
+
+    .section-title {
+        font-size: clamp(26px, 7vw, 34px);
+        letter-spacing: 1px;
+    }
+
+    .section-desc {
+        font-size: 14px;
+        line-height: 1.85;
+        padding: 0 4px;
     }
 
     .footer-links-group {
@@ -2167,5 +2359,95 @@ ul {
 
     .logo-en {
         font-size: 9px;
+    }
+}
+
+@media (max-width: 390px) {
+    html, body {
+        overflow-x: hidden;
+        max-width: 100vw;
+    }
+
+    .container,
+    .section .container {
+        padding: 0 14px;
+    }
+
+    .hero-title {
+        font-size: clamp(26px, 9vw, 34px);
+        letter-spacing: 0.5px;
+    }
+
+    .hero-stats-inline {
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 14px;
+    }
+
+    .hero-stats-inline .stat-item,
+    .hero-stats-inline .stat-item:nth-child(2),
+    .hero-stats-inline .stat-item:nth-child(3) {
+        grid-column: auto;
+        border: 0 !important;
+        border-top: 1px solid rgba(201, 169, 97, 0.3) !important;
+        padding-top: 14px;
+        margin-top: 0;
+    }
+
+    .hero-stats-inline .stat-item:first-child {
+        border-top: 0 !important;
+        padding-top: 4px;
+    }
+
+    .stat-value {
+        font-size: 24px;
+    }
+
+    .stat-label {
+        font-size: 11.5px;
+    }
+
+    .hero-stats {
+        padding: 16px 14px;
+    }
+
+    .section {
+        padding: 48px 0;
+    }
+
+    .section-header {
+        margin-bottom: 36px;
+    }
+
+    .visual-card {
+        padding: 22px;
+    }
+
+    .vc-item {
+        padding: 16px;
+        gap: 12px;
+    }
+
+    .vc-icon {
+        width: 42px;
+        height: 42px;
+    }
+    .vc-icon svg {
+        width: 20px;
+        height: 20px;
+    }
+
+    .value-card,
+    .service-card,
+    .contact-form-wrap {
+        padding: 28px 20px;
+    }
+
+    .cta-card {
+        padding: 40px 20px;
+    }
+
+    .compliance-hero-card {
+        padding: 32px 20px;
     }
 }
