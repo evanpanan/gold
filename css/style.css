@@ -377,16 +377,30 @@ ul {
     content: '';
     position: absolute;
     inset: 0;
-    opacity: 0;
+    background-image:
+        linear-gradient(rgba(201,169,97,0.16) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(201,169,97,0.16) 1px, transparent 1px);
+    background-size: 52px 52px;
+    mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, #000 0%, transparent 80%);
+    -webkit-mask-image: radial-gradient(ellipse 70% 55% at 50% 40%, #000 0%, transparent 80%);
+    opacity: 0.7;
     pointer-events: none;
+    animation: heroGridMoveA 18s linear infinite;
 }
 
 .hero-bg::after {
     content: '';
     position: absolute;
     inset: 0;
-    opacity: 0;
+    background-image:
+        linear-gradient(rgba(228,201,138,0.09) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(228,201,138,0.09) 1px, transparent 1px);
+    background-size: 120px 120px;
+    mask-image: radial-gradient(ellipse 80% 65% at 50% 55%, #000 0%, transparent 82%);
+    -webkit-mask-image: radial-gradient(ellipse 80% 65% at 50% 55%, #000 0%, transparent 82%);
+    opacity: 0.5;
     pointer-events: none;
+    animation: heroGridMoveB 30s linear infinite reverse;
 }
 
 .hero-overlay {
