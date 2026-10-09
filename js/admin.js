@@ -8,6 +8,7 @@
     let currentCfg = loadConfig();
     let dirty = false;
     let activeTab = 'site';
+    const TAB_STORAGE_KEY = 'GOLDENROCK_ADMIN_ACTIVE_TAB';
     let renderedSchemaFields = [];
 
     const NAV_ITEMS = [
@@ -405,6 +406,33 @@
     /* ============ INIT ============ */
     document.addEventListener('DOMContentLoaded', init);
 
+    function restoreActiveTab() {
+        const validIds = NAV_ITEMS.map(function (n) { return n.id; });
+        let saved = null;
+        try {
+            const hash = (location.hash || '').replace(/^#/, '').trim();
+            if (hash && validIds.indexOf(hash) !== -1) saved = hash;
+        } catch (e) {}
+        if (!saved) {
+            try {
+                const s = sessionStorage.getItem(TAB_STORAGE_KEY);
+                if (s && validIds.indexOf(s) !== -1) saved = s;
+            } catch (e) {}
+        }
+        if (saved) activeTab = saved;
+    }
+
+    function persistActiveTab(id) {
+        try {
+            sessionStorage.setItem(TAB_STORAGE_KEY, id);
+        } catch (e) {}
+        try {
+            if (history && typeof history.replaceState === 'function') {
+                history.replaceState(null, '', (location.pathname || 'admin.html') + (location.search || '') + '#' + id);
+            }
+        } catch (e) {}
+    }
+
     function init() {
         if (!checkAuth()) {
             document.getElementById('loginView').style.display = 'flex';
@@ -412,6 +440,7 @@
             renderBrandIcons();
             bindLogin();
         } else {
+            restoreActiveTab();
             enterAdmin();
         }
     }
@@ -460,6 +489,7 @@
 
     function switchTab(id) {
         activeTab = id;
+        persistActiveTab(id);
         document.querySelectorAll('#adminNav li').forEach(function (li) {
             li.classList.toggle('active', li.getAttribute('data-tab') === id);
         });
