@@ -39,16 +39,29 @@
         return base;
     }
 
-    const CONFIG = (function loadConfig() {
-        if (window.I18N && typeof window.I18N.getConfig === 'function') {
-            return window.I18N.getConfig();
+    function _mergedCfg() {
+        var base = getRawCfg();
+        if (window.I18N && typeof window.I18N.getCfgOverrides === 'function') {
+            try { base = _dM(base, window.I18N.getCfgOverrides()); } catch (e) {}
         }
-        return getRawCfg();
+        return base;
+    }
+
+    let CONFIG = (function loadConfig() {
+        if (window.I18N && typeof window.I18N.getConfig === 'function') {
+            return _dM(window.I18N.getConfig(), (window.I18N.getCfgOverrides && window.I18N.getCfgOverrides()) || {});
+        }
+        return _mergedCfg();
     })();
 
     const RAW_CFG = getRawCfg();
 
-    const PAGE = (CONFIG.legal && CONFIG.legal[PAGE_ID]) || {};
+    let PAGE = (CONFIG.legal && CONFIG.legal[PAGE_ID]) || {};
+
+    function reloadConfigForLang() {
+        CONFIG = _mergedCfg();
+        PAGE = (CONFIG.legal && CONFIG.legal[PAGE_ID]) || {};
+    }
 
     function isImageDataUrl(s) {
         return typeof s === 'string' && s.indexOf('data:image/') === 0;
@@ -256,6 +269,7 @@
 
     // 语言切换时 SPA 原地重渲染（不刷新页面）
     function renderAllOnLangChange() {
+        reloadConfigForLang();
         renderHead();
         renderNavbar();
         renderHero();

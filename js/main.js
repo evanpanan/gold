@@ -151,8 +151,12 @@
     }
 
     function renderDynamicContent() {
-        const cfg = GOLDENROCK_CONFIG;
-        const rawCfg = (typeof _getRawBaseCfg === 'function') ? _getRawBaseCfg() : cfg;
+        const cfgBase = (typeof _getRawBaseCfg === 'function') ? _getRawBaseCfg() : GOLDENROCK_CONFIG;
+        let cfg = cfgBase;
+        if (window.I18N && typeof window.I18N.getCfgOverrides === 'function') {
+            cfg = _dM(cfgBase, window.I18N.getCfgOverrides());
+        }
+        const rawCfg = cfgBase;
 
         document.title = cfg.site && cfg.site.title ? cfg.site.title : document.title;
         const metaDesc = document.querySelector('meta[name="description"]');

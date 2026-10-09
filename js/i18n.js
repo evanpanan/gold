@@ -840,6 +840,196 @@
         en: { label: "English", html: "en" }
     };
 
+    // ============ Multi-lang OVERRIDES for GOLDENROCK_CONFIG data-dyn block ============
+    // (大块非 data-i18n 的动态文案，如 footer disclaimer / form 标题 / 联系卡内容等，在 switchLang 后通过 deepMerge 合入原始 config)
+    var DICT_CFG_OVERRIDES = {
+        zh_CN: {},
+        zh_TW: {
+            brand: {
+                heroBadge: "香港持牌金融服務機構",
+                taglinePrimary: "磐石固本",
+                taglineSecondary: "金石創富"
+            },
+            hero: {
+                subtitle: "立足香港國際金融樞紐，助力客戶理性佈局全球市場\n發掘可持續的全球價值機遇",
+                ctaPrimary: { text: "了解服務", href: "#services" },
+                ctaSecondary: { text: "聯繫我們", href: "#contact" },
+                stats: [
+                    { value: "HK", label: "國際金融樞紐" },
+                    { value: "10+", label: "跨境投研經驗（年）" },
+                    { value: "3", label: "核心專業服務" }
+                ]
+            },
+            about: {
+                intro: [
+                    '<span class="text-gold font-bold">金岩石 GoldenRock</span>，紮根香港國際金融中心的專業金融服務機構，專注全球資本市場證券業務服務。',
+                    '秉持「磐石固本，金石創富」的核心價值觀，匯聚具備跨境資本市場多年實操經驗的投研與交易團隊，服務機構及高淨值客戶，提供專業金融服務，覆蓋港股、美股等海外主流市場。'
+                ],
+                vision: { title: "企業願景", desc: "成為一家專注價值、基業穩固的全球金融服務機構。" },
+                mission: { title: "企業使命", desc: "立足香港國際金融樞紐，助力客戶理性佈局全球市場，發掘可持續的全球價值機遇。" },
+                visualCards: [
+                    { icon: "hq", value: "香港", label: "總部所在地" },
+                    { icon: "mkts", value: "港股 · 美股", label: "核心覆蓋市場" },
+                    { icon: "clients", value: "機構 & 高淨值", label: "核心服務對象" }
+                ]
+            },
+            values: [
+                { num: "01", title: "磐石固本", desc: "堅守風控底線，審慎穩健，基業長青。以磐石般的堅定，守護每一份資產安全。" },
+                { num: "02", title: "金石以誠", desc: "恪守誠信準則，客觀專業，對客戶坦誠。以金石般的赤誠，建立透明信任關係。" },
+                { num: "03", title: "洞見致遠", desc: "堅持獨立研判，著眼長期，拒絕短期投機。以深遠的洞見，把握全球價值脈絡。" },
+                { num: "04", title: "守正拓新", desc: "尊重市場規則，合規先行，理性探索全球機遇。以正道為根基，開拓創新格局。" }
+            ],
+            services: [
+                { num: "01", title: "證券市場交易執行", desc: "提供港股、美股等海外主流市場的專業交易執行服務，高效穩定的交易系統，確保客戶訂單快速、準確執行。", featured: false, featuredLabel: "核心服務", features: ["港股 / 美股直通交易", "極速訂單路由執行", "多元化交易訂單類型", "即時行情與深度數據"] },
+                { num: "02", title: "投資諮詢服務", desc: "資深投研團隊基於獨立研判，為機構及高淨值客戶提供專業的投資建議與策略方案，著眼長期價值投資。", featured: true, featuredLabel: "核心服務", features: ["宏觀經濟與策略研究", "行業與公司深度分析", "定制化投資組合建議", "定期市場觀點與展望"] },
+                { num: "03", title: "跨境資產配置", desc: "依託香港國際金融中心優勢，協助客戶進行全球化的資產配置，分散投資風險，捕捉跨境市場機遇。", featured: false, featuredLabel: "核心服務", features: ["全球多市場資產配置", "跨境稅務合規諮詢", "資產風險分散策略", "長期財富管理規劃"] }
+            ],
+            compliance: {
+                hero: {
+                    badge: "持牌合規",
+                    title: "香港證監會（SFC）監管",
+                    desc: "金岩石有限公司 Golden Rock Limited 嚴格遵守《證券及期貨條例》及香港證監會（SFC）頒佈的各項監管規定，建立完善的內部合規體系與風控機制，確保所有業務活動在合規框架內穩健運行。",
+                    note: "所有受規管活動均在 SFC 嚴格監督下開展"
+                },
+                features: [
+                    { title: "客戶資產隔離託管", desc: "客戶資產與公司自有資金嚴格分離，獨立託管於香港認可的銀行及清算機構。" },
+                    { title: "完善風控體系", desc: "多層級風險管理架構，即時監控市場風險、信用風險與操作風險。" },
+                    { title: "合規披露透明", desc: "按照監管要求及時、完整、準確地進行信息披露，接受公眾監督。" },
+                    { title: "信息安全保障", desc: "銀行級數據加密技術，多重身份驗證，全方位保障客戶信息與交易安全。" }
+                ]
+            },
+            cta: {
+                title: "開啟全球價值投資之旅",
+                desc: "專業的投研團隊 · 穩健的風控體系 · 廣闊的全球視野\n金岩石，與您同行於財富增長之路",
+                ctaPrimary: { text: "立即諮詢", href: "#contact" },
+                ctaSecondary: { text: "查看服務詳情", href: "#services" }
+            },
+            contact: {
+                items: [
+                    { label: "公司地址", value: "香港中環（國際金融中心區域）", icon: "location" },
+                    { label: "聯繫電話", value: "+852 xxxx xxxx", icon: "phone" },
+                    { label: "電子郵箱", value: "contact@goldenrock.com.hk", icon: "email" },
+                    { label: "營業時間", value: "週一至週五 09:00 - 18:00 (HKT)", icon: "time" }
+                ],
+                form: { title: "留言諮詢", desc: "填寫以下表單，我們將在1個工作日內與您聯繫", submitText: "提交諮詢" },
+                serviceOptions: [
+                    { value: "trading", label: "證券市場交易執行" },
+                    { value: "advisory", label: "投資諮詢服務" },
+                    { value: "allocation", label: "跨境資產配置" },
+                    { value: "other", label: "其他諮詢" }
+                ]
+            },
+            footer: {
+                brandDesc: "紮根香港，放眼全球。以專業與誠信，為客戶發掘可持續的全球價值機遇。",
+                disclaimerTitle: "重要聲明：",
+                disclaimer: "本網站所載資料及內容僅供參考，並不構成任何證券、金融產品或工具的要約、邀約、招攬、建議、意見或任何保證。投資涉及風險，證券價格可升可跌，甚至變成毫無價值。過往業績並不代表將來表現。投資者在作出任何投資決定前，應考慮本身的財政狀況、投資目標及經驗、風險承受能力及仔細了解相關產品或服務的性質及風險。如有疑問，請諮詢獨立專業顧問。",
+                regulatorNote: "金岩石有限公司 Golden Rock Limited 為香港註冊成立之公司，並受香港證券及期貨事務監察委員會（SFC）監管。",
+                copyright: "© 2026 金岩石有限公司 GOLDEN ROCK LIMITED. 版權所有 All Rights Reserved.",
+                links: [
+                    { text: "隱私政策", href: "privacy.html" },
+                    { text: "服務條款", href: "terms.html" },
+                    { text: "免責聲明", href: "disclaimer.html" }
+                ]
+            }
+        },
+        en: {
+            brand: {
+                heroBadge: "Hong Kong Licensed Financial Institution",
+                taglinePrimary: "Prudence as Foundation",
+                taglineSecondary: "Insight Creates Wealth"
+            },
+            hero: {
+                subtitle: "Rooted in Hong Kong — the global financial hub — we help clients strategically allocate assets across global markets and uncover sustainable long-term value opportunities.",
+                ctaPrimary: { text: "Our Services", href: "#services" },
+                ctaSecondary: { text: "Contact Us", href: "#contact" },
+                stats: [
+                    { value: "HK", label: "Global Financial Hub" },
+                    { value: "10+", label: "Years Cross-Border Research" },
+                    { value: "3", label: "Core Service Lines" }
+                ]
+            },
+            about: {
+                intro: [
+                    '<span class="text-gold font-bold">GoldenRock</span> is a professional financial services institution rooted in Hong Kong, with a dedicated focus on securities and capital markets businesses worldwide.',
+                    'Guided by our core philosophy — "Prudence as Foundation, Insight Creates Wealth" — we bring together a seasoned research and trading team with decades of cross-border capital markets experience, serving institutional and high-net-worth clients across Hong Kong, US and major international markets.'
+                ],
+                vision: { title: "Our Vision", desc: "To build a value-focused, resilient and enduring global financial services institution." },
+                mission: { title: "Our Mission", desc: "Rooted in Hong Kong's financial hub, we empower clients to build disciplined global portfolios and capture sustainable long-term value." },
+                visualCards: [
+                    { icon: "hq", value: "Hong Kong", label: "HQ Location" },
+                    { icon: "mkts", value: "HK · US Equities", label: "Core Market Coverage" },
+                    { icon: "clients", value: "Institutional & HNW", label: "Client Segments" }
+                ]
+            },
+            values: [
+                { num: "01", title: "Prudence First", desc: "Uncompromising risk discipline at our core. We protect every dollar of client assets with rock-solid vigilance." },
+                { num: "02", title: "Integrity Above All", desc: "Unwavering ethical standards and radical transparency. We build trust through honest, professional counsel." },
+                { num: "03", title: "Long-Term Insight", desc: "Independent, conviction-driven research. We reject short-term speculation and focus on durable global value themes." },
+                { num: "04", title: "Principled Innovation", desc: "Compliance-first rational exploration. We pioneer new paths within the boundaries of market rules and regulatory frameworks." }
+            ],
+            services: [
+                { num: "01", title: "Securities Execution", desc: "Professional, best-in-class execution across Hong Kong, US and major international markets, backed by a robust, low-latency trading infrastructure.", featured: false, featuredLabel: "Core Service", features: ["Direct access: HK / US equities", "Low-latency smart order routing", "Rich order-type universe", "Real-time market depth & data"] },
+                { num: "02", title: "Investment Advisory", desc: "Senior research-led portfolio advisory for institutional and HNW clients. Disciplined, value-driven strategies across full market cycles.", featured: true, featuredLabel: "Core Service", features: ["Macro & strategy research", "Deep industry & company analysis", "Custom-tailored portfolio advice", "Regular market outlook & reviews"] },
+                { num: "03", title: "Cross-Border Allocation", desc: "Leveraging Hong Kong's premier international financial status to construct diversified, multi-jurisdictional portfolios and capture cross-market alpha.", featured: false, featuredLabel: "Core Service", features: ["Global multi-asset allocation", "Cross-border tax & compliance advisory", "Risk diversification frameworks", "Long-term wealth planning"] }
+            ],
+            compliance: {
+                hero: {
+                    badge: "Regulated Entity",
+                    title: "Hong Kong SFC Supervision",
+                    desc: "Golden Rock Limited operates in strict compliance with the Securities and Futures Ordinance (SFO) and all rules and guidelines issued by the Securities and Futures Commission (SFC) of Hong Kong, with a comprehensive internal compliance framework and enterprise-grade risk-management governance.",
+                    note: "All regulated activities are conducted under rigorous SFC oversight"
+                },
+                features: [
+                    { title: "Segregated Client Assets", desc: "Client assets are strictly segregated from firm capital and independently custodised at SFC-authorised banks and clearing houses." },
+                    { title: "Enterprise Risk Management", desc: "Multi-layered risk architecture monitoring market, credit and operational risk in real time." },
+                    { title: "Transparent Disclosure", desc: "Timely, complete and accurate regulatory disclosures in full alignment with public accountability requirements." },
+                    { title: "Bank-Grade Security", desc: "Enterprise encryption and multi-factor authentication to safeguard all client information and transaction flows." }
+                ]
+            },
+            cta: {
+                title: "Begin Your Global Value Journey",
+                desc: "Seasoned investment professionals · rock-solid risk discipline · a truly global perspective.\nGoldenRock — your partner for long-term wealth creation.",
+                ctaPrimary: { text: "Start a Conversation", href: "#contact" },
+                ctaSecondary: { text: "Explore Our Services", href: "#services" }
+            },
+            contact: {
+                items: [
+                    { label: "Address", value: "Central, Hong Kong (IFC District)", icon: "location" },
+                    { label: "Phone", value: "+852 xxxx xxxx", icon: "phone" },
+                    { label: "Email", value: "contact@goldenrock.com.hk", icon: "email" },
+                    { label: "Business Hours", value: "Mon–Fri 09:00 – 18:00 (HKT)", icon: "time" }
+                ],
+                form: { title: "Send an Enquiry", desc: "Fill out the form below and a member of our team will respond within 1 business day.", submitText: "Submit Enquiry" },
+                serviceOptions: [
+                    { value: "trading", label: "Securities Execution" },
+                    { value: "advisory", label: "Investment Advisory" },
+                    { value: "allocation", label: "Cross-Border Allocation" },
+                    { value: "other", label: "Other Enquiries" }
+                ]
+            },
+            footer: {
+                brandDesc: "Rooted in Hong Kong. Global in reach. Professionalism and integrity — uncovering sustainable global value for our clients.",
+                disclaimerTitle: "Important Notice:",
+                disclaimer: "The materials and content on this website are for general information purposes only and do not constitute an offer, solicitation, invitation, recommendation, advice or guarantee in relation to any securities, financial products or instruments. Investment involves risk; the price of securities may move up or down and may become valueless. Past performance is not indicative of future results. Before making any investment decision, investors should consider their own financial position, investment objectives, experience and risk appetite, and carefully understand the nature and risks of the relevant product or service. Please consult an independent professional adviser if in doubt.",
+                regulatorNote: "Golden Rock Limited is a company incorporated in Hong Kong and regulated by the Securities and Futures Commission (SFC) of Hong Kong.",
+                copyright: "© 2026 GOLDEN ROCK LIMITED. All Rights Reserved.",
+                links: [
+                    { text: "Privacy Policy", href: "privacy.html" },
+                    { text: "Terms of Service", href: "terms.html" },
+                    { text: "Disclaimer", href: "disclaimer.html" }
+                ]
+            }
+        }
+    };
+
+    // 对外 API：拿到已经 deepMerge 好的 DICT_CFG_OVERRIDES[activeLang] 给 main.js / legal.js renderDynamicContent() 用
+    function getCfgOverrides(lang) {
+        try {
+            var l = normLang(lang || _activeLang) || DEFAULT_LANG;
+            return cloneJSON(DICT_CFG_OVERRIDES[l] || {});
+        } catch (e) { return {}; }
+    }
+
     var STORAGE_KEY = "GR_LANG";
     var OVERRIDE_KEY = "GOLDENROCK_CONFIG_OVERRIDE";
     var DEFAULT_LANG = "zh_CN";
@@ -1061,6 +1251,7 @@
         applyI18nAttrs: applyI18nAttrs,
         setSwitcherActive: setSwitcherActive,
         normLang: normLang,
+        getCfgOverrides: getCfgOverrides,
         get activeLang() { return _activeLang; }
     };
 
