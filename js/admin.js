@@ -1078,6 +1078,8 @@
         var img = document.getElementById('cropSource');
         if (!modal || !img) return toast('error', '裁剪功能不可用', '缺少 DOM 元素');
 
+        bindCropControls();
+
         CROP.rawDataUrl = dataUrl;
         CROP.pendingKey = fieldKey || null;
         CROP.pendingFileInputId = fileInfo.inputId || null;
@@ -1257,13 +1259,11 @@
     };
 
     function bindCropGestures() {
-        if (bindCropGestures._bound === true) return; // 守卫：防止重复绑定（多次 enterAdmin 会导致手势两遍执行→框抖动）
-        bindCropGestures._bound = false;
+        if (bindCropGestures._bound === true) return;
         var box = document.getElementById('cropBox');
         var stage = document.getElementById('cropStage');
         var img = document.getElementById('cropSource');
         if (!box || !stage) return;
-        // 防止浏览器原生图片拖拽 / 文字选择干扰自定义手势（"拖了半天图片在动框不动的伪不稳定）
         img.setAttribute('draggable', 'false');
         img.ondragstart = function () { return false; };
         function onStageDown(e) {
@@ -1272,6 +1272,8 @@
                 if (t === box) return;
                 t = t.parentNode;
             }
+            if (CROP_GESTURE._lock) return;
+            CROP_GESTURE._lock = true;
             var pt = getPointer(e);
             e.preventDefault();
             if (e.stopPropagation) try { e.stopPropagation(); } catch (e0) {}
@@ -1302,6 +1304,8 @@
     function startCropGesture(e) {
         e.preventDefault();
         e.stopPropagation();
+        if (CROP_GESTURE._lock) return;
+        CROP_GESTURE._lock = true;
         var pt = getPointer(e);
         var target = e.target;
         CROP_GESTURE.startX = pt.x;
@@ -1429,6 +1433,7 @@
 
     function endCropGesture() {
         CROP_GESTURE.active = false;
+        CROP_GESTURE._lock = false;
     }
 
     // ================= 裁剪弹窗控件绑定 =================
