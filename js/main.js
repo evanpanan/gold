@@ -508,11 +508,63 @@
             closeMobileMenu();
         }
 
-        const offsetTop = targetElement.getBoundingClientRect().top + window.scrollY - 80;
-        window.scrollTo({
-            top: offsetTop,
-            behavior: 'smooth'
-        });
+        const offsetTop = Math.max(0, Math.round(targetElement.getBoundingClientRect().top + window.scrollY - 80));
+        // 用户主动点了 tab：通知 I18N 滚动模块立即取消旧 savedY 还原调度 + 清掉旧还原定时器，避免被拉回旧位置；同时把新锚点 y 写入 sessionStorage（如果用户点完立刻 F5，就还原这个新位置）
+        try { if (typeof window._GR_userClickedNav === 'function') window._GR_userClickedNav(target, offsetTop); } catch (err) {}
+
+        // —— 关键 Bug 修复：之前的 window.scrollTo({top,behavior:'smooth'}) 会跟 I18N 的滚动恢复抢 scroll-behavior；
+        //    这里用「瞬时切到 offsetTop（保证立即到位） + setTimeout 0 再 smooth 补动画」，同时清任何残留 doRestoreY 调度
+        //    双重保险：先瞬时切 scroll-behavior auto 到位 → 恢复 smooth → 再用 smooth 对齐一次
+        try { document.documentElement.style.setProperty('scroll-behavior','auto','important'); } catch (err) {}
+        try { window.scrollTo(0, offsetTop); } catch (err) {}
+        try { document.documentElement.scrollTop = offsetTop; } catch (err) {}
+        try { document.body.scrollTop = offsetTop; } catch (err) {}
+        // —— 跟剩余还原调度竞争：doRestoreY 在 i18n.js 里有 60/220/480/800/1800 等多轮，
+        //    我们 20/60/160ms 都瞬时拉一次 offsetTop，保证最后落在用户要的锚点
+        (function(yTarget, el){
+          var pull = function(){
+            if (typeof window._GR_userClickedNav === 'function') {
+              // 先保证 _userNavigatingNow 锁上，后续任何 doRestoreY 都 return
+              try { window._GR_userClickedNav(target, yTarget); } catch (err) {}
+            }
+            try { document.documentElement.style.setProperty('scroll-behavior','auto','important'); } catch (err) {}
+            try { window.scrollTo(0, yTarget); } catch (err) {}
+            try { document.documentElement.scrollTop = yTarget; } catch (err) {}
+            try { document.body.scrollTop = yTarget; } catch (err) {}
+          };
+          setTimeout(function(){ pull(); setTimeout(function(){ pull(); setTimeout(pull, 100); }, 40); }, 20);
+          setTimeout(function () {
+            try { document.documentElement.style.removeProperty('scroll-behavior'); } catch (err) {}
+            // 重新计算（因为瞬时切 auto 时可能已经到位，再做一次 smooth 让视觉过渡）
+            try {
+              if (!el) return;
+              var rectNow = el.getBoundingClientRect();
+              var nowY = Math.max(0, Math.round(rectNow.top + window.scrollY - 80));
+              if (Math.abs(nowY - window.scrollY) > 3) {
+                  window.scrollTo({ top: nowY, behavior: 'smooth' });
+              }
+            } catch (err) {}
+          }, 260);
+        })(offsetTop, targetElement);
+
+        // 同步更新 URL hash（不重新滚动）避免浏览器前进/后退跟保存记忆冲突
+        try {
+            var rawH = String(window.location.hash || '').replace(/^[#]/, '');
+            var cleanTarget = target.replace(/^[#]/, '');
+            if (rawH !== cleanTarget) {
+                if ('replaceState' in history) history.replaceState(null, '', target);
+                else window.location.hash = target;
+            }
+        } catch (err) {}
+
+        // 点完 60ms 再更新一次 active nav，避免还没滚过去时旧 active 高亮闪烁
+        setTimeout(function () {
+            try {
+                navLinks.forEach(function (link) { link.classList.remove('active'); });
+                const hit = document.querySelector('.nav-link[href="' + target + '"]');
+                if (hit) hit.classList.add('active');
+            } catch (err) {}
+        }, 60);
     }
 
     function initScrollReveal() {
@@ -697,20 +749,25 @@
         handleActiveNav();
     }, { passive: true });
 
-    mobileToggle.addEventListener('click', toggleMobileMenu);
-
-    navLinks.forEach(function (link) {
-        link.addEventListener('click', smoothScrollTo);
-    });
-
-    const logoLink = document.querySelector('.logo');
-    if (logoLink) {
-        logoLink.addEventListener('click', smoothScrollTo);
-    }
-
-    const ctaLinks = document.querySelectorAll('.hero-actions a, .cta-actions a, .footer-logo');
-    ctaLinks.forEach(function (link) {
-        link.addEventListener('click', smoothScrollTo);
+    // —— 直接挂到 document 委托上，不用 querySelectorAll 取常量（避免 nav 渲染前取值为空、或新加入元素没绑 listener 的 CASE_D y=5524→点 about 没反应 Bug）
+    //    所有 a[href^="#"]（包括 .nav-link / .logo / hero-actions CTA / footer）都走统一 smoothScrollTo
+    document.addEventListener('click', function (e) {
+        try {
+            var a = e.target && typeof e.target.closest === 'function' ? e.target.closest('a[href^="#"]') : null;
+            if (!a) return;
+            var target = String(a.getAttribute('href') || '').trim();
+            if (!target || target.charAt(0) !== '#' || target.length < 2) return;
+            var ALLOWED = ['#home','#about','#values','#services','#compliance','#contact'];
+            var clean = '#' + target.replace(/^[#]/, '').split('&')[0].split('?')[0];
+            if (ALLOWED.indexOf(clean) === -1 && !document.querySelector(clean) && !document.getElementById(clean.slice(1))) return;
+            // 触发 smoothScrollTo（包装一个类似 event 的对象）
+            smoothScrollTo.call(a, {
+                currentTarget: a,
+                target: e.target,
+                preventDefault: function () { try { e.preventDefault && e.preventDefault(); } catch (err) {} },
+                stopPropagation: function () { try { e.stopPropagation && e.stopPropagation(); } catch (err) {} }
+            });
+        } catch (err) {}
     });
 
     if (contactForm) {
