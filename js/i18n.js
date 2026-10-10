@@ -1235,6 +1235,37 @@
             setSwitcherActive();
             // 首次进入页面也把 data-i18n 刷一遍（DOMContentLoaded 比 body 末尾脚本更早，防止首屏留白字）
             try { applyI18nAttrs(document); } catch (e) {}
+            // ==== 首屏锚点兜底：无 section hash 时强制停留在页面顶部（scrollY=0） ====
+            // 防止浏览器的 Scroll Restoration 或首屏高度塌陷导致刷新跳到合规资质段
+            try {
+                var allowedHashSections = ['#home','#about','#values','#services','#compliance','#contact'];
+                var rawHash = String(window.location.hash || '').trim();
+                var isExplicitAnchor = false;
+                if (rawHash.length > 1) {
+                    var cleanHash = '#' + rawHash.replace(/^[#]/,'').split('&')[0].split('?')[0];
+                    if (allowedHashSections.indexOf(cleanHash) !== -1) isExplicitAnchor = true;
+                }
+                if (!isExplicitAnchor) {
+                    var pinTop = function () {
+                        try {
+                            if ('scrollRestoration' in history) {
+                                try { history.scrollRestoration = 'manual'; } catch (e) {}
+                            }
+                            window.scrollTo(0, 0);
+                            document.documentElement.scrollTop = 0;
+                            document.body.scrollTop = 0;
+                        } catch (e) {}
+                    };
+                    pinTop();
+                    if ('requestAnimationFrame' in window) {
+                        requestAnimationFrame(pinTop);
+                        requestAnimationFrame(function () { setTimeout(pinTop, 0); });
+                    }
+                    setTimeout(pinTop, 30);
+                    setTimeout(pinTop, 120);
+                    window.addEventListener('load', function () { setTimeout(pinTop, 0); }, { once: true, passive: true });
+                }
+            } catch (e) {}
         }
         if (document.readyState !== 'loading') afterDomReady();
         else document.addEventListener('DOMContentLoaded', afterDomReady);

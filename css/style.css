@@ -359,10 +359,11 @@ ul {
 .hero {
     position: relative;
     min-height: 100vh;
+    min-height: 100svh;
     display: flex;
     align-items: center;
     overflow: hidden;
-    padding: 120px 0 80px;
+    padding: 120px 0 112px;
 }
 
 .hero-bg {
@@ -497,7 +498,7 @@ ul {
     justify-content: center;
     gap: 16px;
     flex-wrap: wrap;
-    margin-bottom: 80px;
+    margin-bottom: 56px;
 }
 
 .btn {
@@ -570,13 +571,15 @@ ul {
     justify-content: center;
     flex-wrap: wrap;
     padding: 36px 48px;
+    margin-bottom: 44px;
     background: rgba(255, 255, 255, 0.04);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: var(--radius-xl);
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
     max-width: 720px;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .hero-stats-inline {
@@ -590,8 +593,11 @@ ul {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 6px;
-    padding: 0 24px;
+    justify-content: center;
+    gap: 10px;
+    padding: 6px 24px 10px;
+    min-height: 72px;
+    box-sizing: border-box;
 }
 
 .hero-stats-inline .stat-item + .stat-item {
@@ -603,7 +609,8 @@ ul {
     font-size: 32px;
     font-weight: 700;
     color: var(--color-gold-light);
-    line-height: 1;
+    line-height: 1.1;
+    padding-top: 2px;
 }
 
 .stat-value.counting {
@@ -615,21 +622,32 @@ ul {
     font-size: 13px;
     color: rgba(255, 255, 255, 0.65);
     white-space: nowrap;
+    line-height: 1.5;
+    padding-top: 2px;
 }
 
 .hero-scroll {
     position: absolute;
-    bottom: 32px;
+    bottom: 20px;
     left: 50%;
     transform: translateX(-50%);
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 12px;
+    gap: 10px;
     color: rgba(255, 255, 255, 0.5);
     font-size: 11px;
     letter-spacing: 3px;
-    z-index: 2;
+    z-index: 3;
+    isolation: isolate;
+}
+
+.hero-scroll span {
+    padding: 4px 10px;
+    background: rgba(10, 22, 40, 0.45);
+    border-radius: 10px;
+    -webkit-backdrop-filter: blur(6px);
+    backdrop-filter: blur(6px);
 }
 
 .scroll-line {
@@ -1828,6 +1846,18 @@ ul {
 .hero-parallax-layer {
     will-change: transform;
     transition: transform 0.1s linear;
+    /* 防止空容器（如已隐藏的 hero-badge）导致内部 margin 与下一层塌陷 */
+    padding-top: 0.02px;
+    padding-bottom: 0.02px;
+}
+
+.hero-parallax-layer:has(> :only-child:empty) {
+    display: none !important;
+}
+
+.hero-parallax-layer:has(> .hero-badge:empty),
+.hero-parallax-layer:has(> .hero-badge span[data-dyn="brand.heroBadge"]:empty) {
+    display: none !important;
 }
 
 .reveal {
@@ -1961,7 +1991,7 @@ ul {
 
     .hero {
         min-height: auto;
-        padding: 140px 0 100px;
+        padding: 140px 0 112px;
     }
 
     .hero-title {
@@ -1977,6 +2007,7 @@ ul {
     .hero-stats {
         padding: 24px 20px;
         gap: 24px;
+        margin-bottom: 40px;
     }
 
     .hero-stats-inline {
@@ -1987,8 +2018,10 @@ ul {
     }
 
     .hero-stats-inline .stat-item {
-        padding: 0 20px;
+        padding: 8px 20px 10px;
         min-width: 90px;
+        gap: 10px;
+        min-height: 76px;
     }
 
     .stat-item {
@@ -2001,13 +2034,15 @@ ul {
 
     .stat-value {
         font-size: 30px;
+        line-height: 1.1;
     }
 
     .stat-label {
         font-size: 12.5px;
         white-space: normal;
-        line-height: 1.5;
+        line-height: 1.55;
         text-align: center;
+        padding-top: 4px;
     }
 
     .section {
@@ -2225,6 +2260,7 @@ ul {
         max-width: 100%;
         width: 100%;
         box-sizing: border-box;
+        margin-bottom: 32px;
     }
 
     .hero-stats-inline {
@@ -2235,9 +2271,11 @@ ul {
     }
 
     .hero-stats-inline .stat-item {
-        padding: 10px 10px 8px;
+        padding: 10px 10px 12px;
         width: 100%;
         min-width: 0;
+        min-height: 80px;
+        gap: 10px;
         border: 0 !important;
         box-sizing: border-box;
     }
@@ -2260,14 +2298,16 @@ ul {
     .stat-value {
         font-size: 28px;
         word-break: break-word;
+        line-height: 1.1;
     }
 
     .stat-label {
         font-size: 12.5px;
         white-space: normal;
-        line-height: 1.5;
+        line-height: 1.55;
         text-align: center;
         word-break: break-word;
+        padding-top: 4px;
     }
 
     .section {
@@ -2319,7 +2359,7 @@ ul {
     .hero-actions {
         flex-direction: column;
         gap: 12px;
-        margin-bottom: 56px;
+        margin-bottom: 44px;
     }
 
     .hero-actions .btn {
@@ -2327,15 +2367,18 @@ ul {
     }
 
     .hero {
-        padding: 124px 0 80px;
+        padding: 124px 0 104px;
     }
 
     .stat-value {
         font-size: 26px;
+        line-height: 1.1;
     }
 
     .stat-label {
         font-size: 12px;
+        line-height: 1.55;
+        padding-top: 4px;
     }
 
     .section {
@@ -2386,10 +2429,14 @@ ul {
         letter-spacing: 0.5px;
     }
 
+    .hero {
+        padding: 120px 0 104px;
+    }
+
     .hero-stats-inline {
         display: grid;
         grid-template-columns: 1fr;
-        gap: 14px;
+        gap: 16px;
     }
 
     .hero-stats-inline .stat-item,
@@ -2398,25 +2445,31 @@ ul {
         grid-column: auto;
         border: 0 !important;
         border-top: 1px solid rgba(201, 169, 97, 0.3) !important;
-        padding-top: 14px;
+        padding: 14px 4px 8px;
         margin-top: 0;
+        gap: 10px;
+        min-height: 84px;
     }
 
     .hero-stats-inline .stat-item:first-child {
         border-top: 0 !important;
-        padding-top: 4px;
+        padding-top: 6px;
     }
 
     .stat-value {
         font-size: 24px;
+        line-height: 1.1;
     }
 
     .stat-label {
         font-size: 11.5px;
+        line-height: 1.55;
+        padding-top: 4px;
     }
 
     .hero-stats {
         padding: 16px 14px;
+        margin-bottom: 28px;
     }
 
     .section {
