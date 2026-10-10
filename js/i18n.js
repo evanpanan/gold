@@ -1235,36 +1235,164 @@
             setSwitcherActive();
             // 首次进入页面也把 data-i18n 刷一遍（DOMContentLoaded 比 body 末尾脚本更早，防止首屏留白字）
             try { applyI18nAttrs(document); } catch (e) {}
-            // ==== 首屏锚点兜底：无 section hash 时强制停留在页面顶部（scrollY=0） ====
-            // 防止浏览器的 Scroll Restoration 或首屏高度塌陷导致刷新跳到合规资质段
+            // ==== 滚动位置记忆与恢复：用户"本来在哪个位置，刷新后还是哪个位置" ====
+            // 优先级：显式合法 hash（#home/#about/#values/#services/#compliance/#contact） > sessionStorage 精确像素快照
+            // 备注：首屏 hero-badge 隐藏导致的布局塌陷已通过 CSS 100svh + parallax-layer BFC 独立约束，无需 JS 强制回顶
             try {
-                var allowedHashSections = ['#home','#about','#values','#services','#compliance','#contact'];
+                var ALLOWED_HASH = ['#home','#about','#values','#services','#compliance','#contact'];
                 var rawHash = String(window.location.hash || '').trim();
                 var isExplicitAnchor = false;
+                var cleanHash = '';
                 if (rawHash.length > 1) {
-                    var cleanHash = '#' + rawHash.replace(/^[#]/,'').split('&')[0].split('?')[0];
-                    if (allowedHashSections.indexOf(cleanHash) !== -1) isExplicitAnchor = true;
+                    cleanHash = '#' + rawHash.replace(/^[#]/,'').split('&')[0].split('?')[0];
+                    if (ALLOWED_HASH.indexOf(cleanHash) !== -1) isExplicitAnchor = true;
                 }
-                if (!isExplicitAnchor) {
-                    var pinTop = function () {
-                        try {
-                            if ('scrollRestoration' in history) {
-                                try { history.scrollRestoration = 'manual'; } catch (e) {}
+
+                var SCROLL_KEY = 'GR_SCROLL_RESTORE';
+                var MAX_DRIFT_MS = 1000 * 60 * 15; // 超过 15 分钟的滚动快照丢弃
+                var RESTORING_FLAG_MS = 1500; // 恢复过程中忽略 scroll 事件，避免反向覆盖
+                var FINAL_RECONCILE_MS = 1800; // 字体/data-dyn-list 动态内容全渲染完后再拉回一次
+                var _restoringUntil = 0;
+                var _scrollSaveTimer = null;
+                var _finalSavedTarget = null; // 本次最终要还原的目标像素（用于最后 reconcile 兜底）
+
+                // 1) 保存当前滚动像素到 sessionStorage
+                var saveScrollNow = function (opts) {
+                    try {
+                        if (!opts) opts = {};
+                        if (!opts.force && Date.now() < _restoringUntil) return; // 恢复阶段，不反写
+                        // force:true 时也避免把「还没渲染完整、临时被 clamp 的小 scrollY」覆写目标值
+                        var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+                        if (opts.force && _finalSavedTarget != null && typeof _finalSavedTarget === 'number' && _finalSavedTarget > 0) {
+                            var maxScroll = Math.max(0,
+                                Math.max(document.body.scrollHeight, document.documentElement.scrollHeight,
+                                         document.body.offsetHeight, document.documentElement.offsetHeight) - window.innerHeight);
+                            var shouldBe = Math.min(_finalSavedTarget, maxScroll);
+                            if (shouldBe > 0 && Math.abs(y - shouldBe) > 120) {
+                                // 还没完全渲染完，不强行用临时小 y 覆盖目标，直接返回
+                                return;
                             }
-                            window.scrollTo(0, 0);
-                            document.documentElement.scrollTop = 0;
-                            document.body.scrollTop = 0;
-                        } catch (e) {}
-                    };
-                    pinTop();
-                    if ('requestAnimationFrame' in window) {
-                        requestAnimationFrame(pinTop);
-                        requestAnimationFrame(function () { setTimeout(pinTop, 0); });
+                        }
+                        var payload = JSON.stringify({ y: Math.round(y || 0), t: Date.now() });
+                        try { sessionStorage.setItem(SCROLL_KEY, payload); } catch (e1) {
+                            try { document.documentElement.setAttribute('data-gr-scroll-save', payload); } catch (e2) {}
+                        }
+                    } catch (e) {}
+                };
+
+                // 2) 按合法锚点 hash 滚动（header 补偿 72px）
+                var scrollAnchor = function (y) {
+                    try {
+                        y = Math.max(0, Math.round(y || 0));
+                        // 还原/锚点滚动时临时强制 scroll-behavior: auto，
+                        // 避免 CSS smooth 动画在长距离滚动时被浏览器中途取消
+                        try { document.documentElement.style.setProperty('scroll-behavior','auto','important'); } catch (e) {}
+                        try { window.scrollTo(0, y); } catch (e) {}
+                        try { document.documentElement.scrollTop = y; } catch (e) {}
+                        try { document.body.scrollTop = y; } catch (e) {}
+                    } catch (e) {}
+                };
+
+                // 长距离滚动结束后 200ms 恢复 CSS smooth
+                var _sbRestoreTimer = null;
+                var restoreSmoothBehavior = function () {
+                    if (_sbRestoreTimer != null) clearTimeout(_sbRestoreTimer);
+                    _sbRestoreTimer = setTimeout(function () {
+                        try { document.documentElement.style.removeProperty('scroll-behavior'); } catch (e) {}
+                    }, 200);
+                };
+                // 3) 先挂上保存钩子：beforeunload / pagehide / 切 tab / scroll 节流（300ms）
+                window.addEventListener('beforeunload', function () { saveScrollNow({ force: true }); }, { passive: true });
+                window.addEventListener('pagehide', function () { saveScrollNow({ force: true }); }, { passive: true });
+                document.addEventListener('visibilitychange', function () {
+                    if (document.visibilityState === 'hidden') saveScrollNow({ force: true });
+                }, { passive: true });
+                window.addEventListener('scroll', function () {
+                    if (Date.now() < _restoringUntil) return;
+                    if (_scrollSaveTimer != null) return;
+                    _scrollSaveTimer = setTimeout(function () { _scrollSaveTimer = null; saveScrollNow(); }, 300);
+                }, { passive: true });
+
+                // 4) 恢复阶段：hash 优先，否则读存储快照；整个过程中禁用浏览器原生 restoration + 忽略 scroll 写入避免反向覆盖
+                if (isExplicitAnchor) {
+                    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+                    _restoringUntil = Date.now() + 500;
+                    var sectionEl = document.querySelector(cleanHash) || document.getElementById(cleanHash.slice(1));
+                    if (sectionEl) {
+                        var headerH = 72;
+                        var doAnchorScroll = function () {
+                            try {
+                                var rect = sectionEl.getBoundingClientRect();
+                                var y = Math.max(0, Math.round((rect.top + window.scrollY) - headerH));
+                                scrollAnchor(y);
+                            } catch (e) {}
+                        };
+                        doAnchorScroll();
+                        if ('requestAnimationFrame' in window) requestAnimationFrame(doAnchorScroll);
+                        setTimeout(doAnchorScroll, 80);
+                        setTimeout(doAnchorScroll, 260);
+                        setTimeout(restoreSmoothBehavior, 400);
+                        window.addEventListener('load', function () { setTimeout(doAnchorScroll, 0); setTimeout(doAnchorScroll, 180); setTimeout(restoreSmoothBehavior, 380); }, { once: true, passive: true });
                     }
-                    setTimeout(pinTop, 30);
-                    setTimeout(pinTop, 120);
-                    window.addEventListener('load', function () { setTimeout(pinTop, 0); }, { once: true, passive: true });
-                }
+                } else {
+                    var savedY = null;
+                    try {
+                        var raw = sessionStorage.getItem(SCROLL_KEY);
+                        if (raw) {
+                            try {
+                                var parsed = JSON.parse(raw);
+                                if (parsed && typeof parsed.y === 'number' && typeof parsed.t === 'number') {
+                                    if (Date.now() - parsed.t <= MAX_DRIFT_MS) savedY = parsed.y;
+                                }
+                            } catch (e2) {}
+                        }
+                    } catch (e) {}
+                    if (savedY == null || isNaN(savedY)) {
+                        // 没有快照 → 交给浏览器原生 scroll restoration
+                        try { if ('scrollRestoration' in history) history.scrollRestoration = 'auto'; } catch (e) {}
+                    } else {
+                            // 有快照：先关浏览器原生 restoration，标记还原中，防止原生还原干扰
+                            try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (e) {}
+                            var restoreY = Math.max(0, Math.round(savedY));
+                            _finalSavedTarget = restoreY;
+                            _restoringUntil = Date.now() + RESTORING_FLAG_MS;
+                            // 先强制写一次（避免 beforeunload 没触发时丢失）
+                            try { sessionStorage.setItem(SCROLL_KEY, JSON.stringify({ y: restoreY, t: Date.now() })); } catch (e) {}
+                            var doRestoreY = function () {
+                                try {
+                                    var maxScroll = Math.max(0,
+                                        Math.max(document.body.scrollHeight, document.documentElement.scrollHeight,
+                                                 document.body.offsetHeight, document.documentElement.offsetHeight) - window.innerHeight);
+                                    var target = Math.min(restoreY, maxScroll);
+                                    if (target > 0) scrollAnchor(target);
+                                } catch (e) {}
+                            };
+                            doRestoreY();
+                            if ('requestAnimationFrame' in window) {
+                                requestAnimationFrame(doRestoreY);
+                                requestAnimationFrame(function () { setTimeout(doRestoreY, 0); });
+                            }
+                            setTimeout(doRestoreY, 60);
+                            setTimeout(doRestoreY, 220);
+                            setTimeout(doRestoreY, 480);
+                            setTimeout(doRestoreY, 800);
+                            setTimeout(doRestoreY, FINAL_RECONCILE_MS); // 最后一次：字体/data-dyn-list 全渲染完再拉回
+                            setTimeout(restoreSmoothBehavior, FINAL_RECONCILE_MS + 80);
+                            window.addEventListener('load', function () {
+                                setTimeout(doRestoreY, 0);
+                                setTimeout(doRestoreY, 300);
+                                setTimeout(doRestoreY, 900);
+                                setTimeout(restoreSmoothBehavior, 1100);
+                                // FINAL_RECONCILE_MS 后做最终一次存盘（force）
+                                setTimeout(function () {
+                                    // 先再拉一次保证已稳定，然后再强制保存，最后恢复 smooth
+                                    doRestoreY();
+                                    setTimeout(restoreSmoothBehavior, 80);
+                                    try { saveScrollNow({ force: true }); } catch (e) {}
+                                }, FINAL_RECONCILE_MS + 200);
+                            }, { once: true, passive: true });
+                        }
+                    }
             } catch (e) {}
         }
         if (document.readyState !== 'loading') afterDomReady();
