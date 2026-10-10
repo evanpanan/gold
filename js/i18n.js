@@ -17,7 +17,7 @@
                 logoEnFull: "GOLDEN ROCK LIMITED",
                 taglinePrimary: "磐石固本",
                 taglineSecondary: "金石创富",
-                heroBadge: "香港持牌金融服务机构"
+                heroBadge: ""
             },
             hero: {
                 subtitle: "立足香港国际金融枢纽，助力客户理性布局全球市场\n发掘可持续的全球价值机遇",
@@ -32,7 +32,7 @@
             about: {
                 intro: [
                     '<span class="text-gold font-bold">金岩石 GoldenRock</span>，扎根香港国际金融中心的专业金融服务机构，专注全球资本市场证券业务服务。',
-                    '秉持"磐石固本，金石创富"的核心价值观，汇聚具备跨境资本市场多年实操经验的投研与交易团队，服务机构及高净值客户，提供专业金融服务，覆盖港股、美股等海外主流市场。'
+                    '秉持"磐石固本，金石创富"的核心价值观，汇聚具备跨境资本市场多年实操经验的投研与交易团队，服务机构及高净值客户，提供专业金融服务，覆盖港股、美股、A股等主流证券市场。'
                 ],
                 vision: {
                     title: "企业愿景",
@@ -44,7 +44,7 @@
                 },
                 visualCards: [
                     { icon: "hq", value: "香港", label: "总部所在地" },
-                    { icon: "mkts", value: "港股 · 美股", label: "核心覆盖市场" },
+                    { icon: "mkts", value: "港股 · 美股 · A股", label: "核心覆盖市场" },
                     { icon: "clients", value: "机构 & 高净值", label: "核心服务对象" }
                 ]
             },
@@ -58,9 +58,9 @@
                 {
                     num: "01",
                     title: "证券市场交易执行",
-                    desc: "提供港股、美股等海外主流市场的专业交易执行服务，高效稳定的交易系统，确保客户订单快速、准确执行。",
+                    desc: "提供港股、美股、A股等主流证券市场的专业交易执行服务，高效稳定的交易系统，确保客户订单快速、准确执行。",
                     featured: false,
-                    features: ["港股 / 美股直通交易", "极速订单路由执行", "多元化交易订单类型", "实时行情与深度数据"]
+                    features: ["港股 / 美股 / A股直通交易", "极速订单路由执行", "多元化交易订单类型", "实时行情与深度数据"]
                 },
                 {
                     num: "02",
@@ -80,7 +80,7 @@
             ],
             compliance: {
                 hero: {
-                    badge: "持牌合规",
+                    badge: "合规运营",
                     title: "香港证监会 (SFC) 监管",
                     desc: "金岩石有限公司 Golden Rock Limited 严格遵守《证券及期货条例》及香港证监会（SFC）颁布的各项监管规定，建立完善的内部合规体系与风控机制，确保所有业务活动在合规框架内稳健运行。",
                     note: "所有受规管活动均在 SFC 严格监督下开展"
@@ -158,7 +158,7 @@
                     companyName: "金岩石有限公司 GOLDEN ROCK LIMITED",
                     intro: "欢迎使用金岩石有限公司 GOLDEN ROCK LIMITED（以下简称「本公司」或「我们」）运营的官方网站及相关金融服务。请您在使用本网站或接受我们任何服务前，务必审慎阅读并充分理解本《服务条款》的全部内容，特别是以加粗或下划线方式标注的条款。一旦您勾选同意、注册开户、访问网站或使用任何服务，即视为您已充分阅读、理解并同意接受本条款的全部内容。",
                     sections: [
-                        { title: "一、服务内容", paragraphs: ["本公司是一家依据香港特别行政区法律成立并受香港证券及期货事务监察委员会（SFC）监管的持牌金融服务机构。我们向符合条件的机构及个人客户提供：（1）证券市场交易执行；（2）投资咨询服务；（3）跨境资产配置顾问服务；以及前述相关的客户支持、信息推送、研究报告等附属服务。具体服务内容以客户与本公司签署的正式业务合约约定为准。", "本公司保留不时变更、中断或终止部分或全部服务的权利，调整时将按法律要求通过官网公告或客户通知方式告知。"] },
+                        { title: "一、服务内容", paragraphs: ["本公司是一家依据香港特别行政区法律成立并受香港证券及期货事务监察委员会（SFC）监管的金融服务机构。我们向符合条件的机构及个人客户提供：（1）证券市场交易执行；（2）投资咨询服务；（3）跨境资产配置顾问服务；以及前述相关的客户支持、信息推送、研究报告等附属服务。具体服务内容以客户与本公司签署的正式业务合约约定为准。", "本公司保留不时变更、中断或终止部分或全部服务的权利，调整时将按法律要求通过官网公告或客户通知方式告知。"] },
                         { title: "二、客户资格与开户", paragraphs: ["申请使用本公司金融服务的客户须同时满足：（1）具有完全民事行为能力；（2）符合《证券及期货条例》及 SFC 相关规定对各类服务的投资者资格要求；（3）未处于任何司法或监管限制投资的状态。", "客户开户应遵循「了解你的客户（KYC）」原则，根据本公司要求如实提供身份信息、财务状况、投资经验、风险承担能力等资料，并保证其真实、准确、完整、合法、有效。若提供任何虚假或误导信息，本公司有权拒绝开户、冻结账户或终止服务，客户须自行承担由此产生的一切后果。"] },
                         { title: "三、客户身份与账户安全", paragraphs: ["客户应妥善保管其账户名、密码、数字证书、动态口令、生物识别信息等身份验证要素。凡通过上述验证要素所完成的一切操作，均视为客户本人或其授权代理人所为，相应责任由客户自行承担。", "客户如发现或怀疑账户信息被泄漏、被冒用或存在其他安全问题，应立即通知本公司并按指引操作；因客户自身保管不善导致的损失，本公司不承担责任。"] },
                         { title: "四、投资风险披露", paragraphs: ["客户清楚知悉并确认：所有投资均涉及风险，证券、基金及其他金融产品的价格可升可跌，甚至可能变得毫无价值，过往业绩并不代表将来表现。投资者不应作出任何投资决定而依赖本网站所载的任何资料或本公司一般性质的研究材料，客户应就个别投资的适合性征询其本身之专业顾问意见。", "跨境投资（如美股、港股通等）还可能涉及汇率风险、境外监管规则差异、跨境税费成本、政治及宏观经济风险等，客户承诺已充分了解相关风险并愿意独立承担投资结果。", "在市场剧烈波动、流动性枯竭或其他不可抗力情形下，客户订单可能无法按预期价格或时间执行，甚至无法执行，本公司对因前述原因造成的任何损失不承担责任。"] },
@@ -178,7 +178,7 @@
                     companyName: "金岩石有限公司 GOLDEN ROCK LIMITED",
                     intro: "以下免责声明（以下简称「本声明」）适用于所有访问本公司官网的任何人士（以下简称「访问者」）及使用本公司服务的客户（以下简称「客户」）。访问或使用本网站即表示您已阅读、理解并同意接受本声明的全部条款。如您不同意本声明的任何部分，请立即停止访问本网站及使用相关服务。",
                     sections: [
-                        { title: "一、信息性质与不构成要约或建议", paragraphs: ["本网站所刊载的一切资料、文件、研究报告、图表、数据、分析、观点、工具及其他内容（以下统称「内容」）仅作一般信息参考及说明用途，并不构成任何证券、金融产品或工具的收购、出售、认购或交易的要约、邀请、招揽、推介、建议或任何形式的保证。任何内容不应被视为专业的投资、法律、税务、会计或其他专业意见。", "本公司并无将该等内容提供给任何特定人士作为其作出投资决策唯一依据的意图。投资决策应结合访问者/客户自身的财务状况、投资目标、经验、风险承受能力，并咨询持牌专业顾问的独立意见后作出。"] },
+                        { title: "一、信息性质与不构成要约或建议", paragraphs: ["本网站所刊载的一切资料、文件、研究报告、图表、数据、分析、观点、工具及其他内容（以下统称「内容」）仅作一般信息参考及说明用途，并不构成任何证券、金融产品或工具的收购、出售、认购或交易的要约、邀请、招揽、推介、建议或任何形式的保证。任何内容不应被视为专业的投资、法律、税务、会计或其他专业意见。", "本公司并无将该等内容提供给任何特定人士作为其作出投资决策唯一依据的意图。投资决策应结合访问者/客户自身的财务状况、投资目标、经验、风险承受能力，并咨询持专业资质顾问的独立意见后作出。"] },
                         { title: "二、信息准确性与完整性", paragraphs: ["本公司在编制和发布网站内容时已采取合理谨慎措施，但不对内容的准确性、完整性、真实性、时效性、可靠性、适销性或针对任何特定目的的适用性作出任何明示或默示的陈述或保证。内容可能在未予通知的情况下随时发生变动，本公司并无义务持续更新或修正该等内容。", "本网站提供的任何模拟、回测、目标价、评级、预测或前瞻性陈述，均基于特定假设与公开信息，仅用于展示与参考，不代表实际可实现的收益或结果。实际结果可能与前瞻性陈述存在重大差异。"] },
                         { title: "三、投资风险特别提示", paragraphs: ["所有投资及金融产品交易均具有风险，投资者可能蒙受部分或全部本金损失。客户应清楚并完全理解其投资决策及交易所涉及的风险，必要时应寻求独立的专业建议。", "（一）证券及股票相关风险：股票价格可能极度波动，受宏观经济、行业状况、公司业绩、市场情绪、监管政策等多重因素影响，不存在任何可以保证盈利的投资方法或策略。", "（二）跨境投资风险：投资境外市场（如美国、欧洲、东盟等）须承担：汇率波动可能侵蚀实际收益；境外法律、规则、会计、税务、结算制度的差异；市场流动性与交易时间差异；境外政治、社会、外交、制裁等重大风险。", "（三）杠杆/衍生产品风险：若涉及保证金、期货、期权、结构性产品或其他杠杆工具，亏损可能远超客户所投入的初始保证金，客户可能需要在短时间内追补大额资金并承担全部损失。", "（四）流动性与系统风险：在市场剧烈波动、极端行情、系统故障等情形下，客户可能无法及时下单、撤单或执行交易，由此产生的一切损失由客户自行承担。"] },
                         { title: "四、第三方内容与链接", paragraphs: ["本网站可能引用、转载或提供由第三方机构、研究员、媒体或个人提供的数据、研究、观点或超链接（统称为「第三方内容」）。此类第三方内容仅为方便访问者而提供，不代表本公司立场或推荐。", "本公司并不审核、背书或保证任何第三方内容的准确性、完整性、合法性或适合性，也不对访问者因依赖或使用第三方内容而产生的任何损失承担责任。访问者自行承担访问第三方网站或使用第三方内容的全部风险。"] },
@@ -293,7 +293,7 @@
                 logoEnFull: "GOLDEN ROCK LIMITED",
                 taglinePrimary: "磐石固本",
                 taglineSecondary: "金石創富",
-                heroBadge: "香港持牌金融服務機構"
+                heroBadge: ""
             },
             hero: {
                 subtitle: "立足香港國際金融樞紐，協助客戶理性佈局全球市場\n發掘可持續的全球價值機遇",
@@ -307,8 +307,8 @@
             },
             about: {
                 intro: [
-                    '<span class="text-gold font-bold">金石岩石 GoldenRock</span>，紮根香港國際金融中心的專業金融服務機構，專注全球資本市場證券業務服務。',
-                    '秉持「磐石固本，金石創富」的核心價值觀，匯聚具備跨境資本市場多年實操經驗的投研與交易團隊，服務機構及高淨值客戶，提供專業金融服務，覆蓋港股、美股等海外主流市場。'
+                    '<span class="text-gold font-bold">金岩石 GoldenRock</span>，紮根香港國際金融中心的專業金融服務機構，專注全球資本市場證券業務服務。',
+                    '秉持「磐石固本，金石創富」的核心價值觀，匯聚具備跨境資本市場多年實操經驗的投研與交易團隊，服務機構及高淨值客戶，提供專業金融服務，覆蓋港股、美股、A股等主流證券市場。'
                 ],
                 vision: {
                     title: "企業願景",
@@ -320,7 +320,7 @@
                 },
                 visualCards: [
                     { icon: "hq", value: "香港", label: "總部所在地" },
-                    { icon: "mkts", value: "港股 · 美股", label: "核心覆蓋市場" },
+                    { icon: "mkts", value: "港股 · 美股 · A股", label: "核心覆蓋市場" },
                     { icon: "clients", value: "機構 & 高淨值", label: "核心服務對象" }
                 ]
             },
@@ -334,9 +334,9 @@
                 {
                     num: "01",
                     title: "證券市場交易執行",
-                    desc: "提供港股、美股等海外主流市場的專業交易執行服務，高效穩定的交易系統，確保客戶訂單快速、準確執行。",
+                    desc: "提供港股、美股、A股等主流證券市場的專業交易執行服務，高效穩定的交易系統，確保客戶訂單快速、準確執行。",
                     featured: false,
-                    features: ["港股 / 美股直通交易", "極速訂單路由執行", "多元化交易訂單類型", "實時行情與深度數據"]
+                    features: ["港股 / 美股 / A股直通交易", "極速訂單路由執行", "多元化交易訂單類型", "實時行情與深度數據"]
                 },
                 {
                     num: "02",
@@ -356,9 +356,9 @@
             ],
             compliance: {
                 hero: {
-                    badge: "持牌合規",
+                    badge: "合規營運",
                     title: "香港證監會（SFC）監管",
-                    desc: "金石岩石有限公司 Golden Rock Limited 嚴格遵守《證券及期貨條例》及香港證監會（SFC）頒佈的各項監管規定，建立完善的內部合規體系與風控機制，確保所有業務活動在合規框架內穩健運行。",
+                    desc: "金岩石有限公司 Golden Rock Limited 嚴格遵守《證券及期貨條例》及香港證監會（SFC）頒佈的各項監管規定，建立完善的內部合規體系與風控機制，確保所有業務活動在合規框架內穩健運行。",
                     note: "所有受規管活動均在 SFC 嚴格監督下開展"
                 },
                 features: [
@@ -370,7 +370,7 @@
             },
             cta: {
                 title: "開啟全球價值投資之旅",
-                desc: "專業的投研團隊 · 穩健的風控體系 · 廣闊的全球視野\n金石岩石，與您同行於財富增長之路",
+                desc: "專業的投研團隊 · 穩健的風控體系 · 廣闊的全球視野\n金岩石，與您同行於財富增長之路",
                 ctaPrimary: { text: "立即諮詢", href: "#contact" },
                 ctaSecondary: { text: "查看服務詳情", href: "#services" }
             },
@@ -397,8 +397,8 @@
                 brandDesc: "紮根香港，放眼全球。以專業與誠信，為客戶發掘可持續的全球價值機遇。",
                 disclaimerTitle: "重要聲明：",
                 disclaimer: "本網站所載資料及內容僅供參考，並不構成任何證券、金融產品或工具的要約、邀約、招攬、建議、意見或任何保證。投資涉及風險，證券價格可升可跌，甚至變成毫無價值。過往業績並不代表將來表現。投資者在作出任何投資決定前，應考慮本身的財政狀況、投資目標及經驗、風險承受能力及仔細了解相關產品或服務的性質及風險。如有疑問，請諮詢獨立專業顧問。",
-                regulatorNote: "金石岩石有限公司 Golden Rock Limited 為香港註冊成立之公司，並受香港證券及期貨事務監察委員會（SFC）監管。",
-                copyright: "© 2026 金石岩石有限公司 GOLDEN ROCK LIMITED. 版權所有 All Rights Reserved.",
+                regulatorNote: "金岩石有限公司 Golden Rock Limited 為香港註冊成立之公司，並受香港證券及期貨事務監察委員會（SFC）監管。",
+                copyright: "© 2026 金岩石有限公司 GOLDEN ROCK LIMITED. 版權所有 All Rights Reserved.",
                 links: [
                     { text: "隱私政策", href: "privacy.html" },
                     { text: "服務條款", href: "terms.html" },
@@ -409,11 +409,11 @@
                 privacy: {
                     pageTitle: "隱私政策",
                     pageTitleEn: "Privacy Policy",
-                    metaDescription: "金石岩石有限公司 Golden Rock Limited 隱私政策：我們如何收集、使用、存儲和保護您的個人信息。",
+                    metaDescription: "金岩石有限公司 Golden Rock Limited 隱私政策：我們如何收集、使用、存儲和保護您的個人信息。",
                     effectiveDate: "2026-10-01",
                     lastUpdated: "2026-10-01",
-                    companyName: "金石岩石有限公司 GOLDEN ROCK LIMITED",
-                    intro: "金石岩石有限公司 GOLDEN ROCK LIMITED（以下簡稱「我們」）深知個人信息對您的重要性，並會盡全力保護您的個人信息安全可靠。我們致力於維持您對我們的信任，恪守以下原則保護您的個人信息：權責一致原則、目的明確原則、選擇同意原則、最少夠用原則、確保安全原則、主體參與原則、公開透明原則等。同時，我們承諾，我們將按業界成熟的安全標準，採取相應的安全保護措施來保護您的個人信息。",
+                    companyName: "金岩石有限公司 GOLDEN ROCK LIMITED",
+                    intro: "金岩石有限公司 GOLDEN ROCK LIMITED（以下簡稱「我們」）深知個人信息對您的重要性，並會盡全力保護您的個人信息安全可靠。我們致力於維持您對我們的信任，恪守以下原則保護您的個人信息：權責一致原則、目的明確原則、選擇同意原則、最少夠用原則、確保安全原則、主體參與原則、公開透明原則等。同時，我們承諾，我們將按業界成熟的安全標準，採取相應的安全保護措施來保護您的個人信息。",
                     sections: [
                         { title: "一、我們如何收集和使用您的個人信息", paragraphs: ["個人信息是指以電子或者其他方式記錄的能夠單獨或者與其他信息結合識別特定自然人身份或者反映特定自然人活動情況的各種信息。我們僅會出於本政策所述的以下目的，收集和使用您的個人信息：", "（一）為您提供證券開戶、交易及相關金融服務：當您在我司開立賬戶、申請交易權限、進行證券買賣、資金劃轉等業務時，我們會收集您的姓名、身份證件號碼、聯繫方式、銀行賬戶信息、職業信息、風險承受能力評估結果、交易記錄等，以滿足監管合規要求並完成您委託的業務辦理。", "（二）為您提供客戶服務與諮詢：當您通過官網表單、電話、電子郵件或即時通訊工具與我們聯繫時，我們可能會保存您的通訊記錄與內容，包括您的姓名、聯繫方式、諮詢內容等，以便回覆您的疑問並持續優化服務質量。", "（三）改進產品與服務質量：我們可能會將收集到的信息進行去標識化和聚合處理，用於統計分析、服務優化、產品研發等內部用途，該等信息不會用於識別您的個人身份。", "（四）履行法定義務：我們可能基於《證券及期貨條例》《打擊洗錢及恐怖分子資金籌集條例》《個人資料（私隱）條例》等適用法律法規、監管機構或司法機關的合法要求，處理或披露您的必要信息。"] },
                         { title: "二、Cookie 與同類技術的使用", paragraphs: ["為確保網站正常運轉、為您獲得更輕鬆的訪問體驗，我們會在您的設備上存儲名為 Cookie 的小數據文件。藉助 Cookie，我們能夠記住您的偏好設置、幫助優化頁面加載速度、統計匿名訪問數據以分析用戶行為。", "您可以通過瀏覽器設置管理或刪除 Cookie，您也可以選擇拒絕 Cookie，但拒絕 Cookie 後部分功能可能無法正常使用。除 Cookie 外，我們還可能使用網站信標、像素標籤等同類技術用於統計訪問量、點擊轉化分析等合法用途。"] },
@@ -422,19 +422,19 @@
                         { title: "五、您的個人信息主體權利", paragraphs: ["按照香港《個人資料（私隱）條例》及其他適用法律，您對您的個人信息享有以下權利：（1）訪問權：您有權請求我們確認是否處理您的個人信息，並獲取該等信息的副本；（2）更正權：如您認為我們持有關於您的信息不准確或不完整，您有權要求我們進行更正或補充；（3）刪除權：在特定情形下（如信息已無必要保留、處理違反法律規定等），您有權要求刪除您的個人信息，但法律法規另有規定的除外；（4）限制處理/反對處理權：在特定情況下您可要求我們限制或反對對您信息的處理；（5）撤回同意權：對於基於同意的處理，您有權隨時撤回同意，但這不影響撤回前基於同意已進行的處理活動。", "如您擬行使上述權利，可通過本政策末尾公佈的聯繫方式向我們提交請求，我們將在合理期限內（一般不超過 30 天）依法處理並回覆。我們可能會先驗證您的身份以確保請求的合法性。對於合理的請求，我們原則上不收取費用，但對多次重複、超出合理限度的請求，我們將視情況收取一定成本費用。"] },
                         { title: "六、未成年人個人信息保護", paragraphs: ["我們的服務主要面向成年投資者。如果您是未滿 18 週歲的未成年人，請在您的監護人陪同與指導下閱讀本政策並使用我們的服務。我們將根據相關法律法規的要求，在獲得監護人明確同意的前提下處理未成年人個人信息，並採取額外措施予以保護。", "如我們發現在未事先獲得可證實的監護人同意的情況下收集了未成年人的個人信息，我們將儘快刪除相關數據。"] },
                         { title: "七、本政策如何更新", paragraphs: ["為了給您提供更好的服務，我們的業務可能會不時調整與變更，本隱私政策也會隨之適時更新。未經您明確同意，我們不會削減您按照本政策所應享有的權利。", "本政策更新後，我們會在官網顯著位置公告、通過站內信或郵件等方式向您告知，並在頁面頂部標註最新生效日期。重大變更我們將以更顯著的方式（包括通知甚至彈窗方式）另行告知。您可在本頁面隨時查閱最新版本。"] },
-                        { title: "八、如何聯繫我們", paragraphs: ["如您對本隱私政策有任何疑問、意見、建議，或希望行使您的信息主體權利、舉報隱私相關違規行為，可通過以下方式與我們聯繫，我們會在 15 個工作日內回覆。", "公司：金石岩石有限公司 GOLDEN ROCK LIMITED", "地址：香港中環（國際金融中心區域）", "郵箱：privacy@goldenrock.com.hk", "電話：+852 xxxx xxxx", "如您對我們的回覆不滿意，您也有權向香港個人資料私隱專員公署（PCPD）或其他適用的數據保護監管機構投訴。"] }
+                        { title: "八、如何聯繫我們", paragraphs: ["如您對本隱私政策有任何疑問、意見、建議，或希望行使您的信息主體權利、舉報隱私相關違規行為，可通過以下方式與我們聯繫，我們會在 15 個工作日內回覆。", "公司：金岩石有限公司 GOLDEN ROCK LIMITED", "地址：香港中環（國際金融中心區域）", "郵箱：privacy@goldenrock.com.hk", "電話：+852 xxxx xxxx", "如您對我們的回覆不滿意，您也有權向香港個人資料私隱專員公署（PCPD）或其他適用的數據保護監管機構投訴。"] }
                     ]
                 },
                 terms: {
                     pageTitle: "服務條款",
                     pageTitleEn: "Terms of Service",
-                    metaDescription: "金石岩石有限公司 Golden Rock Limited 服務條款：使用本網站及金融服務須遵守的法律條款與條件。",
+                    metaDescription: "金岩石有限公司 Golden Rock Limited 服務條款：使用本網站及金融服務須遵守的法律條款與條件。",
                     effectiveDate: "2026-10-01",
                     lastUpdated: "2026-10-01",
-                    companyName: "金石岩石有限公司 GOLDEN ROCK LIMITED",
-                    intro: "歡迎使用金石岩石有限公司 GOLDEN ROCK LIMITED（以下簡稱「本公司」或「我們」）運營的官方網站及相關金融服務。請您在使用本網站或接受我們任何服務前，務必審慎閱讀並充分理解本《服務條款》的全部內容，特別是以加粗或下劃線方式標註的條款。一旦您勾選同意、註冊開戶、訪問網站或使用任何服務，即視為您已充分閱讀、理解並同意接受本條款的全部內容。",
+                    companyName: "金岩石有限公司 GOLDEN ROCK LIMITED",
+                    intro: "歡迎使用金岩石有限公司 GOLDEN ROCK LIMITED（以下簡稱「本公司」或「我們」）運營的官方網站及相關金融服務。請您在使用本網站或接受我們任何服務前，務必審慎閱讀並充分理解本《服務條款》的全部內容，特別是以加粗或下劃線方式標註的條款。一旦您勾選同意、註冊開戶、訪問網站或使用任何服務，即視為您已充分閱讀、理解並同意接受本條款的全部內容。",
                     sections: [
-                        { title: "一、服務內容", paragraphs: ["本公司是一家依據香港特別行政區法律成立並受香港證券及期貨事務監察委員會（SFC）監管的持牌金融服務機構。我們向符合條件的機構及個人客戶提供：（1）證券市場交易執行；（2）投資諮詢服務；（3）跨境資產配置顧問服務；以及前述相關的客戶支持、信息推送、研究報告等附屬服務。具體服務內容以客戶與本公司簽署的正式業務合約約定為準。", "本公司保留不時變更、中斷或終止部分或全部服務的權利，調整時將按法律要求通過官網公告或客戶通知方式告知。"] },
+                        { title: "一、服務內容", paragraphs: ["本公司是一家依據香港特別行政區法律成立並受香港證券及期貨事務監察委員會（SFC）監管的金融服務機構。我們向符合條件的機構及個人客戶提供：（1）證券市場交易執行；（2）投資諮詢服務；（3）跨境資產配置顧問服務；以及前述相關的客戶支持、信息推送、研究報告等附屬服務。具體服務內容以客戶與本公司簽署的正式業務合約約定為準。", "本公司保留不時變更、中斷或終止部分或全部服務的權利，調整時將按法律要求通過官網公告或客戶通知方式告知。"] },
                         { title: "二、客戶資格與開戶", paragraphs: ["申請使用本公司金融服務的客戶須同時滿足：（1）具有完全民事行為能力；（2）符合《證券及期貨條例》及 SFC 相關規定對各類服務的投資者資格要求；（3）未處於任何司法或監管限制投資的狀態。", "客戶開戶應遵循「了解你的客戶（KYC）」原則，根據本公司要求如實提供身份信息、財務狀況、投資經驗、風險承擔能力等資料，並保證其真實、準確、完整、合法、有效。若提供任何虛假或誤導信息，本公司有權拒絕開戶、凍結賬戶或終止服務，客戶須自行承擔由此產生的一切後果。"] },
                         { title: "三、客戶身份與賬戶安全", paragraphs: ["客戶應妥善保管其賬戶名、密碼、數字證書、動態口令、生物識別信息等身份驗證要素。凡通過上述驗證要素所完成的一切操作，均視為客戶本人或其授權代理人所為，相應責任由客戶自行承擔。", "客戶如發現或懷疑賬戶信息被洩漏、被冒用或存在其他安全問題，應立即通知本公司並按指引操作；因客戶自身保管不善導致的損失，本公司不承擔責任。"] },
                         { title: "四、投資風險披露", paragraphs: ["客戶清楚知悉並確認：所有投資均涉及風險，證券、基金及其他金融產品的價格可升可跌，甚至可能變得毫無價值，過往業績並不代表將來表現。投資者不應作出任何投資決定而依賴本網站所載的任何資料或本公司一般性質的研究材料，客戶應就個別投資的適合性諮詢其本身之專業顧問意見。", "跨境投資（如美股、港股通等）還可能涉及匯率風險、境外監管規則差異、跨境稅費成本、政治及宏觀經濟風險等，客戶承諾已充分了解相關風險並願意獨立承擔投資結果。", "在市場劇烈波動、流動性枯竭或其他不可抗力情形下，客戶訂單可能無法按預期價格或時間執行，甚至無法執行，本公司對因前述原因造成的任何損失不承擔責任。"] },
@@ -448,13 +448,13 @@
                 disclaimer: {
                     pageTitle: "免責聲明",
                     pageTitleEn: "Disclaimer",
-                    metaDescription: "金石岩石有限公司 Golden Rock Limited 免責聲明：本網站信息性質、投資風險與使用限制的重要說明。",
+                    metaDescription: "金岩石有限公司 Golden Rock Limited 免責聲明：本網站信息性質、投資風險與使用限制的重要說明。",
                     effectiveDate: "2026-10-01",
                     lastUpdated: "2026-10-01",
-                    companyName: "金石岩石有限公司 GOLDEN ROCK LIMITED",
+                    companyName: "金岩石有限公司 GOLDEN ROCK LIMITED",
                     intro: "以下免責聲明（以下簡稱「本聲明」）適用於所有訪問本公司官網的任何人士（以下簡稱「訪問者」）及使用本公司服務的客戶（以下簡稱「客戶」）。訪問或使用本網站即表示您已閱讀、理解並同意接受本聲明的全部條款。如您不同意本聲明的任何部分，請立即停止訪問本網站及使用相關服務。",
                     sections: [
-                        { title: "一、信息性質與不構成要約或建議", paragraphs: ["本網站所刊載的一切資料、文件、研究報告、圖表、數據、分析、觀點、工具及其他內容（以下統稱「內容」）僅作一般信息參考及說明用途，並不構成任何證券、金融產品或工具的收購、出售、認購或交易的要約、邀請、招攬、推介、建議或任何形式的保證。任何內容不應被視為專業的投資、法律、稅務、會計或其他專業意見。", "本公司並無將該等內容提供給任何特定人士作為其作出投資決策唯一依據的意圖。投資決策應結合訪問者/客戶自身的財務狀況、投資目標、經驗、風險承受能力，並諮詢持牌專業顧問的獨立意見後作出。"] },
+                        { title: "一、信息性質與不構成要約或建議", paragraphs: ["本網站所刊載的一切資料、文件、研究報告、圖表、數據、分析、觀點、工具及其他內容（以下統稱「內容」）僅作一般信息參考及說明用途，並不構成任何證券、金融產品或工具的收購、出售、認購或交易的要約、邀請、招攬、推介、建議或任何形式的保證。任何內容不應被視為專業的投資、法律、稅務、會計或其他專業意見。", "本公司並無將該等內容提供給任何特定人士作為其作出投資決策唯一依據的意圖。投資決策應結合訪問者/客戶自身的財務狀況、投資目標、經驗、風險承受能力，並諮詢持專業資質顧問的獨立意見後作出。"] },
                         { title: "二、信息準確性與完整性", paragraphs: ["本公司在編制和發佈網站內容時已採取合理謹慎措施，但不對內容的準確性、完整性、真實性、時效性、可靠性、適銷性或針對任何特定目的的適用性作出任何明示或默示的陳述或保證。內容可能在未予通知的情況下隨時發生變動，本公司並無義務持續更新或修正該等內容。", "本網站提供的任何模擬、回測、目標價、評級、預測或前瞻性陳述，均基於特定假設與公開信息，僅用於展示與參考，不代表實際可實現的收益或結果。實際結果可能與前瞻性陳述存在重大差異。"] },
                         { title: "三、投資風險特別提示", paragraphs: ["所有投資及金融產品交易均具有風險，投資者可能蒙受部分或全部本金損失。客戶應清楚並完全理解其投資決策及交易所涉及的風險，必要時應尋求獨立的專業建議。", "（一）證券及股票相關風險：股票價格可能極度波動，受宏觀經濟、行業狀況、公司業績、市場情緒、監管政策等多重因素影響，不存在任何可以保證盈利的投資方法或策略。", "（二）跨境投資風險：投資境外市場（如美國、歐洲、東盟等）須承擔：匯率波動可能侵蝕實際收益；境外法律、規則、會計、稅務、結算制度的差異；市場流動性與交易時間差異；境外政治、社會、外交、制裁等重大風險。", "（三）槓桿/衍生產品風險：若涉及保證金、期貨、期權、結構性產品或其他槓桿工具，虧損可能遠超客戶所投入的初始保證金，客戶可能需要在短時間內追補大額資金並承擔全部損失。", "（四）流動性與系統風險：在市場劇烈波動、極端行情、系統故障等情形下，客戶可能無法及時下單、撤單或執行交易，由此產生的一切損失由客戶自行承擔。"] },
                         { title: "四、第三方內容與鏈接", paragraphs: ["本網站可能引用、轉載或提供由第三方機構、研究員、媒體或個人提供的數據、研究、觀點或超鏈接（統稱為「第三方內容」）。此類第三方內容僅為方便訪問者而提供，不代表本公司立場或推薦。", "本公司並不審核、背書或保證任何第三方內容的準確性、完整性、合法性或適合性，也不對訪問者因依賴或使用第三方內容而產生的任何損失承擔責任。訪問者自行承擔訪問第三方網站或使用第三方內容的全部風險。"] },
@@ -482,7 +482,7 @@
                     contact: "CONTACT US"
                 },
                 sectionTitle: {
-                    about: "關於金石岩石",
+                    about: "關於金岩石",
                     values: "核心價值觀",
                     services: "核心專業服務",
                     compliance: "合規資質與資金安全",
@@ -557,9 +557,9 @@
         },
         en: {
             site: {
-                title: "Golden Rock Limited | Hong Kong Licensed Brokerage",
-                metaDescription: "Golden Rock Limited — a Hong Kong-based professional financial services firm specializing in global capital markets securities business, licensed and regulated by the SFC.",
-                metaKeywords: "GoldenRock, Hong Kong Brokerage, Securities Trading, Investment Advisory, Cross-border Asset Allocation, HK Stocks, US Stocks",
+                title: "Golden Rock Limited | Global Capital Markets Services",
+                metaDescription: "Golden Rock Limited — a Hong Kong-based professional financial services firm specializing in global capital markets securities business, supervised and regulated by the SFC.",
+                metaKeywords: "GoldenRock, Hong Kong Brokerage, Securities Trading, Investment Advisory, Cross-border Asset Allocation, HK Stocks, US Stocks, A Shares",
                 faviconEmoji: "\uD83C\uDFDB\uFE0F",
                 faviconSvg: "<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><path fill='#B99642' d='M32 4.5c8.2 2.3 14.4 8.9 16 17.2 1 5.4-.4 10.6-3.9 14.6 2.2 2.3 3.5 5.3 3.6 8.6-.5 8.2-6.9 14.9-15.7 14.8-8.8-.1-15.1-6.9-15.5-15.1-.2-4.6 1.7-8.9 5.2-11.9C17.6 29.5 16 25.2 16.4 20.8c.4-8.5 7.4-15.2 15.6-16.3z'/><path fill='#fff' d='M30.8 15c-10.4 2-15 11.7-10.6 21.4 2.4 5.3 7.5 7.4 10.8 6.1-6.4 2.3-9.3 7.7-9.5 12.2C33.7 57.9 48 51.4 48 37.1c-.2-6-3-11.1-8-14.7 4.8-2 7.7-6.7 7.5-11.7-1.7-9.4-12.4-15.5-16.7-4.2z'/></svg>"
             },
@@ -569,7 +569,7 @@
                 logoEnFull: "GOLDEN ROCK LIMITED",
                 taglinePrimary: "Steadfast as a Rock",
                 taglineSecondary: "Wealth Crafted with Integrity",
-                heroBadge: "Hong Kong Licensed Financial Services Provider"
+                heroBadge: ""
             },
             hero: {
                 subtitle: "Rooted in Hong Kong — Asia's global financial hub — we help clients allocate rationally across global markets and uncover sustainable long-term value opportunities.",
@@ -584,7 +584,7 @@
             about: {
                 intro: [
                     '<span class="text-gold font-bold">Golden Rock</span> is a Hong Kong-based professional financial services institution headquartered in the city\'s international financial district, specializing in global capital markets securities services.',
-                    'Guided by the core values of "Steadfast as a Rock, Wealth Crafted with Integrity," we bring together an investment research and trading team with deep, hands-on experience in cross-border capital markets to serve institutional and high-net-worth clients across HK, US and other major overseas markets.'
+                    'Guided by the core values of "Steadfast as a Rock, Wealth Crafted with Integrity," we bring together an investment research and trading team with deep, hands-on experience in cross-border capital markets to serve institutional and high-net-worth clients across HK, US and A-share major securities markets.'
                 ],
                 vision: {
                     title: "Our Vision",
@@ -596,7 +596,7 @@
                 },
                 visualCards: [
                     { icon: "hq", value: "Hong Kong", label: "Headquartered" },
-                    { icon: "mkts", value: "HK · US Markets", label: "Primary Coverage" },
+                    { icon: "mkts", value: "HK · US · A Shares", label: "Primary Coverage" },
                     { icon: "clients", value: "Institutional & HNW", label: "Clients We Serve" }
                 ]
             },
@@ -610,9 +610,9 @@
                 {
                     num: "01",
                     title: "Securities Execution",
-                    desc: "Direct-access trading in Hong Kong, US and major overseas markets with ultra-reliable order routing infrastructure: fast, accurate, deterministic execution.",
+                    desc: "Direct-access trading in Hong Kong, US and A-share major securities markets with ultra-reliable order routing infrastructure: fast, accurate, deterministic execution.",
                     featured: false,
-                    features: ["Direct HK / US Market Access", "Smart Order Routing", "Multi-order Types", "Real-time Market Depth & Data"]
+                    features: ["Direct HK / US / A-Share Access", "Smart Order Routing", "Multi-order Types", "Real-time Market Depth & Data"]
                 },
                 {
                     num: "02",
@@ -632,9 +632,9 @@
             ],
             compliance: {
                 hero: {
-                    badge: "SFC Licensed",
+                    badge: "Regulated Operations",
                     title: "Regulated by the SFC (Hong Kong)",
-                    desc: "Golden Rock Limited strictly observes the Securities and Futures Ordinance (SFO) and all rules, codes and guidelines issued by the Securities and Futures Commission (SFC) of Hong Kong. A comprehensive internal compliance and enterprise risk management framework ensures every activity runs within the licensed regulatory perimeter.",
+                    desc: "Golden Rock Limited strictly observes the Securities and Futures Ordinance (SFO) and all rules, codes and guidelines issued by the Securities and Futures Commission (SFC) of Hong Kong. A comprehensive internal compliance and enterprise risk management framework ensures every activity runs within the applicable regulatory perimeter.",
                     note: "All regulated activities are conducted under the strict supervision of the SFC."
                 },
                 features: [
@@ -710,7 +710,7 @@
                     companyName: "Golden Rock Limited",
                     intro: "Welcome to the official website and related financial services operated by Golden Rock Limited (hereafter \"the Company\", \"we\", \"us\" or \"our\"). Before you use this website or any of our services, please read these Terms of Service carefully and make sure you fully understand their entire content — especially any provisions that are bolded or underlined. By checking the acceptance box, registering an account, accessing this website or using any of our services, you are deemed to have fully read, understood and agreed to be bound by all of these Terms.",
                     sections: [
-                        { title: "1. Scope of Services", paragraphs: ["The Company is a licensed financial services institution incorporated under the laws of the Hong Kong Special Administrative Region and regulated by the Securities and Futures Commission (SFC). We provide eligible institutional and individual clients with: (1) securities execution services; (2) investment advisory services; (3) cross-border asset allocation advisory services; and ancillary services including client support, information dissemination and research reports. The exact scope of services is set out in the formal written business agreements entered into between the client and the Company.", "The Company reserves the right to change, suspend or terminate some or all of its services from time to time. Any such adjustment will be notified through a website announcement or direct client notice as required by law."] },
+                        { title: "1. Scope of Services", paragraphs: ["The Company is a financial services institution incorporated under the laws of the Hong Kong Special Administrative Region and regulated by the Securities and Futures Commission (SFC). We provide eligible institutional and individual clients with: (1) securities execution services; (2) investment advisory services; (3) cross-border asset allocation advisory services; and ancillary services including client support, information dissemination and research reports. The exact scope of services is set out in the formal written business agreements entered into between the client and the Company.", "The Company reserves the right to change, suspend or terminate some or all of its services from time to time. Any such adjustment will be notified through a website announcement or direct client notice as required by law."] },
                         { title: "2. Client Eligibility and Account Opening", paragraphs: ["Clients applying to use our financial services must simultaneously satisfy: (1) full legal capacity; (2) eligibility under the Securities and Futures Ordinance and all applicable SFC rules for the relevant category(ies) of service; and (3) not being subject to any judicial or regulatory restriction on investing.", "Client account opening follows \"Know Your Client\" (KYC) principles. Clients must furnish, in accordance with the Company's requirements, truthful identity information, financial status, investment experience, risk tolerance and other relevant materials, and must warrant that such information is true, accurate, complete, lawful and valid. Should any false or misleading information be provided, the Company reserves the right to refuse account opening, freeze the account or terminate services; the client shall bear all consequences arising therefrom."] },
                         { title: "3. Client Identity and Account Security", paragraphs: ["Clients shall properly safeguard their account names, passwords, digital certificates, one-time passwords, biometric identifiers and all other authentication credentials. Any and all operations completed using such credentials shall be deemed to have been performed by the client personally or by his or her duly authorised agent, and the client shall bear the corresponding liability.", "If a client discovers or suspects that account information has been leaked, misappropriated or otherwise compromised, he or she shall immediately notify the Company and follow the instructions provided. The Company shall not be liable for any loss caused by the client's own failure to properly safeguard such credentials."] },
                         { title: "4. Investment Risk Disclosure", paragraphs: ["The client expressly acknowledges and confirms that all investments involve risk. The price of any security, fund or other financial product may go up as well as down and may, in certain circumstances, become valueless. Past performance is not indicative of future results. Clients should not rely on any material contained on this website, or on any generic research material provided by the Company, as the sole basis for making an investment decision; clients should consult their own professional adviser on the suitability of any particular investment.", "Cross-border investments (e.g., US securities, Stock Connect, etc.) may also carry exchange-rate risk, differences in foreign regulatory regimes, cross-border tax costs, political and macroeconomic risks, etc. By using our services, the client warrants that he or she has fully understood such risks and is willing to bear the outcome of his or her investments independently.", "During periods of extreme market volatility, illiquidity or other force majeure, client orders may not be executed at the expected price or timing, or at all. The Company shall not be liable for any loss arising from any of the foregoing causes."] },
@@ -730,7 +730,7 @@
                     companyName: "Golden Rock Limited",
                     intro: "The following disclaimer (hereafter \"this Disclaimer\") applies to all persons who access the Company's official website (hereafter \"Visitors\") and to all clients of the Company's services (hereafter \"Clients\"). By accessing or using this website you acknowledge that you have read, understood and agree to be bound by all of the provisions of this Disclaimer. If you do not agree to any part of this Disclaimer, please immediately cease accessing this website and using any related services.",
                     sections: [
-                        { title: "1. Nature of Content — No Offer or Recommendation", paragraphs: ["All materials, documents, research reports, charts, data, analyses, opinions, tools and other content published on this website (collectively, the \"Content\") are provided for general informational purposes only. The Content does not constitute an offer, invitation, solicitation, recommendation, advice or guarantee of any kind in relation to the acquisition, disposal, subscription or trading of any securities, financial products or instruments. Nothing in the Content should be regarded as professional investment, legal, tax, accounting or other specialist advice.", "The Company has no intention of making the Content available to any particular person as the sole basis for an investment decision. Any investment decision should be made in light of the Visitor's or Client's own financial position, investment objectives, experience and risk appetite, and on the basis of independent advice from a licensed professional adviser."] },
+                        { title: "1. Nature of Content — No Offer or Recommendation", paragraphs: ["All materials, documents, research reports, charts, data, analyses, opinions, tools and other content published on this website (collectively, the \"Content\") are provided for general informational purposes only. The Content does not constitute an offer, invitation, solicitation, recommendation, advice or guarantee of any kind in relation to the acquisition, disposal, subscription or trading of any securities, financial products or instruments. Nothing in the Content should be regarded as professional investment, legal, tax, accounting or other specialist advice.", "The Company has no intention of making the Content available to any particular person as the sole basis for an investment decision. Any investment decision should be made in light of the Visitor's or Client's own financial position, investment objectives, experience and risk appetite, and on the basis of independent advice from a suitably qualified professional adviser."] },
                         { title: "2. Accuracy and Completeness of Information", paragraphs: ["While the Company has exercised reasonable care in the preparation and publication of the Content on this website, it makes no express or implied representation or warranty as to the accuracy, completeness, truthfulness, timeliness, reliability, merchantability or fitness for any particular purpose of the Content. The Content is subject to change at any time without notice. The Company is under no obligation to continuously update or revise the Content.", "Any simulations, back-tests, target prices, ratings, forecasts or forward-looking statements provided on this website are based on specific assumptions and publicly available information. They are presented for illustrative and reference purposes only, and do not represent actual achievable returns or outcomes. Actual results may differ materially from any forward-looking statement."] },
                         { title: "3. Special Investment Risk Warnings", paragraphs: ["All investments and transactions in financial products involve risk. Investors may lose some or all of the principal invested. Clients should be fully aware of and understand the risks associated with their investment decisions and transactions, and should seek independent professional advice where appropriate.", "(a) Securities and equity-related risks: Equity prices can be highly volatile and are influenced by a wide range of factors including macroeconomic conditions, sector dynamics, company performance, market sentiment and regulatory policies. No investment method or strategy can guarantee profitability.", "(b) Cross-border investment risks: Investing in overseas markets (e.g., the United States, Europe, ASEAN, etc.) entails: possible erosion of real returns due to exchange-rate movements; differences in foreign laws, regulations, accounting, taxation and settlement regimes; differences in market liquidity and trading hours; and significant political, social, diplomatic and sanctions-related risks.", "(c) Leverage / Derivatives risk: Where margin, futures, options, structured products or other leveraged instruments are involved, losses may substantially exceed the client's initial margin. The client may be required to deposit substantial additional sums within a short period of time and will bear the entirety of any loss.", "(d) Liquidity and systemic risk: During periods of extreme volatility, dislocated markets or system failure, clients may be unable to place, cancel or execute orders in a timely manner. Any and all losses arising therefrom shall be borne by the client alone."] },
                         { title: "4. Third-party Content and Links", paragraphs: ["This website may contain references to, republished material from, or hyperlinks to data, research, opinions or content published by third-party institutions, analysts, media outlets or individuals (collectively, \"Third-Party Content\"). Such Third-Party Content is provided for the convenience of Visitors only and does not represent the Company's position or any endorsement by the Company.", "The Company does not review, endorse or warrant the accuracy, completeness, legality or suitability of any Third-Party Content, and shall not be liable for any loss suffered by a Visitor as a result of relying on or using any Third-Party Content. Visitors access third-party websites and use Third-Party Content entirely at their own risk."] },
@@ -846,7 +846,7 @@
         zh_CN: {},
         zh_TW: {
             brand: {
-                heroBadge: "香港持牌金融服務機構",
+                heroBadge: "",
                 taglinePrimary: "磐石固本",
                 taglineSecondary: "金石創富"
             },
@@ -863,13 +863,13 @@
             about: {
                 intro: [
                     '<span class="text-gold font-bold">金岩石 GoldenRock</span>，紮根香港國際金融中心的專業金融服務機構，專注全球資本市場證券業務服務。',
-                    '秉持「磐石固本，金石創富」的核心價值觀，匯聚具備跨境資本市場多年實操經驗的投研與交易團隊，服務機構及高淨值客戶，提供專業金融服務，覆蓋港股、美股等海外主流市場。'
+                    '秉持「磐石固本，金石創富」的核心價值觀，匯聚具備跨境資本市場多年實操經驗的投研與交易團隊，服務機構及高淨值客戶，提供專業金融服務，覆蓋港股、美股、A股等主流證券市場。'
                 ],
                 vision: { title: "企業願景", desc: "成為一家專注價值、基業穩固的全球金融服務機構。" },
                 mission: { title: "企業使命", desc: "立足香港國際金融樞紐，助力客戶理性佈局全球市場，發掘可持續的全球價值機遇。" },
                 visualCards: [
                     { icon: "hq", value: "香港", label: "總部所在地" },
-                    { icon: "mkts", value: "港股 · 美股", label: "核心覆蓋市場" },
+                    { icon: "mkts", value: "港股 · 美股 · A股", label: "核心覆蓋市場" },
                     { icon: "clients", value: "機構 & 高淨值", label: "核心服務對象" }
                 ]
             },
@@ -880,13 +880,13 @@
                 { num: "04", title: "守正拓新", desc: "尊重市場規則，合規先行，理性探索全球機遇。以正道為根基，開拓創新格局。" }
             ],
             services: [
-                { num: "01", title: "證券市場交易執行", desc: "提供港股、美股等海外主流市場的專業交易執行服務，高效穩定的交易系統，確保客戶訂單快速、準確執行。", featured: false, featuredLabel: "核心服務", features: ["港股 / 美股直通交易", "極速訂單路由執行", "多元化交易訂單類型", "即時行情與深度數據"] },
+                { num: "01", title: "證券市場交易執行", desc: "提供港股、美股、A股等主流證券市場的專業交易執行服務，高效穩定的交易系統，確保客戶訂單快速、準確執行。", featured: false, featuredLabel: "核心服務", features: ["港股 / 美股 / A股直通交易", "極速訂單路由執行", "多元化交易訂單類型", "即時行情與深度數據"] },
                 { num: "02", title: "投資諮詢服務", desc: "資深投研團隊基於獨立研判，為機構及高淨值客戶提供專業的投資建議與策略方案，著眼長期價值投資。", featured: true, featuredLabel: "核心服務", features: ["宏觀經濟與策略研究", "行業與公司深度分析", "定制化投資組合建議", "定期市場觀點與展望"] },
                 { num: "03", title: "跨境資產配置", desc: "依託香港國際金融中心優勢，協助客戶進行全球化的資產配置，分散投資風險，捕捉跨境市場機遇。", featured: false, featuredLabel: "核心服務", features: ["全球多市場資產配置", "跨境稅務合規諮詢", "資產風險分散策略", "長期財富管理規劃"] }
             ],
             compliance: {
                 hero: {
-                    badge: "持牌合規",
+                    badge: "合規營運",
                     title: "香港證監會（SFC）監管",
                     desc: "金岩石有限公司 Golden Rock Limited 嚴格遵守《證券及期貨條例》及香港證監會（SFC）頒佈的各項監管規定，建立完善的內部合規體系與風控機制，確保所有業務活動在合規框架內穩健運行。",
                     note: "所有受規管活動均在 SFC 嚴格監督下開展"
@@ -934,7 +934,7 @@
         },
         en: {
             brand: {
-                heroBadge: "Hong Kong Licensed Financial Institution",
+                heroBadge: "",
                 taglinePrimary: "Prudence as Foundation",
                 taglineSecondary: "Insight Creates Wealth"
             },
@@ -951,13 +951,13 @@
             about: {
                 intro: [
                     '<span class="text-gold font-bold">GoldenRock</span> is a professional financial services institution rooted in Hong Kong, with a dedicated focus on securities and capital markets businesses worldwide.',
-                    'Guided by our core philosophy — "Prudence as Foundation, Insight Creates Wealth" — we bring together a seasoned research and trading team with decades of cross-border capital markets experience, serving institutional and high-net-worth clients across Hong Kong, US and major international markets.'
+                    'Guided by our core philosophy — "Prudence as Foundation, Insight Creates Wealth" — we bring together a seasoned research and trading team with decades of cross-border capital markets experience, serving institutional and high-net-worth clients across Hong Kong, US and A-share major securities markets.'
                 ],
                 vision: { title: "Our Vision", desc: "To build a value-focused, resilient and enduring global financial services institution." },
                 mission: { title: "Our Mission", desc: "Rooted in Hong Kong's financial hub, we empower clients to build disciplined global portfolios and capture sustainable long-term value." },
                 visualCards: [
                     { icon: "hq", value: "Hong Kong", label: "HQ Location" },
-                    { icon: "mkts", value: "HK · US Equities", label: "Core Market Coverage" },
+                    { icon: "mkts", value: "HK · US · A Shares", label: "Core Market Coverage" },
                     { icon: "clients", value: "Institutional & HNW", label: "Client Segments" }
                 ]
             },
@@ -968,13 +968,13 @@
                 { num: "04", title: "Principled Innovation", desc: "Compliance-first rational exploration. We pioneer new paths within the boundaries of market rules and regulatory frameworks." }
             ],
             services: [
-                { num: "01", title: "Securities Execution", desc: "Professional, best-in-class execution across Hong Kong, US and major international markets, backed by a robust, low-latency trading infrastructure.", featured: false, featuredLabel: "Core Service", features: ["Direct access: HK / US equities", "Low-latency smart order routing", "Rich order-type universe", "Real-time market depth & data"] },
+                { num: "01", title: "Securities Execution", desc: "Professional, best-in-class execution across Hong Kong, US and A-share major securities markets, backed by a robust, low-latency trading infrastructure.", featured: false, featuredLabel: "Core Service", features: ["Direct access: HK / US / A Shares", "Low-latency smart order routing", "Rich order-type universe", "Real-time market depth & data"] },
                 { num: "02", title: "Investment Advisory", desc: "Senior research-led portfolio advisory for institutional and HNW clients. Disciplined, value-driven strategies across full market cycles.", featured: true, featuredLabel: "Core Service", features: ["Macro & strategy research", "Deep industry & company analysis", "Custom-tailored portfolio advice", "Regular market outlook & reviews"] },
                 { num: "03", title: "Cross-Border Allocation", desc: "Leveraging Hong Kong's premier international financial status to construct diversified, multi-jurisdictional portfolios and capture cross-market alpha.", featured: false, featuredLabel: "Core Service", features: ["Global multi-asset allocation", "Cross-border tax & compliance advisory", "Risk diversification frameworks", "Long-term wealth planning"] }
             ],
             compliance: {
                 hero: {
-                    badge: "Regulated Entity",
+                    badge: "Regulated Operations",
                     title: "Hong Kong SFC Supervision",
                     desc: "Golden Rock Limited operates in strict compliance with the Securities and Futures Ordinance (SFO) and all rules and guidelines issued by the Securities and Futures Commission (SFC) of Hong Kong, with a comprehensive internal compliance framework and enterprise-grade risk-management governance.",
                     note: "All regulated activities are conducted under rigorous SFC oversight"
