@@ -1255,15 +1255,24 @@
                 var _restoringUntil = 0;
                 var _scrollSaveTimer = null;
                 var _finalSavedTarget = null; // 本次最终要还原的目标像素（用于最后 reconcile 兜底）
+                var _lastFinalReconcileUntil = 0; // FINAL_RECONCILE_MS+200 之后才允许 load 最终 force 存盘
 
                 // 1) 保存当前滚动像素到 sessionStorage
+                // opts.reason:
+                //   'unload' / 'visibility' — 用户要离开/切 tab：必须写入，不拦截（防临时 clamp 防御只在初始还原阶段生效
+                //   'final-reconcile' — 初始还原最后存盘：才做差值防御，防「doc 还没长高临时值反向覆盖 savedY」
+                //   'scroll' / 其它 / undefined — 节流或普通 force，用一般规则
                 var saveScrollNow = function (opts) {
                     try {
                         if (!opts) opts = {};
                         if (!opts.force && Date.now() < _restoringUntil) return; // 恢复阶段，不反写
-                        // force:true 时也避免把「还没渲染完整、临时被 clamp 的小 scrollY」覆写目标值
                         var y = window.scrollY || window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
-                        if (opts.force && _finalSavedTarget != null && typeof _finalSavedTarget === 'number' && _finalSavedTarget > 0) {
+
+                        // ===== 差值防御只在「初始还原阶段的最终 reconcile 存盘」场景生效
+                        // —— beforeunload / pagehide / visibilitychange 必须写（用户手动滚过的真实位置）
+                        //    之前就是因为 beforeunload 走了这里的 return 才导致旧 savedY=5524 残留，滚哪刷新都跳合规
+                        var allowSkipByDiff = (opts.reason === 'final-reconcile');
+                        if (allowSkipByDiff && _finalSavedTarget != null && typeof _finalSavedTarget === 'number' && _finalSavedTarget > 0) {
                             var maxScroll = Math.max(0,
                                 Math.max(document.body.scrollHeight, document.documentElement.scrollHeight,
                                          document.body.offsetHeight, document.documentElement.offsetHeight) - window.innerHeight);
@@ -1302,15 +1311,15 @@
                     }, 200);
                 };
                 // 3) 先挂上保存钩子：beforeunload / pagehide / 切 tab / scroll 节流（300ms）
-                window.addEventListener('beforeunload', function () { saveScrollNow({ force: true }); }, { passive: true });
-                window.addEventListener('pagehide', function () { saveScrollNow({ force: true }); }, { passive: true });
+                window.addEventListener('beforeunload', function () { saveScrollNow({ force: true, reason: 'unload' }); }, { passive: true });
+                window.addEventListener('pagehide', function () { saveScrollNow({ force: true, reason: 'unload' }); }, { passive: true });
                 document.addEventListener('visibilitychange', function () {
-                    if (document.visibilityState === 'hidden') saveScrollNow({ force: true });
+                    if (document.visibilityState === 'hidden') saveScrollNow({ force: true, reason: 'visibility' });
                 }, { passive: true });
                 window.addEventListener('scroll', function () {
                     if (Date.now() < _restoringUntil) return;
                     if (_scrollSaveTimer != null) return;
-                    _scrollSaveTimer = setTimeout(function () { _scrollSaveTimer = null; saveScrollNow(); }, 300);
+                    _scrollSaveTimer = setTimeout(function () { _scrollSaveTimer = null; saveScrollNow({ reason: 'scroll' }); }, 300);
                 }, { passive: true });
 
                 // 4) 恢复阶段：hash 优先，否则读存储快照；整个过程中禁用浏览器原生 restoration + 忽略 scroll 写入避免反向覆盖
@@ -1388,7 +1397,7 @@
                                     // 先再拉一次保证已稳定，然后再强制保存，最后恢复 smooth
                                     doRestoreY();
                                     setTimeout(restoreSmoothBehavior, 80);
-                                    try { saveScrollNow({ force: true }); } catch (e) {}
+                                    try { saveScrollNow({ force: true, reason: 'final-reconcile' }); } catch (e) {}
                                 }, FINAL_RECONCILE_MS + 200);
                             }, { once: true, passive: true });
                         }
